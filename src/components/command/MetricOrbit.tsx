@@ -81,7 +81,7 @@ export function MetricOrbit() {
             <div className="text-[9px] font-bold uppercase text-[var(--muted)]">
               {s.l}
             </div>
-            <div className="text-xs font-black tabular-nums text-[var(--ink)]">
+            <div className="text-xs font-bold tabular-nums text-[var(--ink)]">
               {s.v}
             </div>
           </div>

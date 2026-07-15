@@ -10,7 +10,7 @@ import {
   scorecard,
   unitEconomics,
 } from "@/lib/engine/analytics";
-import { fmt, fmtPct } from "@/lib/utils";
+import { cn, fmt, fmtPct } from "@/lib/utils";
 import {
   BrainCircuit,
   RefreshCw,
@@ -69,30 +69,28 @@ export function ExecutiveBrief() {
   }, [result, params, seed]);
 
   return (
-    <div className="cc-panel relative overflow-hidden rounded-xl border border-[var(--line)] bg-[var(--card)]">
-      <div className="absolute inset-x-0 top-0 h-[2px] bg-gradient-to-r from-[var(--navy)] via-[var(--gold)] to-[var(--navy)]" />
+    <div className="relative overflow-hidden rounded-2xl border border-[var(--line)] bg-[var(--card)] shadow-[var(--shadow-sm)]">
+      <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-[var(--gold)] to-transparent" />
       <div className="flex flex-wrap items-start justify-between gap-3 border-b border-[var(--line-soft)] px-5 py-4">
         <div className="flex items-center gap-3">
-          <div className="flex h-11 w-11 items-center justify-center rounded-lg bg-gradient-to-br from-[#0a4d6e] to-[#071428] text-[#d4b76a] shadow-lg">
+          <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-gradient-to-br from-[#0e4d6b] to-[#0b1220] text-[#d4b76a] shadow-md ring-1 ring-white/10">
             <BrainCircuit className="h-5 w-5" />
           </div>
           <div>
-            <div className="text-[10px] font-bold uppercase tracking-[0.16em] text-[var(--gold)]">
-              AI Executive Brief · auto
-            </div>
-            <div className="text-base font-bold text-[var(--ink)]">
+            <div className="panel-kicker">AI Executive Brief · auto</div>
+            <div className="text-base font-bold tracking-tight text-[var(--ink)]">
               Tóm tắt điều hành thông minh
             </div>
           </div>
         </div>
         <div className="flex items-center gap-2">
           <span
-            className={`rounded-full px-3 py-1 text-[10px] font-black uppercase tracking-wide ${
+            className={`rounded-full px-3 py-1 text-[10px] font-bold uppercase tracking-wide ${
               brief.score >= 75
-                ? "bg-teal-500/15 text-teal-700 dark:text-teal-300"
+                ? "bg-[color-mix(in_srgb,var(--good)_14%,transparent)] text-[var(--good)]"
                 : brief.score >= 55
-                  ? "bg-amber-500/15 text-amber-800 dark:text-amber-300"
-                  : "bg-rose-500/15 text-rose-700 dark:text-rose-300"
+                  ? "bg-[color-mix(in_srgb,var(--warn)_14%,transparent)] text-[var(--warn)]"
+                  : "bg-[color-mix(in_srgb,var(--bad)_14%,transparent)] text-[var(--bad)]"
             }`}
           >
             {brief.verdict}
@@ -100,7 +98,7 @@ export function ExecutiveBrief() {
           <button
             type="button"
             onClick={() => setSeed((s) => s + 1)}
-            className="inline-flex items-center gap-1 rounded-lg border border-[var(--line)] px-2.5 py-1.5 text-[11px] font-bold text-[var(--muted)] hover:bg-[var(--bg)]"
+            className="icon-btn gap-1 text-[11px] font-semibold"
           >
             <RefreshCw className="h-3 w-3" />
             Regen
@@ -115,14 +113,14 @@ export function ExecutiveBrief() {
               key={seed + brief.score}
               initial={{ opacity: 0, y: 6 }}
               animate={{ opacity: 1, y: 0 }}
-              className="space-y-2.5"
+              className="space-y-3"
             >
               {brief.paragraphs.map((p, i) => (
                 <p
                   key={i}
                   className="text-[13.5px] leading-relaxed text-[var(--muted)]"
                 >
-                  <span className="mr-2 font-mono text-[10px] font-bold text-[var(--gold)]">
+                  <span className="mr-2 inline-flex h-5 w-5 items-center justify-center rounded-md bg-[var(--bg)] font-mono text-[10px] font-bold text-[var(--gold)]">
                     {String(i + 1).padStart(2, "0")}
                   </span>
                   {p}
@@ -132,41 +130,35 @@ export function ExecutiveBrief() {
           </AnimatePresence>
         </div>
 
-        <div className="border-t border-[var(--line-soft)] bg-[var(--bg)]/60 p-5 lg:col-span-4 lg:border-l lg:border-t-0">
+        <div className="border-t border-[var(--line-soft)] bg-[var(--bg)]/50 p-5 lg:col-span-4 lg:border-l lg:border-t-0">
           <div className="text-[10px] font-bold uppercase tracking-[0.14em] text-[var(--muted)]">
             Quick stats
           </div>
-          <div className="mt-3 space-y-3">
-            <div className="flex items-center justify-between rounded-lg border border-[var(--line)] bg-[var(--card)] px-3 py-2.5">
-              <span className="flex items-center gap-2 text-xs font-semibold text-[var(--muted)]">
-                <TrendingUp className="h-3.5 w-3.5 text-teal-600" />
-                Health
-              </span>
-              <span className="text-lg font-black tabular-nums text-[var(--ink)]">
-                {brief.score}
-              </span>
-            </div>
-            <div className="flex items-center justify-between rounded-lg border border-[var(--line)] bg-[var(--card)] px-3 py-2.5">
-              <span className="flex items-center gap-2 text-xs font-semibold text-[var(--muted)]">
-                <ShieldAlert className="h-3.5 w-3.5 text-rose-500" />
-                Critical
-              </span>
-              <span className="text-lg font-black tabular-nums text-[var(--ink)]">
-                {brief.critCount}
-              </span>
-            </div>
-            <div className="flex items-center justify-between rounded-lg border border-[var(--line)] bg-[var(--card)] px-3 py-2.5">
-              <span className="flex items-center gap-2 text-xs font-semibold text-[var(--muted)]">
-                <Sparkles className="h-3.5 w-3.5 text-[var(--gold)]" />
-                Alerts
-              </span>
-              <span className="text-lg font-black tabular-nums text-[var(--ink)]">
-                {brief.alertCount}
-              </span>
-            </div>
+          <div className="mt-3 space-y-2">
+            {[
+              { icon: TrendingUp, l: "Health", v: brief.score, c: "text-[var(--good)]" },
+              { icon: ShieldAlert, l: "Critical", v: brief.critCount, c: "text-[var(--bad)]" },
+              { icon: Sparkles, l: "Alerts", v: brief.alertCount, c: "text-[var(--gold)]" },
+            ].map((x) => {
+              const Icon = x.icon;
+              return (
+                <div
+                  key={x.l}
+                  className="flex items-center justify-between rounded-xl border border-[var(--line)] bg-[var(--card)] px-3 py-2.5"
+                >
+                  <span className="flex items-center gap-2 text-xs font-semibold text-[var(--muted)]">
+                    <Icon className={cn("h-3.5 w-3.5", x.c)} />
+                    {x.l}
+                  </span>
+                  <span className="text-lg font-bold tabular-nums text-[var(--ink)]">
+                    {x.v}
+                  </span>
+                </div>
+              );
+            })}
           </div>
           {brief.topInsight && (
-            <div className="mt-4 rounded-lg border border-[var(--gold)]/30 bg-[var(--gold-soft)]/30 p-3">
+            <div className="mt-4 rounded-xl border border-[color-mix(in_srgb,var(--gold)_30%,var(--line))] bg-[var(--gold-soft)]/40 p-3">
               <div className="text-[10px] font-bold uppercase text-[var(--gold)]">
                 Top insight
               </div>
@@ -184,7 +176,7 @@ export function ExecutiveBrief() {
               <Link
                 key={x.href}
                 href={x.href}
-                className="flex items-center justify-between rounded-lg border border-[var(--line)] bg-[var(--card)] px-3 py-2 text-xs font-bold text-[var(--ink)] hover:border-[var(--gold)]/40"
+                className="flex items-center justify-between rounded-xl border border-[var(--line)] bg-[var(--card)] px-3 py-2 text-xs font-semibold text-[var(--ink)] transition hover:border-[color-mix(in_srgb,var(--gold)_40%,var(--line))] hover:shadow-[var(--shadow-sm)]"
               >
                 {x.l}
                 <ChevronRight className="h-3.5 w-3.5 text-[var(--muted)]" />

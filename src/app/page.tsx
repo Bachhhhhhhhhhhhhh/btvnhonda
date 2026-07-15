@@ -307,11 +307,9 @@ export default function DashboardPage() {
           <MonthPlayback />
         </div>
         <div className="space-y-3 xl:col-span-2">
-          <div className="cc-panel rounded-xl border border-[var(--gold)]/35 bg-gradient-to-br from-[var(--gold-soft)]/40 to-[var(--card)] p-4">
-            <div className="text-[10px] font-bold uppercase tracking-[0.14em] text-[var(--gold)]">
-              Optimizer suggestion
-            </div>
-            <div className="mt-2 text-lg font-black text-[var(--ink)]">
+          <div className="rounded-2xl border border-[color-mix(in_srgb,var(--gold)_35%,var(--line))] bg-gradient-to-br from-[var(--gold-soft)]/50 to-[var(--card)] p-4 shadow-[var(--shadow-sm)]">
+            <div className="panel-kicker">Optimizer suggestion</div>
+            <div className="mt-2 text-lg font-bold tracking-tight text-[var(--ink)]">
               Stack {fmtPct(opt.bestStackRatio, 0)} · TF{" "}
               {fmtPct(opt.bestTransferRatio, 0)}
             </div>
@@ -329,9 +327,9 @@ export default function DashboardPage() {
           {topInsights.map((ins) => (
             <div
               key={ins.id}
-              className="cc-panel rounded-xl border border-[var(--line)] bg-[var(--card)] p-3.5"
+              className="rounded-2xl border border-[var(--line)] bg-[var(--card)] p-3.5 shadow-[var(--shadow-sm)]"
             >
-              <div className="text-[10px] font-bold uppercase text-[var(--gold)]">
+              <div className="text-[10px] font-bold uppercase tracking-wide text-[var(--gold)]">
                 {ins.category}
               </div>
               <div className="mt-1 text-sm font-bold text-[var(--ink)]">

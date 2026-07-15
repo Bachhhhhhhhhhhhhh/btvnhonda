@@ -73,9 +73,9 @@ export function Sidebar({
     const showLabels = isMobile || !collapsed;
     return (
       <>
-        <div className={cn("border-b border-white/10", showLabels ? "px-4 py-4" : "px-2 py-3")}>
+        <div className={cn("border-b border-white/[0.07]", showLabels ? "px-4 py-4" : "px-2 py-3")}>
           <div className="flex items-center gap-3">
-            <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-gradient-to-b from-[#d4b76a] to-[#b8954a] text-[#071428] shadow-sm">
+            <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-[#e0c47a] to-[#a8893a] text-[#0b1220] shadow-[0_4px_12px_-2px_rgba(168,137,58,0.45)] ring-1 ring-white/20">
               <Boxes className="h-5 w-5" strokeWidth={2.25} />
             </div>
             {showLabels && (
@@ -92,21 +92,21 @@ export function Sidebar({
               <button
                 type="button"
                 onClick={onClose}
-                className="rounded p-1 text-slate-400 hover:bg-white/10 hover:text-white lg:hidden"
+                className="rounded-lg p-1.5 text-slate-400 hover:bg-white/10 hover:text-white lg:hidden"
               >
                 <X className="h-5 w-5" />
               </button>
             )}
           </div>
           {showLabels && (
-            <div className="mt-3 flex items-center gap-2 rounded-lg border border-white/10 bg-white/[0.04] px-2.5 py-1.5 text-[10px] font-medium text-slate-400">
+            <div className="mt-3 flex items-center gap-2 rounded-xl border border-white/[0.08] bg-white/[0.04] px-2.5 py-1.5 text-[10px] font-medium text-slate-400">
               <ShieldCheck className="h-3 w-3 text-emerald-400" />
               <span>Phiên bảo mật</span>
             </div>
           )}
         </div>
 
-        <nav className={cn("flex-1 overflow-y-auto py-3", showLabels ? "px-2" : "px-1.5")}>
+        <nav className={cn("flex-1 overflow-y-auto py-3", showLabels ? "px-2.5" : "px-1.5")}>
           {NAV.map((item) => {
             const showGroup = showLabels && item.group !== lastGroup;
             lastGroup = item.group;
@@ -125,7 +125,7 @@ export function Sidebar({
                   onClick={onClose}
                   title={item.label}
                   className={cn(
-                    "mb-0.5 flex items-center rounded-lg border border-transparent transition",
+                    "mb-0.5 flex items-center rounded-xl border border-transparent transition duration-150",
                     showLabels ? "gap-2.5 px-3 py-2 text-[12.5px]" : "justify-center px-2 py-2.5",
                     active
                       ? "nav-active"
@@ -135,7 +135,7 @@ export function Sidebar({
                   <Icon
                     className={cn(
                       "h-[15px] w-[15px] shrink-0",
-                      active ? "opacity-100" : "opacity-50"
+                      active ? "opacity-100" : "opacity-55"
                     )}
                     strokeWidth={1.85}
                   />
@@ -143,7 +143,7 @@ export function Sidebar({
                     <>
                       <span className="flex-1 truncate">{item.label}</span>
                       {item.hot && !active && (
-                        <span className="rounded bg-[#b8954a]/20 px-1.5 py-0.5 text-[8px] font-bold uppercase tracking-wide text-[#d4b76a]">
+                        <span className="rounded-md bg-[#b8954a]/18 px-1.5 py-0.5 text-[8px] font-bold uppercase tracking-wide text-[#d4b76a]">
                           New
                         </span>
                       )}

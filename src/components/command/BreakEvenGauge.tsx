@@ -17,16 +17,14 @@ export function BreakEvenGauge() {
   const needle = score; // 0-100
 
   return (
-    <div className="cc-panel rounded-xl border border-[var(--line)] bg-[var(--card)] p-4">
-      <div className="mb-3 flex items-center gap-2">
-        <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-[var(--gold)]/15 text-[var(--gold)]">
+    <div className="rounded-2xl border border-[var(--line)] bg-[var(--card)] p-5 shadow-[var(--shadow-sm)]">
+      <div className="mb-3 flex items-center gap-2.5">
+        <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-[color-mix(in_srgb,var(--gold)_14%,transparent)] text-[var(--gold)]">
           <Scale className="h-4 w-4" />
         </div>
         <div>
-          <div className="text-[10px] font-bold uppercase tracking-[0.14em] text-[var(--gold)]">
-            Break-even gauge
-          </div>
-          <div className="text-sm font-extrabold text-[var(--ink)]">
+          <div className="panel-kicker">Break-even gauge</div>
+          <div className="text-sm font-bold text-[var(--ink)]">
             Transfer vs Thuê Bắc
           </div>
         </div>
@@ -79,28 +77,28 @@ export function BreakEvenGauge() {
       </div>
 
       <div className="mt-1 grid grid-cols-2 gap-2 text-center">
-        <div className="rounded-lg border border-[var(--line)] bg-[var(--bg)] px-2 py-2">
+        <div className="rounded-xl border border-[var(--line-soft)] bg-[var(--bg)] px-2 py-2.5">
           <div className="text-[9px] font-bold uppercase text-[var(--muted)]">
             Unit TF
           </div>
-          <div className="text-sm font-black tabular-nums text-[var(--ink)]">
+          <div className="text-sm font-bold tabular-nums text-[var(--ink)]">
             {fmt(Math.round(ue.transfer))}
           </div>
         </div>
-        <div className="rounded-lg border border-[var(--line)] bg-[var(--bg)] px-2 py-2">
+        <div className="rounded-xl border border-[var(--line-soft)] bg-[var(--bg)] px-2 py-2.5">
           <div className="text-[9px] font-bold uppercase text-[var(--muted)]">
             Unit avoid
           </div>
-          <div className="text-sm font-black tabular-nums text-[var(--ink)]">
+          <div className="text-sm font-bold tabular-nums text-[var(--ink)]">
             {fmt(ue.avoid)}
           </div>
         </div>
       </div>
       <div
-        className={`mt-3 rounded-lg px-3 py-2 text-center text-xs font-bold ${
+        className={`mt-3 rounded-xl px-3 py-2.5 text-center text-xs font-semibold ${
           ue.justified
-            ? "bg-teal-500/15 text-teal-700 dark:text-teal-300"
-            : "bg-rose-500/15 text-rose-700 dark:text-rose-300"
+            ? "bg-[color-mix(in_srgb,var(--good)_12%,transparent)] text-[var(--good)]"
+            : "bg-[color-mix(in_srgb,var(--bad)_12%,transparent)] text-[var(--bad)]"
         }`}
       >
         {ue.justified

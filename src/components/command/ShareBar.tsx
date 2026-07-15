@@ -92,14 +92,14 @@ export function ShareBar() {
   };
 
   return (
-    <div className="flex flex-wrap items-center gap-2 rounded-xl border border-[var(--line)] bg-[var(--card)] px-3 py-2.5">
-      <span className="text-[10px] font-bold uppercase tracking-[0.12em] text-[var(--muted)]">
+    <div className="flex flex-wrap items-center gap-2 rounded-2xl border border-[var(--line)] bg-[var(--card)] px-3 py-2.5 shadow-[var(--shadow-sm)]">
+      <span className="px-1 text-[10px] font-bold uppercase tracking-[0.12em] text-[var(--muted)]">
         Workspace
       </span>
       <button
         type="button"
         onClick={shareLink}
-        className="inline-flex items-center gap-1.5 rounded-lg border border-[var(--line)] px-2.5 py-1.5 text-[11px] font-bold text-[var(--ink)] hover:bg-[var(--bg)]"
+        className="icon-btn gap-1.5 px-2.5 text-[11px] font-semibold text-[var(--ink)]"
       >
         <Link2 className="h-3.5 w-3.5 text-[var(--gold)]" />
         Copy share link
@@ -107,7 +107,7 @@ export function ShareBar() {
       <button
         type="button"
         onClick={exportWorkspace}
-        className="inline-flex items-center gap-1.5 rounded-lg border border-[var(--line)] px-2.5 py-1.5 text-[11px] font-bold text-[var(--ink)] hover:bg-[var(--bg)]"
+        className="icon-btn gap-1.5 px-2.5 text-[11px] font-semibold text-[var(--ink)]"
       >
         <FileJson className="h-3.5 w-3.5 text-[var(--gold)]" />
         Export workspace
@@ -115,7 +115,7 @@ export function ShareBar() {
       <button
         type="button"
         onClick={importFile}
-        className="inline-flex items-center gap-1.5 rounded-lg border border-[var(--line)] px-2.5 py-1.5 text-[11px] font-bold text-[var(--ink)] hover:bg-[var(--bg)]"
+        className="icon-btn gap-1.5 px-2.5 text-[11px] font-semibold text-[var(--ink)]"
       >
         <Upload className="h-3.5 w-3.5 text-[var(--gold)]" />
         Import JSON

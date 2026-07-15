@@ -22,8 +22,8 @@ export function PresetBar({
   const locked = useParamLock((s) => s.locked);
 
   return (
-    <div className="flex flex-wrap items-center gap-2 rounded-xl border border-[var(--line)] bg-[var(--card)] p-2.5 shadow-sm">
-      <span className="px-1 text-[10px] font-bold uppercase tracking-[0.12em] text-[var(--muted)]">
+    <div className="flex flex-wrap items-center gap-2 rounded-2xl border border-[var(--line)] bg-[var(--card)] p-2.5 shadow-[var(--shadow-sm)]">
+      <span className="px-1.5 text-[10px] font-bold uppercase tracking-[0.12em] text-[var(--muted)]">
         Preset
       </span>
       <ParamLockButton />
@@ -46,10 +46,10 @@ export function PresetBar({
             });
           }}
           className={cn(
-            "rounded-lg border px-2.5 py-1.5 text-[11px] font-bold transition disabled:opacity-40",
+            "rounded-xl border px-2.5 py-1.5 text-[11px] font-semibold transition disabled:opacity-40",
             activePresetId === p.id
-              ? "border-[var(--ink)] bg-[var(--ink)] text-[var(--card)] pulse-ring"
-              : "border-[var(--line)] bg-[var(--bg)] text-[var(--ink)] hover:border-[var(--gold)]/50"
+              ? "border-[var(--ink)] bg-[var(--ink)] text-[var(--card)] shadow-sm"
+              : "border-[var(--line)] bg-[var(--bg)] text-[var(--ink)] hover:border-[color-mix(in_srgb,var(--gold)_45%,var(--line))]"
           )}
         >
           {p.name}

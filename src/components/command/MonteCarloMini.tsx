@@ -43,15 +43,15 @@ export function MonteCarloMini() {
   const pNeg = mc.samples.filter((x) => x < 0).length / n;
 
   return (
-    <div className="cc-panel rounded-xl border border-[var(--line)] bg-[var(--card)] p-4">
-      <div className="mb-2 flex items-center justify-between gap-2">
-        <div className="flex items-center gap-2">
-          <Dices className="h-4 w-4 text-[var(--gold)]" />
+    <div className="rounded-2xl border border-[var(--line)] bg-[var(--card)] p-5 shadow-[var(--shadow-sm)]">
+      <div className="mb-3 flex items-center justify-between gap-2">
+        <div className="flex items-center gap-2.5">
+          <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-[color-mix(in_srgb,var(--gold)_14%,transparent)] text-[var(--gold)]">
+            <Dices className="h-4 w-4" />
+          </div>
           <div>
-            <div className="text-[10px] font-bold uppercase tracking-[0.14em] text-[var(--gold)]">
-              Monte Carlo mini
-            </div>
-            <div className="text-sm font-extrabold text-[var(--ink)]">
+            <div className="panel-kicker">Monte Carlo mini</div>
+            <div className="text-sm font-bold text-[var(--ink)]">
               Phân phối savings · N={n}
             </div>
           </div>
@@ -59,13 +59,14 @@ export function MonteCarloMini() {
         <button
           type="button"
           onClick={() => setSeed((s) => s + 1)}
-          className="rounded-lg border border-[var(--line)] p-1.5 text-[var(--muted)] hover:text-[var(--ink)]"
+          className="icon-btn"
+          aria-label="Rerun"
         >
           <RefreshCw className="h-3.5 w-3.5" />
         </button>
       </div>
 
-      <div className="mb-2 grid grid-cols-4 gap-1.5 text-center">
+      <div className="mb-3 grid grid-cols-4 gap-1.5 text-center">
         {[
           { l: "Mean", v: `${fmt(mc.mean / 1e9, 2)}` },
           { l: "P10", v: `${fmt(mc.p10 / 1e9, 2)}` },
@@ -74,12 +75,12 @@ export function MonteCarloMini() {
         ].map((x) => (
           <div
             key={x.l}
-            className="rounded-lg border border-[var(--line)] bg-[var(--bg)] px-1 py-1.5"
+            className="rounded-xl border border-[var(--line-soft)] bg-[var(--bg)] px-1 py-2"
           >
             <div className="text-[8px] font-bold uppercase text-[var(--muted)]">
               {x.l === "P&lt;0" ? "P<0" : x.l}
             </div>
-            <div className="text-[11px] font-black tabular-nums text-[var(--ink)]">
+            <div className="text-[11px] font-bold tabular-nums text-[var(--ink)]">
               {x.v}
             </div>
           </div>
@@ -88,12 +89,12 @@ export function MonteCarloMini() {
 
       <div className="h-36">
         <ResponsiveContainer width="100%" height="100%">
-          <BarChart data={hist}>
-            <CartesianGrid strokeDasharray="3 3" stroke={chartTheme.grid} vertical={false} />
-            <XAxis dataKey="bin" tick={{ fill: chartTheme.tick, fontSize: 8 }} interval={2} axisLine={false} />
+          <BarChart data={hist} barCategoryGap="12%">
+            <CartesianGrid strokeDasharray="4 6" stroke={chartTheme.grid} vertical={false} />
+            <XAxis dataKey="bin" tick={{ fill: chartTheme.tick, fontSize: 8 }} interval={2} axisLine={false} tickLine={false} />
             <YAxis hide />
-            <Tooltip {...chartTheme.tooltip} />
-            <Bar dataKey="count" fill="#0a4d6e" radius={[2, 2, 0, 0]} name="Tần suất" />
+            <Tooltip {...chartTheme.tooltip} cursor={{ fill: "rgba(148,163,184,0.08)" }} />
+            <Bar dataKey="count" fill={chartTheme.colors.sky} radius={[6, 6, 0, 0]} name="Tần suất" maxBarSize={24} />
           </BarChart>
         </ResponsiveContainer>
       </div>

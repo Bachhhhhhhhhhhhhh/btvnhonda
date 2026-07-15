@@ -110,11 +110,11 @@ export function AppShell({ children }: { children: React.ReactNode }) {
         </div>
 
         <header className="cc-header no-print sticky top-0 z-20 flex h-14 items-center justify-between border-b px-3 sm:px-5">
-          <div className="flex min-w-0 items-center gap-2">
+          <div className="flex min-w-0 items-center gap-2.5">
             <button
               type="button"
               onClick={() => setMobileOpen(true)}
-              className="rounded-lg border border-[var(--line)] p-2 text-[var(--ink)] lg:hidden"
+              className="icon-btn lg:hidden"
               aria-label="Menu"
             >
               <Menu className="h-4 w-4" />
@@ -122,10 +122,10 @@ export function AppShell({ children }: { children: React.ReactNode }) {
             <div className="min-w-0">
               <div className="flex items-center gap-1.5 text-[10px] font-semibold uppercase tracking-[0.12em] text-[var(--muted)]">
                 <span>LOG Twin</span>
-                <ChevronRight className="h-3 w-3" />
+                <ChevronRight className="h-3 w-3 opacity-60" />
                 <span className="text-[var(--gold)]">{meta.crumb}</span>
               </div>
-              <div className="truncate text-[14px] font-extrabold text-[var(--ink)] sm:text-[15px]">
+              <div className="truncate text-[14px] font-bold tracking-tight text-[var(--ink)] sm:text-[15px]">
                 {meta.title}
               </div>
             </div>
@@ -142,11 +142,11 @@ export function AppShell({ children }: { children: React.ReactNode }) {
                 });
                 window.dispatchEvent(ev);
               }}
-              className="hidden items-center gap-1.5 rounded-lg border border-[var(--line)] bg-[var(--bg)] px-2.5 py-1.5 text-[11px] font-semibold text-[var(--muted)] sm:inline-flex"
+              className="icon-btn hidden gap-1.5 px-2.5 text-[11px] font-semibold sm:inline-flex"
             >
               <Search className="h-3.5 w-3.5" />
               Search
-              <kbd className="rounded border border-[var(--line)] bg-[var(--card)] px-1 text-[9px]">
+              <kbd className="rounded border border-[var(--line)] bg-[var(--bg)] px-1 text-[9px] text-[var(--muted)]">
                 ⌘K
               </kbd>
             </button>
@@ -156,10 +156,8 @@ export function AppShell({ children }: { children: React.ReactNode }) {
               onClick={() =>
                 setDensity(density === "compact" ? "comfortable" : "compact")
               }
-              className={cn(
-                "rounded-lg border border-[var(--line)] p-2 text-[var(--muted)] hover:text-[var(--ink)]",
-                density === "compact" && "bg-[var(--bg)] text-[var(--ink)]"
-              )}
+              className="icon-btn"
+              data-active={density === "compact" ? "true" : undefined}
               title="Density"
             >
               <Rows3 className="h-3.5 w-3.5" />
@@ -175,7 +173,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
                   tone: "info",
                 });
               }}
-              className="rounded-lg border border-[var(--line)] p-2 text-[var(--muted)] hover:text-[var(--ink)]"
+              className="icon-btn"
               title="Theme"
             >
               {mode === "dark" ? (
@@ -197,14 +195,14 @@ export function AppShell({ children }: { children: React.ReactNode }) {
                   tone: "good",
                 });
               }}
-              className="inline-flex items-center gap-1 rounded-lg border border-[var(--line)] px-2 py-1.5 text-[11px] font-bold text-[var(--ink)] hover:bg-[var(--bg)]"
+              className="icon-btn gap-1 px-2.5 text-[11px] font-semibold text-[var(--ink)]"
             >
               <Download className="h-3.5 w-3.5" />
               <span className="hidden sm:inline">Export</span>
             </button>
 
-            <div className="hidden items-center gap-1.5 rounded-lg border border-emerald-500/30 bg-emerald-500/10 px-2.5 py-1.5 text-[11px] font-bold text-emerald-700 dark:text-emerald-300 md:flex">
-              <span className="live-dot h-1.5 w-1.5 rounded-full bg-emerald-500" />
+            <div className="hidden items-center gap-1.5 rounded-xl border border-[color-mix(in_srgb,var(--good)_35%,var(--line))] bg-[color-mix(in_srgb,var(--good)_10%,var(--card))] px-2.5 py-1.5 text-[11px] font-bold text-[var(--good)] md:flex">
+              <span className="live-dot h-1.5 w-1.5 rounded-full bg-[var(--good)]" />
               LIVE
             </div>
           </div>

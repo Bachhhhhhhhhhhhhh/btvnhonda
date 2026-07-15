@@ -52,32 +52,30 @@ export function TwinChat({ compact = false }: { compact?: boolean }) {
   return (
     <div
       className={cn(
-        "cc-panel flex flex-col overflow-hidden rounded-xl border border-[var(--line)] bg-[var(--card)]",
+        "flex flex-col overflow-hidden rounded-2xl border border-[var(--line)] bg-[var(--card)] shadow-[var(--shadow-sm)]",
         compact ? "h-[380px]" : "h-[480px]"
       )}
     >
-      <div className="flex items-center gap-2 border-b border-[var(--line-soft)] px-4 py-3">
-        <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-gradient-to-br from-[#0a4d6e] to-[#071428] text-[#d4b76a]">
+      <div className="flex items-center gap-2.5 border-b border-[var(--line-soft)] px-4 py-3.5">
+        <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-to-br from-[#0e4d6b] to-[#0b1220] text-[#d4b76a] ring-1 ring-white/10">
           <Bot className="h-4 w-4" />
         </div>
         <div className="min-w-0 flex-1">
-          <div className="text-[10px] font-bold uppercase tracking-[0.14em] text-[var(--gold)]">
-            Twin Chat
-          </div>
-          <div className="text-sm font-extrabold text-[var(--ink)]">
+          <div className="panel-kicker">Twin Chat</div>
+          <div className="text-sm font-bold text-[var(--ink)]">
             Hỏi đáp dữ liệu live
           </div>
         </div>
         <Sparkles className="h-4 w-4 text-[var(--gold)]" />
       </div>
 
-      <div className="flex flex-wrap gap-1 border-b border-[var(--line-soft)] px-3 py-2">
+      <div className="flex flex-wrap gap-1.5 border-b border-[var(--line-soft)] px-3 py-2.5">
         {SUGGESTIONS.map((s) => (
           <button
             key={s}
             type="button"
             onClick={() => ask(s)}
-            className="rounded-full border border-[var(--line)] bg-[var(--bg)] px-2 py-0.5 text-[10px] font-semibold text-[var(--muted)] hover:border-[var(--gold)]/40 hover:text-[var(--ink)]"
+            className="rounded-full border border-[var(--line)] bg-[var(--bg)] px-2.5 py-1 text-[10px] font-semibold text-[var(--muted)] transition hover:border-[color-mix(in_srgb,var(--gold)_40%,var(--line))] hover:text-[var(--ink)]"
           >
             {s}
           </button>
@@ -94,15 +92,15 @@ export function TwinChat({ compact = false }: { compact?: boolean }) {
             )}
           >
             {m.role === "assistant" && (
-              <div className="mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-[var(--bg)]">
+              <div className="mt-0.5 flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-[var(--bg)] ring-1 ring-[var(--line)]">
                 <Bot className="h-3 w-3 text-[var(--gold)]" />
               </div>
             )}
             <div
               className={cn(
-                "max-w-[85%] rounded-xl px-3 py-2 text-[12.5px] leading-relaxed",
+                "max-w-[85%] rounded-2xl px-3.5 py-2.5 text-[12.5px] leading-relaxed",
                 m.role === "user"
-                  ? "bg-[#0a4d6e] text-white"
+                  ? "bg-[var(--chart-1)] text-white shadow-sm"
                   : "border border-[var(--line)] bg-[var(--bg)] text-[var(--ink)]"
               )}
             >
@@ -115,7 +113,7 @@ export function TwinChat({ compact = false }: { compact?: boolean }) {
               )}
             </div>
             {m.role === "user" && (
-              <div className="mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-[var(--bg)]">
+              <div className="mt-0.5 flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-[var(--bg)] ring-1 ring-[var(--line)]">
                 <User className="h-3 w-3 text-[var(--muted)]" />
               </div>
             )}
@@ -135,11 +133,12 @@ export function TwinChat({ compact = false }: { compact?: boolean }) {
           value={input}
           onChange={(e) => setInput(e.target.value)}
           placeholder="Hỏi Twin… vd. tiết kiệm bao nhiêu?"
-          className="min-w-0 flex-1 rounded-lg border border-[var(--line)] bg-[var(--bg)] px-3 py-2 text-sm text-[var(--ink)] outline-none focus:border-[var(--gold)]"
+          className="min-w-0 flex-1 rounded-xl border border-[var(--line)] bg-[var(--bg)] px-3.5 py-2.5 text-sm text-[var(--ink)] outline-none transition focus:border-[var(--gold)] focus:shadow-[0_0_0_3px_color-mix(in_srgb,var(--gold)_18%,transparent)]"
         />
         <button
           type="submit"
-          className="btn-bank-gold flex h-10 w-10 items-center justify-center rounded-lg"
+          className="btn-bank-gold flex h-10 w-10 items-center justify-center rounded-xl"
+          aria-label="Send"
         >
           <Send className="h-4 w-4" />
         </button>

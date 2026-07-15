@@ -41,15 +41,15 @@ export function PolicyMatrix() {
   const bestId = rows.reduce((b, r) => (r.save > b.save ? r : b), rows[0]).id;
 
   return (
-    <div className="cc-panel overflow-hidden rounded-xl border border-[var(--line)] bg-[var(--card)]">
-      <div className="flex flex-wrap items-center justify-between gap-2 border-b border-[var(--line-soft)] px-4 py-3">
-        <div className="flex items-center gap-2">
-          <GitCompare className="h-4 w-4 text-[var(--gold)]" />
+    <div className="overflow-hidden rounded-2xl border border-[var(--line)] bg-[var(--card)] shadow-[var(--shadow-sm)]">
+      <div className="flex flex-wrap items-center justify-between gap-2 border-b border-[var(--line-soft)] px-5 py-4">
+        <div className="flex items-center gap-2.5">
+          <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-[color-mix(in_srgb,var(--gold)_14%,transparent)] text-[var(--gold)]">
+            <GitCompare className="h-4 w-4" />
+          </div>
           <div>
-            <div className="text-[10px] font-bold uppercase tracking-[0.14em] text-[var(--gold)]">
-              Policy matrix
-            </div>
-            <div className="text-sm font-extrabold text-[var(--ink)]">
+            <div className="panel-kicker">Policy matrix</div>
+            <div className="text-sm font-bold text-[var(--ink)]">
               So 4 preset trên rate card hiện tại
             </div>
           </div>
