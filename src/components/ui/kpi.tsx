@@ -30,54 +30,49 @@ export function Kpi({
 }) {
   const valueTones = {
     default: "text-[var(--ink)]",
-    good: "text-teal-700 dark:text-teal-300",
-    warn: "text-amber-700 dark:text-amber-300",
-    bad: "text-rose-700 dark:text-rose-300",
-    accent: "text-sky-800 dark:text-sky-300",
+    good: "text-[var(--good)]",
+    warn: "text-[var(--warn)]",
+    bad: "text-[var(--bad)]",
+    accent: "text-[var(--link)]",
   };
   const iconBg = {
     default: "bg-[var(--bg)] text-[var(--muted)]",
-    good: "bg-teal-500/15 text-teal-700 dark:text-teal-300",
-    warn: "bg-amber-500/15 text-amber-700 dark:text-amber-300",
-    bad: "bg-rose-500/15 text-rose-700 dark:text-rose-300",
-    accent: "bg-sky-500/15 text-sky-800 dark:text-sky-300",
+    good: "bg-[color-mix(in_srgb,var(--good)_12%,transparent)] text-[var(--good)]",
+    warn: "bg-[color-mix(in_srgb,var(--warn)_12%,transparent)] text-[var(--warn)]",
+    bad: "bg-[color-mix(in_srgb,var(--bad)_12%,transparent)] text-[var(--bad)]",
+    accent: "bg-[color-mix(in_srgb,var(--link)_12%,transparent)] text-[var(--link)]",
   };
   const deltaTones = {
     default: "bg-[var(--bg)] text-[var(--muted)]",
-    good: "bg-teal-500/15 text-teal-800 dark:text-teal-300",
-    warn: "bg-amber-500/15 text-amber-800 dark:text-amber-300",
-    bad: "bg-rose-500/15 text-rose-800 dark:text-rose-300",
-    accent: "bg-sky-500/15 text-sky-800 dark:text-sky-300",
+    good: "bg-[color-mix(in_srgb,var(--good)_12%,transparent)] text-[var(--good)]",
+    warn: "bg-[color-mix(in_srgb,var(--warn)_12%,transparent)] text-[var(--warn)]",
+    bad: "bg-[color-mix(in_srgb,var(--bad)_12%,transparent)] text-[var(--bad)]",
+    accent: "bg-[color-mix(in_srgb,var(--link)_12%,transparent)] text-[var(--link)]",
   };
-  const accentBar = {
-    default: "from-[#071428] via-[#b8954a] to-[#071428]",
-    good: "from-[#0d6b63] via-[#14b8a6] to-[#0d6b63]",
-    warn: "from-[#a65c12] via-[#d4b76a] to-[#a65c12]",
-    bad: "from-[#a31d1d] via-[#f87171] to-[#a31d1d]",
-    accent: "from-[#0a4d6e] via-[#38bdf8] to-[#0a4d6e]",
+  const bar = {
+    default: "bg-[var(--chart-1)]",
+    good: "bg-[var(--good)]",
+    warn: "bg-[var(--warn)]",
+    bad: "bg-[var(--bad)]",
+    accent: "bg-[var(--link)]",
   };
 
   return (
     <motion.div
-      initial={{ opacity: 0, y: 8 }}
+      initial={{ opacity: 0, y: 6 }}
       animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.3, delay }}
-      className="cc-panel relative overflow-hidden rounded-xl border border-[var(--line)] bg-[var(--card)] p-4"
+      transition={{ duration: 0.28, delay }}
+      className="group relative overflow-hidden rounded-2xl border border-[var(--line)] bg-[var(--card)] p-4 shadow-[var(--shadow-sm)] transition-all duration-200 hover:-translate-y-px hover:shadow-[var(--shadow-md)]"
     >
-      <div
-        className={cn(
-          "absolute left-0 right-0 top-0 h-[3px] bg-gradient-to-r",
-          accentBar[tone]
-        )}
-      />
-      <div className="flex items-start justify-between gap-3">
+      <div className={cn("absolute left-0 top-0 h-full w-[3px] rounded-l-2xl", bar[tone])} />
+      <div className="flex items-start justify-between gap-3 pl-1">
         <div className="min-w-0">
-          <div className="text-[10px] font-bold uppercase tracking-[0.12em] text-[var(--muted)]">
+          <div className="text-[10px] font-semibold uppercase tracking-[0.1em] text-[var(--muted)]">
             {label}
           </div>
           <div
             className={cn(
-              "mt-2 text-[1.55rem] font-black tabular-nums tracking-tight leading-none",
+              "mt-2 text-[1.55rem] font-bold tabular-nums tracking-tight leading-none",
               valueTones[tone]
             )}
           >
@@ -89,7 +84,7 @@ export function Kpi({
                   const hasPct = value.includes("%") && !suffix.includes("%");
                   if (!suffix && !hasPct) return null;
                   return (
-                    <span className="ml-1 text-[0.75em] font-bold opacity-80">
+                    <span className="ml-1 text-[0.72em] font-semibold opacity-75">
                       {hasPct ? "%" : ""}
                       {suffix ? ` ${suffix}` : ""}
                     </span>
@@ -105,17 +100,17 @@ export function Kpi({
           {Icon && (
             <div
               className={cn(
-                "flex h-9 w-9 items-center justify-center rounded-lg",
+                "flex h-9 w-9 items-center justify-center rounded-xl transition-transform group-hover:scale-105",
                 iconBg[tone]
               )}
             >
-              <Icon className="h-4 w-4" strokeWidth={1.85} />
+              <Icon className="h-4 w-4" strokeWidth={1.75} />
             </div>
           )}
           {delta && (
             <span
               className={cn(
-                "rounded-md px-2 py-0.5 text-[10px] font-bold",
+                "rounded-md px-2 py-0.5 text-[10px] font-semibold",
                 deltaTones[tone]
               )}
             >
@@ -125,14 +120,16 @@ export function Kpi({
         </div>
       </div>
       {sub && (
-        <div className="mt-2.5 text-xs leading-relaxed text-[var(--muted)]">{sub}</div>
+        <div className="mt-2.5 pl-1 text-xs leading-relaxed text-[var(--muted)]">
+          {sub}
+        </div>
       )}
       {source && (
         <div
-          className="mt-2.5 truncate border-t border-[var(--line-soft)] pt-2 text-[10px] text-[var(--muted)]"
+          className="mt-2.5 truncate border-t border-[var(--line-soft)] pt-2 pl-1 text-[10px] text-[var(--muted)] opacity-80"
           title={source}
         >
-          Nguồn · {source}
+          {source}
         </div>
       )}
     </motion.div>

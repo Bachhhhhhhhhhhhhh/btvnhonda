@@ -73,7 +73,7 @@ import { TwinChat } from "@/components/command/TwinChat";
 import { CostWaterfall } from "@/components/command/CostWaterfall";
 import { MonteCarloMini } from "@/components/command/MonteCarloMini";
 
-const PIE_COLORS = ["#0a4d6e", "#0d6b63", "#b8954a", "#5b21b6", "#64748b"];
+const PIE_COLORS = ["#0e4d6b", "#0f766e", "#a8893a", "#4f46e5", "#64748b"];
 
 export default function DashboardPage() {
   const { result, params } = useTwinStore();
@@ -141,56 +141,57 @@ export default function DashboardPage() {
 
       {/* Command hero */}
       <motion.section
-        initial={{ opacity: 0, y: 14 }}
+        initial={{ opacity: 0, y: 12 }}
         animate={{ opacity: 1, y: 0 }}
-        className="hero-wow relative overflow-hidden rounded-2xl border border-[var(--line)] text-white shadow-[0_24px_60px_-24px_rgba(0,0,0,0.55)]"
+        transition={{ duration: 0.35 }}
+        className="hero-wow relative overflow-hidden rounded-2xl text-white shadow-[var(--shadow-lg)]"
       >
-        <div className="orb left-[-40px] top-[-40px] h-52 w-52 bg-[#b8954a]" />
+        <div className="orb left-[-48px] top-[-48px] h-56 w-56 bg-[#c9a95a]" />
         <div
-          className="orb bottom-[-50px] right-[8%] h-60 w-60 bg-cyan-700"
-          style={{ animationDelay: "1s" }}
+          className="orb bottom-[-56px] right-[6%] h-64 w-64 bg-[#0e4d6b]"
+          style={{ animationDelay: "1.2s" }}
         />
         <div className="relative z-10 grid gap-8 p-6 sm:p-8 xl:grid-cols-12 xl:items-end">
           <div className="xl:col-span-7">
-            <div className="mb-3 inline-flex items-center gap-2 rounded-full border border-[#d4b76a]/35 bg-[#d4b76a]/10 px-3 py-1 text-[11px] font-bold text-[#e8d5a3]">
-              <Sparkles className="h-3.5 w-3.5" />
-              Command Center v3 · Honda MC Logistics
+            <div className="mb-3 inline-flex items-center gap-2 rounded-full border border-white/12 bg-white/[0.06] px-3 py-1 text-[11px] font-semibold text-[#e0c47a]">
+              <Sparkles className="h-3.5 w-3.5 opacity-90" />
+              Honda MC · Logistics Command Center
             </div>
-            <h1 className="max-w-2xl text-[1.9rem] font-black leading-[1.12] tracking-tight sm:text-[2.5rem]">
+            <h1 className="max-w-2xl text-[1.9rem] font-bold leading-[1.12] tracking-tight sm:text-[2.4rem]">
               Digital Twin
-              <span className="mt-1 block bg-gradient-to-r from-[#d4b76a] via-[#fff3c4] to-[#d4b76a] bg-clip-text text-transparent">
+              <span className="mt-2 block text-[1.1rem] font-medium text-slate-300/95 sm:text-[1.3rem]">
                 Capacity · Network · Capital
               </span>
             </h1>
-            <p className="mt-3 max-w-xl text-sm leading-relaxed text-slate-300">
-              Một màn hình điều hành: playback mùa cao điểm, AI brief, optimizer,
-              bản đồ cargo live, WSB what-if và board presentation.
+            <p className="mt-3.5 max-w-xl text-[13.5px] leading-relaxed text-slate-400">
+              Điều hành stacking, transfer N→S và thuê ngoài trên một màn hình —
+              playback, brief, optimizer, GIS và board pack.
             </p>
-            <div className="mt-5 flex flex-wrap gap-2">
+            <div className="mt-6 flex flex-wrap gap-2">
               <Link
                 href="/digital-twin"
-                className="btn-bank-gold inline-flex items-center gap-2 px-5 py-2.5 text-sm shadow-lg"
+                className="btn-bank-gold inline-flex items-center gap-2 px-5 py-2.5 text-sm"
               >
                 Control Twin
                 <ArrowRight className="h-4 w-4" />
               </Link>
               <Link
                 href="/wsb"
-                className="inline-flex items-center gap-2 rounded-lg border border-white/20 bg-white/10 px-4 py-2.5 text-sm font-bold backdrop-blur hover:bg-white/15"
+                className="inline-flex items-center gap-2 rounded-xl border border-white/18 bg-white/[0.08] px-4 py-2.5 text-sm font-semibold backdrop-blur hover:bg-white/[0.12]"
               >
                 <FlaskConical className="h-4 w-4" />
                 WSB
               </Link>
               <Link
                 href="/insights"
-                className="inline-flex items-center gap-2 rounded-lg border border-white/15 px-4 py-2.5 text-sm font-semibold text-slate-200 hover:bg-white/5"
+                className="inline-flex items-center gap-2 rounded-xl border border-white/12 px-4 py-2.5 text-sm font-medium text-slate-200 hover:bg-white/[0.06]"
               >
                 <Brain className="h-4 w-4" />
                 Insights
               </Link>
               <Link
                 href="/map"
-                className="inline-flex items-center gap-2 rounded-lg border border-white/15 px-4 py-2.5 text-sm font-semibold text-slate-200 hover:bg-white/5"
+                className="inline-flex items-center gap-2 rounded-xl border border-white/12 px-4 py-2.5 text-sm font-medium text-slate-200 hover:bg-white/[0.06]"
               >
                 <MapPinned className="h-4 w-4" />
                 Map
@@ -221,14 +222,14 @@ export default function DashboardPage() {
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.1 + i * 0.05 }}
-                className="stat-glass rounded-xl px-3.5 py-3"
+                className="stat-glass rounded-xl px-3.5 py-3.5"
               >
-                <div className="text-[10px] font-bold uppercase tracking-[0.12em] text-[#d4b76a]">
+                <div className="text-[10px] font-semibold uppercase tracking-[0.12em] text-[#d4b76a]">
                   {x.l}
                 </div>
-                <div className="mt-1 text-[1.5rem] font-black tabular-nums text-white">
+                <div className="mt-1.5 text-[1.45rem] font-bold tabular-nums tracking-tight text-white">
                   <AnimatedNumber value={x.num} digits={x.d} />
-                  <span className="ml-1 text-sm font-bold text-slate-400">
+                  <span className="ml-1 text-sm font-medium text-slate-400">
                     {x.s}
                   </span>
                 </div>
@@ -460,23 +461,23 @@ export default function DashboardPage() {
               <AreaChart data={chartData}>
                 <defs>
                   <linearGradient id="gOver" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="0%" stopColor="#94a3b8" stopOpacity={0.35} />
-                    <stop offset="100%" stopColor="#94a3b8" stopOpacity={0} />
+                    <stop offset="0%" stopColor={chartTheme.colors.slate} stopOpacity={0.28} />
+                    <stop offset="100%" stopColor={chartTheme.colors.slate} stopOpacity={0} />
                   </linearGradient>
                   <linearGradient id="gRes" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="0%" stopColor="#b45309" stopOpacity={0.35} />
-                    <stop offset="100%" stopColor="#b45309" stopOpacity={0} />
+                    <stop offset="0%" stopColor={chartTheme.colors.amber} stopOpacity={0.28} />
+                    <stop offset="100%" stopColor={chartTheme.colors.amber} stopOpacity={0} />
                   </linearGradient>
                 </defs>
-                <CartesianGrid strokeDasharray="3 3" stroke={chartTheme.grid} vertical={false} />
-                <XAxis dataKey="month" tick={{ fill: chartTheme.tick, fontSize: 11 }} axisLine={false} />
-                <YAxis tick={{ fill: chartTheme.tick, fontSize: 11 }} axisLine={false} />
+                <CartesianGrid strokeDasharray="4 6" stroke={chartTheme.grid} vertical={false} />
+                <XAxis dataKey="month" tick={{ fill: chartTheme.tick, fontSize: 11 }} axisLine={false} tickLine={false} />
+                <YAxis tick={{ fill: chartTheme.tick, fontSize: 11 }} axisLine={false} tickLine={false} width={44} />
                 <Tooltip {...chartTheme.tooltip} />
-                <Legend />
-                <Area type="monotone" dataKey="Over" stroke="#94a3b8" fill="url(#gOver)" strokeWidth={2} />
-                <Area type="monotone" dataKey="Residual" stroke="#b45309" fill="url(#gRes)" strokeWidth={2} />
-                <Line type="monotone" dataKey="Transfer" stroke="#7c3aed" strokeWidth={2} dot={false} />
-                <Line type="monotone" dataKey="Outsource" stroke="#0a4d6e" strokeWidth={2} dot={false} />
+                <Legend iconType="circle" wrapperStyle={{ fontSize: 12, paddingTop: 8 }} />
+                <Area type="monotone" dataKey="Over" stroke={chartTheme.colors.slate} fill="url(#gOver)" strokeWidth={2} dot={false} activeDot={{ r: 3 }} />
+                <Area type="monotone" dataKey="Residual" stroke={chartTheme.colors.amber} fill="url(#gRes)" strokeWidth={2} dot={false} activeDot={{ r: 3 }} />
+                <Line type="monotone" dataKey="Transfer" stroke={chartTheme.colors.violet} strokeWidth={2} dot={false} activeDot={{ r: 3 }} />
+                <Line type="monotone" dataKey="Outsource" stroke={chartTheme.colors.sky} strokeWidth={2} dot={false} activeDot={{ r: 3 }} />
               </AreaChart>
             </ResponsiveContainer>
           </CardContent>
@@ -493,16 +494,17 @@ export default function DashboardPage() {
                   data={costPie}
                   dataKey="value"
                   nameKey="name"
-                  innerRadius={52}
-                  outerRadius={88}
-                  paddingAngle={2}
+                  innerRadius={56}
+                  outerRadius={90}
+                  paddingAngle={3}
+                  stroke="transparent"
                 >
                   {costPie.map((_, i) => (
                     <Cell key={i} fill={PIE_COLORS[i % PIE_COLORS.length]} />
                   ))}
                 </Pie>
                 <Tooltip {...chartTheme.tooltip} />
-                <Legend />
+                <Legend iconType="circle" wrapperStyle={{ fontSize: 12 }} />
               </PieChart>
             </ResponsiveContainer>
           </CardContent>
@@ -516,12 +518,12 @@ export default function DashboardPage() {
           </CardHeader>
           <CardContent className="h-64">
             <ResponsiveContainer width="100%" height="100%">
-              <BarChart data={chartData}>
-                <CartesianGrid strokeDasharray="3 3" stroke={chartTheme.grid} vertical={false} />
-                <XAxis dataKey="month" tick={{ fill: chartTheme.tick, fontSize: 11 }} axisLine={false} />
-                <YAxis tick={{ fill: chartTheme.tick, fontSize: 11 }} axisLine={false} />
-                <Tooltip {...chartTheme.tooltip} />
-                <Bar dataKey="CostBn" name="Chi phí tỷ" fill="#0a4d6e" radius={[4, 4, 0, 0]} />
+              <BarChart data={chartData} barCategoryGap="22%">
+                <CartesianGrid strokeDasharray="4 6" stroke={chartTheme.grid} vertical={false} />
+                <XAxis dataKey="month" tick={{ fill: chartTheme.tick, fontSize: 11 }} axisLine={false} tickLine={false} />
+                <YAxis tick={{ fill: chartTheme.tick, fontSize: 11 }} axisLine={false} tickLine={false} width={40} />
+                <Tooltip {...chartTheme.tooltip} cursor={{ fill: "rgba(148,163,184,0.08)" }} />
+                <Bar dataKey="CostBn" name="Chi phí tỷ" fill={chartTheme.colors.sky} radius={[8, 8, 0, 0]} maxBarSize={36} />
               </BarChart>
             </ResponsiveContainer>
           </CardContent>

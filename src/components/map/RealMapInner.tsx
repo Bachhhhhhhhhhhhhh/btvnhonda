@@ -36,25 +36,25 @@ function assetUrl(path: string) {
   return `${base}${path.startsWith("/") ? path : `/${path}`}`;
 }
 
-/** Region palette (id_region từ vdporiginals/vietnam_geo) */
+/** Cool monochrome GIS fills — north→south subtle teal scale (no rainbow) */
 const REGION_STYLE: Record<string, { fill: string; stroke: string }> = {
-  "2": { fill: "#bfdbfe", stroke: "#1e40af" }, // Đông Bắc
-  "3": { fill: "#93c5fd", stroke: "#1d4ed8" }, // Tây Bắc
-  "4": { fill: "#a5b4fc", stroke: "#4338ca" }, // Đồng bằng sông Hồng
-  "5": { fill: "#99f6e4", stroke: "#0f766e" }, // Bắc Trung Bộ
-  "6": { fill: "#6ee7b7", stroke: "#047857" }, // Duyên hải Nam Trung
-  "7": { fill: "#fde68a", stroke: "#b45309" }, // Tây Nguyên
-  "8": { fill: "#fdba74", stroke: "#c2410c" }, // Đông Nam Bộ
-  "9": { fill: "#fca5a5", stroke: "#b91c1c" }, // Đồng bằng sông Cửu Long
+  "2": { fill: "#94a3b8", stroke: "#334155" },
+  "3": { fill: "#7c9bb5", stroke: "#1e3a5f" },
+  "4": { fill: "#6b9aaa", stroke: "#164e63" },
+  "5": { fill: "#5a9a92", stroke: "#115e59" },
+  "6": { fill: "#4f8f7a", stroke: "#134e4a" },
+  "7": { fill: "#7a8f6a", stroke: "#3f6212" },
+  "8": { fill: "#8a8060", stroke: "#713f12" },
+  "9": { fill: "#7a7a8a", stroke: "#3730a3" },
 };
 
-const DEFAULT_PROV = { fill: "#cbd5e1", stroke: "#475569" };
+const DEFAULT_PROV = { fill: "#94a3b8", stroke: "#475569" };
 const ISLAND_STYLE: PathOptions = {
-  color: "#c4a35a",
-  weight: 2,
-  fillColor: "#f5e6b8",
-  fillOpacity: 0.75,
-  opacity: 1,
+  color: "#a8893a",
+  weight: 1.25,
+  fillColor: "#d4c08a",
+  fillOpacity: 0.5,
+  opacity: 0.9,
 };
 
 function provinceStyle(feature?: Feature<Geometry, Record<string, unknown>>): PathOptions {
@@ -62,47 +62,50 @@ function provinceStyle(feature?: Feature<Geometry, Record<string, unknown>>): Pa
   const s = REGION_STYLE[id] ?? DEFAULT_PROV;
   return {
     color: s.stroke,
-    weight: 0.9,
+    weight: 0.55,
     fillColor: s.fill,
-    fillOpacity: 0.42,
-    opacity: 0.9,
+    fillOpacity: 0.22,
+    opacity: 0.7,
   };
 }
 
 function makeIcon(color: string, label: string, kind: "circle" | "square" | "star") {
-  const size = 28;
-  const shape =
+  const w = 30;
+  const h = 42;
+  const glyph =
     kind === "star"
-      ? `<polygon points="14,3 17,11 26,11 19,16 21,25 14,20 7,25 9,16 2,11 11,11" fill="${color}" stroke="#fff" stroke-width="1.5"/>`
+      ? `<path d="M15 4.5l2.4 7.2H25l-6 4.4 2.3 7.1L15 19.1l-6.3 4.1 2.3-7.1-6-4.4h7.6z" fill="${color}" stroke="#fff" stroke-width="1.4"/>`
       : kind === "square"
-        ? `<rect x="5" y="5" width="18" height="18" rx="3" fill="${color}" stroke="#fff" stroke-width="2"/>`
-        : `<circle cx="14" cy="14" r="10" fill="${color}" stroke="#fff" stroke-width="2"/>`;
+        ? `<rect x="7" y="6" width="16" height="16" rx="3.5" fill="${color}" stroke="#fff" stroke-width="1.8"/>`
+        : `<circle cx="15" cy="14" r="9" fill="${color}" stroke="#fff" stroke-width="1.8"/>`;
 
   const html = `
-    <div style="position:relative;width:${size}px;height:${size + 14}px;text-align:center">
-      <svg width="${size}" height="${size}" viewBox="0 0 28 28">${shape}</svg>
+    <div style="position:relative;width:${w}px;height:${h}px;filter:drop-shadow(0 2px 4px rgba(11,18,32,.28))">
+      <svg width="${w}" height="30" viewBox="0 0 30 30" style="display:block;margin:0 auto">
+        ${glyph}
+      </svg>
       <div style="
         position:absolute;left:50%;transform:translateX(-50%);
-        bottom:0;font:700 9px/1 'Be Vietnam Pro',system-ui,sans-serif;
-        color:#0a1628;background:#fff;border:1px solid #d8dee8;
-        border-radius:3px;padding:1px 4px;white-space:nowrap;
-        box-shadow:0 1px 3px rgba(0,0,0,.15)
+        bottom:0;font:600 9px/1.1 'Be Vietnam Pro',system-ui,sans-serif;
+        color:#0f172a;background:rgba(255,255,255,.96);border:1px solid #e2e8f0;
+        border-radius:6px;padding:2px 5px;white-space:nowrap;
+        box-shadow:0 1px 3px rgba(15,23,42,.12);letter-spacing:.01em
       ">${label}</div>
     </div>`;
 
   return L.divIcon({
     className: "bank-map-marker",
     html,
-    iconSize: [size, size + 14],
-    iconAnchor: [size / 2, size / 2],
-    popupAnchor: [0, -size / 2],
+    iconSize: [w, h],
+    iconAnchor: [w / 2, 15],
+    popupAnchor: [0, -18],
   });
 }
 
 const ICONS = {
-  owned: (label: string) => makeIcon("#0c4a6e", label, "circle"),
+  owned: (label: string) => makeIcon("#0e4d6b", label, "circle"),
   rented: (label: string) => makeIcon("#b45309", label, "square"),
-  sovereignty: (label: string) => makeIcon("#c4a35a", label, "star"),
+  sovereignty: (label: string) => makeIcon("#a8893a", label, "star"),
 };
 
 function FitBounds({ region }: { region: Region | "all" }) {
@@ -143,7 +146,7 @@ function onEachProvince(feature: Feature<Geometry, Record<string, unknown>>, lay
   layer.on({
     mouseover: (e: LeafletMouseEvent) => {
       const t = e.target as L.Path;
-      t.setStyle({ weight: 2, fillOpacity: 0.65 });
+      t.setStyle({ weight: 1.5, fillOpacity: 0.42, color: "#0e4d6b" });
       t.bringToFront();
     },
     mouseout: (e: LeafletMouseEvent) => {
@@ -247,16 +250,20 @@ export default function RealMapInner({
 
   return (
     <div className="relative overflow-hidden" style={{ height }}>
-      {/* Bank chrome bar — navy strip */}
-      <div className="map-chrome absolute left-0 right-0 top-0 z-[1000]">
+      {/* Clean map chrome */}
+      <div className="absolute left-0 right-0 top-0 z-[1000] flex items-center justify-between gap-3 border-b border-white/10 bg-[#0b1220]/90 px-3.5 py-2.5 text-[11px] font-semibold text-slate-200 backdrop-blur-md">
         <span>
-          <span className="gold">GIS Việt Nam</span>
-          {" · "}
-          63 tỉnh/TP + Hoàng Sa & Trường Sa
-          {geoLoading ? " · đang tải ranh giới…" : geoError ? ` · ${geoError}` : " · sẵn sàng"}
+          <span className="text-[#c9a95a]">Việt Nam GIS</span>
+          <span className="mx-1.5 text-slate-500">·</span>
+          63 tỉnh · Hoàng Sa · Trường Sa
+          {geoLoading ? (
+            <span className="ml-1.5 text-slate-400">· tải…</span>
+          ) : geoError ? (
+            <span className="ml-1.5 text-rose-300">· {geoError}</span>
+          ) : null}
         </span>
-        <span className="hidden sm:inline">
-          Twin · {fmt(transferVol)} xe N→S · {fmt(nsCont)} cont/năm
+        <span className="hidden tabular-nums text-slate-400 sm:inline">
+          {fmt(transferVol)} xe N→S · {fmt(nsCont)} cont
         </span>
       </div>
 
@@ -267,11 +274,12 @@ export default function RealMapInner({
         maxZoom={14}
         scrollWheelZoom
         className="h-full w-full"
-        style={{ background: "#d9e4ee", paddingTop: 0 }}
+        style={{ background: "#e8eef4", paddingTop: 0 }}
       >
         <TileLayer
-          attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OSM</a> · ranh giới: <a href="https://github.com/vdporiginals/vietnam_geo">vdporiginals/vietnam_geo</a>'
-          url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+          attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OSM</a> · &copy; <a href="https://carto.com/">CARTO</a> · ranh giới: <a href="https://github.com/vdporiginals/vietnam_geo">vietnam_geo</a>'
+          url="https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png"
+          subdomains="abcd"
         />
         <FitBounds region={filterRegion} />
 
@@ -338,10 +346,12 @@ export default function RealMapInner({
                   [to.lat, to.lng],
                 ]}
                 pathOptions={{
-                  color: isSea ? "#0c4a6e" : "#c4a35a",
-                  weight: isSea ? 2.5 : 2,
-                  dashArray: isSea ? "10 8" : "4 6",
-                  opacity: 0.85,
+                  color: isSea ? "#0e4d6b" : "#a8893a",
+                  weight: isSea ? 2.25 : 1.75,
+                  dashArray: isSea ? "8 7" : "3 5",
+                  opacity: 0.78,
+                  lineCap: "round",
+                  lineJoin: "round",
                 }}
               >
                 <Tooltip sticky>{lane.label}</Tooltip>
@@ -491,33 +501,33 @@ export default function RealMapInner({
         })}
       </MapContainer>
 
-      {/* Floating legend — bank card */}
-      <div className="absolute bottom-3 left-3 z-[1000] max-w-[230px] rounded-[3px] border border-[#dce3ec] bg-white/96 p-3 text-[10px] font-semibold text-slate-700 shadow-[0_4px_16px_-4px_rgba(7,20,40,0.18)] backdrop-blur-sm">
-        <div className="mb-1.5 text-[9px] font-bold uppercase tracking-[0.14em] text-[#b8954a]">
+      {/* Floating legend */}
+      <div className="absolute bottom-3 left-3 z-[1000] max-w-[240px] rounded-xl border border-[var(--line)] bg-[var(--card)]/95 p-3.5 text-[10px] font-medium text-[var(--ink)] shadow-[var(--shadow-md)] backdrop-blur-md">
+        <div className="mb-2 text-[9px] font-bold uppercase tracking-[0.14em] text-[var(--gold)]">
           Chú giải
         </div>
-        <div className="space-y-1">
-          <div className="flex items-center gap-1.5">
-            <span className="inline-block h-2.5 w-2.5 rounded-full bg-[#0c4a6e]" /> HVN owned
+        <div className="space-y-1.5">
+          <div className="flex items-center gap-2">
+            <span className="inline-block h-2.5 w-2.5 rounded-full bg-[#0e4d6b] ring-2 ring-white" /> HVN owned
           </div>
-          <div className="flex items-center gap-1.5">
-            <span className="inline-block h-2.5 w-2.5 rounded-[2px] bg-[#b45309]" /> Kho thuê
+          <div className="flex items-center gap-2">
+            <span className="inline-block h-2.5 w-2.5 rounded-md bg-[#b45309] ring-2 ring-white" /> Kho thuê
           </div>
-          <div className="flex items-center gap-1.5">
-            <span className="inline-block h-2.5 w-2.5 rounded-full bg-[#b8954a]" /> Hoàng Sa · Trường Sa
+          <div className="flex items-center gap-2">
+            <span className="inline-block h-2.5 w-2.5 rounded-full bg-[#a8893a] ring-2 ring-white" /> Hoàng Sa · Trường Sa
           </div>
-          <div className="flex items-center gap-1.5">
-            <span className="inline-block h-2.5 w-3 rounded-[1px] bg-[#93c5fd]/opacity-70 ring-1 ring-[#1d4ed8]" /> Ranh giới tỉnh
+          <div className="flex items-center gap-2">
+            <span className="inline-block h-2.5 w-3 rounded-sm bg-slate-400/40 ring-1 ring-slate-500/40" /> Ranh giới tỉnh
           </div>
-          <div className="flex items-center gap-1.5">
-            <span className="inline-block h-0.5 w-4 border-t-2 border-dashed border-[#0c4a6e]" /> Tuyến Sea
+          <div className="flex items-center gap-2">
+            <span className="inline-block h-0.5 w-5 border-t-2 border-dashed border-[#0e4d6b]" /> Tuyến Sea
           </div>
-          <div className="flex items-center gap-1.5">
-            <span className="inline-block h-0.5 w-4 border-t-2 border-dotted border-[#b8954a]" /> Tuyến Truck
+          <div className="flex items-center gap-2">
+            <span className="inline-block h-0.5 w-5 border-t-2 border-dotted border-[#a8893a]" /> Tuyến Truck
           </div>
         </div>
-        <div className="mt-2 border-t border-[#eef2f6] pt-1.5 text-[9px] font-medium leading-snug text-slate-400">
-          Nguồn GIS: vdporiginals/vietnam_geo · nền OpenStreetMap
+        <div className="mt-2.5 border-t border-[var(--line-soft)] pt-2 text-[9px] leading-snug text-[var(--muted)]">
+          GIS: vietnam_geo · nền CARTO light
         </div>
       </div>
     </div>

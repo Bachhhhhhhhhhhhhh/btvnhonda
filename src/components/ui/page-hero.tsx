@@ -19,18 +19,19 @@ export function PageHero({
   if (variant === "light") {
     return (
       <motion.div
-        initial={{ opacity: 0, y: 6 }}
+        initial={{ opacity: 0, y: 8 }}
         animate={{ opacity: 1, y: 0 }}
-        className="rounded-[4px] border border-[#dce3ec] bg-white p-6 shadow-[0_1px_2px_rgba(7,20,40,0.05)]"
+        transition={{ duration: 0.28 }}
+        className="rounded-2xl border border-[var(--line)] bg-[var(--card)] p-6 shadow-[var(--shadow-sm)] sm:p-7"
       >
-        <div className="text-[10px] font-bold uppercase tracking-[0.16em] text-[#b8954a]">
+        <div className="text-[10px] font-bold uppercase tracking-[0.14em] text-[var(--gold)]">
           {kicker}
         </div>
-        <h1 className="mt-1.5 text-2xl font-bold tracking-tight text-[#071428]">
+        <h1 className="mt-1.5 text-2xl font-bold tracking-tight text-[var(--ink)] sm:text-[1.65rem]">
           {title}
         </h1>
         {subtitle && (
-          <p className="mt-2 max-w-3xl text-sm leading-relaxed text-slate-600">
+          <p className="mt-2 max-w-3xl text-sm leading-relaxed text-[var(--muted)]">
             {subtitle}
           </p>
         )}
@@ -41,12 +42,13 @@ export function PageHero({
 
   return (
     <motion.div
-      initial={{ opacity: 0, y: 6 }}
+      initial={{ opacity: 0, y: 8 }}
       animate={{ opacity: 1, y: 0 }}
-      className="hero-mesh relative overflow-hidden rounded-[4px] p-6 text-white shadow-[0_8px_24px_-8px_rgba(7,20,40,0.35)] sm:p-7"
+      transition={{ duration: 0.28 }}
+      className="hero-mesh relative overflow-hidden rounded-2xl p-6 text-white shadow-[var(--shadow-md)] sm:p-7"
     >
       <div className="relative z-10">
-        <div className="text-[10px] font-bold uppercase tracking-[0.16em] text-[#d4b76a]">
+        <div className="text-[10px] font-bold uppercase tracking-[0.14em] text-[#d4b76a]">
           {kicker}
         </div>
         <h1 className="mt-1.5 max-w-3xl text-2xl font-bold tracking-tight sm:text-[1.7rem]">

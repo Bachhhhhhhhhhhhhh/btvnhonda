@@ -16,8 +16,8 @@ import { MapPinned, Route } from "lucide-react";
 const RealMapInner = dynamic(() => import("./RealMapInner"), {
   ssr: false,
   loading: () => (
-    <div className="flex h-[420px] flex-col items-center justify-center gap-2 bg-[#eef2f6] text-sm font-semibold text-slate-500">
-      <MapPinned className="h-6 w-6 text-[#b8954a]" />
+    <div className="flex h-[420px] flex-col items-center justify-center gap-2 bg-[var(--bg)] text-sm font-medium text-[var(--muted)]">
+      <MapPinned className="h-6 w-6 text-[var(--gold)]" />
       Đang tải bản đồ GIS Việt Nam…
     </div>
   ),
@@ -60,16 +60,15 @@ export function VietnamNetworkMap({
 
   return (
     <div className={cn("relative", className)}>
-      {/* Bank toolbar */}
-      <div className="mb-3 flex flex-wrap items-center gap-2 border-b border-[#eef2f6] pb-3">
+      <div className="mb-3 flex flex-wrap items-center gap-2 border-b border-[var(--line-soft)] pb-3">
         <button
           type="button"
           onClick={() => setLaneOn((v) => !v)}
           className={cn(
-            "inline-flex items-center gap-1.5 rounded-[3px] border px-3 py-1.5 text-xs font-bold transition",
+            "inline-flex items-center gap-1.5 rounded-lg border px-3 py-1.5 text-xs font-semibold transition",
             laneOn
-              ? "border-[#071428] bg-[#071428] text-white"
-              : "border-[#dce3ec] bg-white text-slate-700 hover:bg-slate-50"
+              ? "border-[var(--ink)] bg-[var(--ink)] text-[var(--card)]"
+              : "border-[var(--line)] bg-[var(--card)] text-[var(--ink)] hover:bg-[var(--bg)]"
           )}
         >
           <Route className="h-3.5 w-3.5" />
@@ -95,12 +94,11 @@ export function VietnamNetworkMap({
             </button>
           ))}
         </div>
-        <div className="ml-auto text-[10px] font-semibold text-slate-500">
+        <div className="ml-auto text-[10px] font-medium text-[var(--muted)]">
           GIS 63 tỉnh · HS/TS · {fmt(REGION_CAPS.nationwide.cap100)} xe nationwide
         </div>
       </div>
 
-      {/* Map framed like bank locator */}
       <div className="map-stage relative">
         <div className="map-float relative z-[1]">
           <RealMapInner
@@ -120,21 +118,21 @@ export function VietnamNetworkMap({
             initial={{ opacity: 0, y: 6 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0 }}
-            className="mt-3 rounded-[4px] border border-[#dce3ec] bg-white p-4 shadow-[0_1px_2px_rgba(7,20,40,0.05)]"
+            className="mt-3 rounded-2xl border border-[var(--line)] bg-[var(--card)] p-4 shadow-[var(--shadow-sm)]"
           >
             <div className="flex flex-wrap items-start justify-between gap-3">
               <div>
-                <div className="text-[10px] font-bold uppercase tracking-[0.14em] text-[#b8954a]">
+                <div className="text-[10px] font-bold uppercase tracking-[0.14em] text-[var(--gold)]">
                   {selected.type === "sovereignty"
                     ? "Lãnh thổ Việt Nam"
                     : selected.type === "owned"
                       ? "HVN Owned"
                       : "Rented WH"}
                 </div>
-                <div className="mt-0.5 text-lg font-bold text-[#071428]">
+                <div className="mt-0.5 text-lg font-bold text-[var(--ink)]">
                   {selected.name}
                 </div>
-                <div className="text-xs text-slate-500">
+                <div className="text-xs text-[var(--muted)]">
                   {selected.city} · {selected.lat.toFixed(4)}°N,{" "}
                   {selected.lng.toFixed(4)}°E
                 </div>
@@ -155,12 +153,12 @@ export function VietnamNetworkMap({
                 <MiniStat label="Mã" value={selected.short} />
               </div>
             ) : (
-              <div className="mt-3 rounded-[3px] border border-[#e8d5a3] bg-[#faf6eb] px-3 py-2 text-xs font-semibold text-[#7a6230]">
+              <div className="mt-3 rounded-xl border border-[color-mix(in_srgb,var(--gold)_35%,var(--line))] bg-[var(--gold-soft)] px-3 py-2 text-xs font-semibold text-[var(--gold)]">
                 {selected.note} — ranh giới GIS mở · chủ quyền Việt Nam.
               </div>
             )}
             {selected.note && selected.type !== "sovereignty" && (
-              <p className="mt-2 text-xs text-slate-500">{selected.note}</p>
+              <p className="mt-2 text-xs text-[var(--muted)]">{selected.note}</p>
             )}
           </motion.div>
         )}
@@ -174,10 +172,10 @@ export function VietnamNetworkMap({
               type="button"
               onClick={() => handleSelect(w)}
               className={cn(
-                "rounded-[3px] border px-2.5 py-1 text-[10px] font-bold transition",
+                "rounded-lg border px-2.5 py-1 text-[10px] font-semibold transition",
                 selected?.id === w.id
-                  ? "border-[#071428] bg-[#071428] text-white"
-                  : "border-[#dce3ec] bg-white text-slate-600 hover:border-[#b0bccb]"
+                  ? "border-[var(--ink)] bg-[var(--ink)] text-[var(--card)]"
+                  : "border-[var(--line)] bg-[var(--card)] text-[var(--muted)] hover:text-[var(--ink)]"
               )}
             >
               {w.short}
@@ -191,11 +189,11 @@ export function VietnamNetworkMap({
 
 function MiniStat({ label, value }: { label: string; value: string }) {
   return (
-    <div className="rounded-[3px] border border-[#eef2f6] bg-[#f7f9fc] px-2.5 py-2">
-      <div className="text-[9px] font-bold uppercase tracking-wide text-slate-400">
+    <div className="rounded-xl border border-[var(--line-soft)] bg-[var(--bg)] px-2.5 py-2">
+      <div className="text-[9px] font-bold uppercase tracking-wide text-[var(--muted)]">
         {label}
       </div>
-      <div className="text-sm font-bold tabular-nums text-[#071428]">{value}</div>
+      <div className="text-sm font-bold tabular-nums text-[var(--ink)]">{value}</div>
     </div>
   );
 }

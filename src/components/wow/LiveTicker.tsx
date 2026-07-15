@@ -28,16 +28,27 @@ export function LiveTicker() {
   }, [a, params, result.months, ue]);
 
   return (
-    <div className="ticker-wrap no-print relative overflow-hidden rounded-[4px] border border-[#071428] bg-[#071428] text-[11px] font-semibold text-[#e8eef5]">
-      <div className="pointer-events-none absolute inset-y-0 left-0 z-10 w-10 bg-gradient-to-r from-[#071428] to-transparent" />
-      <div className="pointer-events-none absolute inset-y-0 right-0 z-10 w-10 bg-gradient-to-l from-[#071428] to-transparent" />
-      <div className="ticker-track flex whitespace-nowrap py-2">
+    <div className="ticker-wrap no-print relative overflow-hidden rounded-xl border border-[var(--line)] bg-[var(--card)] text-[11px] font-medium text-[var(--muted)] shadow-[var(--shadow-sm)]">
+      <div className="pointer-events-none absolute inset-y-0 left-0 z-10 w-10 bg-gradient-to-r from-[var(--card)] to-transparent" />
+      <div className="pointer-events-none absolute inset-y-0 right-0 z-10 w-10 bg-gradient-to-l from-[var(--card)] to-transparent" />
+      <div className="ticker-track flex whitespace-nowrap py-2.5">
         {items.map((t, i) => (
           <span key={i} className="mx-4 inline-flex items-center gap-2">
-            <span className={t.startsWith("●") ? "text-[#d4b76a]" : t.startsWith("⚠") ? "text-rose-300" : "text-slate-200"}>
+            <span
+              className={
+                t.startsWith("●")
+                  ? "inline-flex items-center gap-1.5 font-semibold text-[var(--gold)]"
+                  : t.startsWith("⚠")
+                    ? "text-[var(--bad)]"
+                    : "text-[var(--ink)]"
+              }
+            >
+              {t.startsWith("●") && (
+                <span className="live-dot inline-block h-1.5 w-1.5 rounded-full bg-[var(--good)]" />
+              )}
               {t}
             </span>
-            <span className="text-[#b8954a]/50">|</span>
+            <span className="text-[var(--line)]">·</span>
           </span>
         ))}
       </div>

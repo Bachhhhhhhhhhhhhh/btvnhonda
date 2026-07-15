@@ -14,8 +14,8 @@ export function Card({
   return (
     <div
       className={cn(
-        "cc-panel overflow-hidden rounded-xl border border-[var(--line)] bg-[var(--card)]",
-        hover && "glass-hover",
+        "overflow-hidden rounded-2xl border border-[var(--line)] bg-[var(--card)] shadow-[var(--shadow-sm)]",
+        hover && "transition-shadow hover:shadow-[var(--shadow-md)]",
         accent && "kpi-ring",
         className
       )}
@@ -35,7 +35,7 @@ export function CardHeader({
   return (
     <div
       className={cn(
-        "border-b border-[var(--line-soft)] bg-[var(--bg)]/40 px-5 py-3.5",
+        "border-b border-[var(--line-soft)] px-5 py-4",
         className
       )}
     >
@@ -54,7 +54,7 @@ export function CardTitle({
   return (
     <h3
       className={cn(
-        "text-[14px] font-extrabold tracking-tight text-[var(--ink)]",
+        "text-[15px] font-bold tracking-tight text-[var(--ink)]",
         className
       )}
     >
@@ -71,7 +71,7 @@ export function CardDescription({
   children: React.ReactNode;
 }) {
   return (
-    <p className={cn("mt-0.5 text-xs leading-relaxed text-[var(--muted)]", className)}>
+    <p className={cn("mt-1 text-xs leading-relaxed text-[var(--muted)]", className)}>
       {children}
     </p>
   );
