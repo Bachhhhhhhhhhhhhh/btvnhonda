@@ -62,6 +62,10 @@ import { MetricOrbit } from "@/components/command/MetricOrbit";
 import { HeatCalendar } from "@/components/command/HeatCalendar";
 import { BreakEvenGauge } from "@/components/command/BreakEvenGauge";
 import { SparkKpi } from "@/components/command/SparkKpi";
+import { ShareBar } from "@/components/command/ShareBar";
+import { PolicyMatrix } from "@/components/command/PolicyMatrix";
+import { GoalTracker } from "@/components/command/GoalTracker";
+import { ActionChecklist } from "@/components/command/ActionChecklist";
 
 const PIE_COLORS = ["#0a4d6e", "#0d6b63", "#b8954a", "#5b21b6", "#64748b"];
 
@@ -229,6 +233,7 @@ export default function DashboardPage() {
       </motion.section>
 
       <PresetBar />
+      <ShareBar />
       <OpsAlerts max={3} />
 
       {/* Spark strip */}
@@ -278,6 +283,16 @@ export default function DashboardPage() {
       </div>
 
       <HeatCalendar />
+
+      <div className="grid gap-4 xl:grid-cols-12">
+        <div className="xl:col-span-7">
+          <PolicyMatrix />
+        </div>
+        <div className="space-y-4 xl:col-span-5">
+          <GoalTracker />
+          <ActionChecklist compact />
+        </div>
+      </div>
 
       {/* Playback + optimizer banner */}
       <div className="grid gap-4 xl:grid-cols-5">

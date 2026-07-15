@@ -28,6 +28,7 @@ import {
   X,
   PanelLeftClose,
   PanelLeft,
+  CalendarRange,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useThemeStore } from "@/lib/theme-store";
@@ -37,6 +38,7 @@ export const NAV = [
   { href: "/digital-twin", label: "Digital Twin", icon: Network, group: "Điều hành", hot: true },
   { href: "/wsb", label: "WSB What-if", icon: FlaskConical, group: "Điều hành", hot: true },
   { href: "/insights", label: "Insights & tối ưu", icon: Brain, group: "Điều hành", hot: true },
+  { href: "/planner", label: "S&OP Planner", icon: CalendarRange, group: "Điều hành", hot: true },
   { href: "/map", label: "Bản đồ mạng lưới", icon: MapPinned, group: "Điều hành" },
   { href: "/overview", label: "Giới thiệu dự án", icon: BookOpen, group: "Điều hành" },
   { href: "/warehouse", label: "Năng lực kho", icon: Warehouse, group: "Vận hành" },

@@ -35,6 +35,7 @@ const ROUTES = [
   { href: "/digital-twin", label: "Digital Twin", icon: Network, kw: "twin control" },
   { href: "/wsb", label: "WSB What-if Builder", icon: FlaskConical, kw: "whatif scenario builder wsb" },
   { href: "/insights", label: "Insights & tối ưu", icon: Brain, kw: "insights optimize" },
+  { href: "/planner", label: "S&OP Planner", icon: LayoutDashboard, kw: "planner checklist goals sop" },
   { href: "/map", label: "Bản đồ", icon: MapPinned, kw: "map gis" },
   { href: "/overview", label: "Giới thiệu dự án", icon: BookOpen, kw: "overview" },
   { href: "/warehouse", label: "Năng lực kho", icon: Warehouse, kw: "warehouse capacity" },

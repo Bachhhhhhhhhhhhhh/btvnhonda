@@ -32,6 +32,7 @@ const TITLES: Record<string, { title: string; crumb: string }> = {
   "/digital-twin": { title: "Digital Twin — Mô phỏng mạng lưới", crumb: "Twin" },
   "/wsb": { title: "WSB — What-if Scenario Builder", crumb: "WSB" },
   "/insights": { title: "Insights & tối ưu nâng cao", crumb: "Insights" },
+  "/planner": { title: "S&OP Planner — mục tiêu & checklist", crumb: "Planner" },
   "/map": { title: "Bản đồ mạng lưới kho & vận tải", crumb: "Map" },
   "/overview": { title: "Giới thiệu dự án", crumb: "Overview" },
   "/warehouse": { title: "Năng lực kho miền Bắc", crumb: "Kho" },

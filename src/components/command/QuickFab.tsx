@@ -11,6 +11,7 @@ import {
   Plus,
   X,
   Keyboard,
+  CalendarRange,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -18,6 +19,7 @@ const ACTIONS = [
   { href: "/digital-twin", label: "Twin", icon: Network },
   { href: "/wsb", label: "WSB", icon: FlaskConical },
   { href: "/insights", label: "Insights", icon: Brain },
+  { href: "/planner", label: "Planner", icon: CalendarRange },
   { href: "/map", label: "Map", icon: MapPinned },
   { href: "/report", label: "Report", icon: FileText },
 ];
