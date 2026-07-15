@@ -1,6 +1,7 @@
 /**
  * Mạng lưới kho MC — PPT BACKGROUND MC WH + Excel Rental WH
- * Bản đồ: đất liền Việt Nam + Hoàng Sa + Trường Sa
+ * Tọa độ thực (lat/lng WGS84) cho bản đồ OpenStreetMap
+ * Hoàng Sa & Trường Sa: lãnh thổ Việt Nam
  */
 
 export type WhType = "owned" | "rented" | "sovereignty";
@@ -12,8 +13,9 @@ export type WarehouseNode = {
   short: string;
   region: Region;
   type: WhType;
-  x: number;
-  y: number;
+  /** WGS84 */
+  lat: number;
+  lng: number;
   cap100: number;
   cap80: number;
   ratioPct: number;
@@ -22,14 +24,15 @@ export type WarehouseNode = {
 };
 
 export const WAREHOUSES: WarehouseNode[] = [
+  // ── Miền Bắc (Vĩnh Phúc / Hà Nội area) ──
   {
     id: "log1",
     name: "HVN LOG 1",
     short: "LOG1",
     region: "north",
     type: "owned",
-    x: 36,
-    y: 16,
+    lat: 21.308,
+    lng: 105.598,
     cap100: 4532,
     cap80: 3612,
     ratioPct: 7,
@@ -42,8 +45,8 @@ export const WAREHOUSES: WarehouseNode[] = [
     short: "LOG2",
     region: "north",
     type: "owned",
-    x: 40,
-    y: 14,
+    lat: 21.325,
+    lng: 105.62,
     cap100: 4188,
     cap80: 3371,
     ratioPct: 7,
@@ -55,8 +58,8 @@ export const WAREHOUSES: WarehouseNode[] = [
     short: "PTF",
     region: "north",
     type: "owned",
-    x: 33,
-    y: 18,
+    lat: 21.29,
+    lng: 105.575,
     cap100: 3220,
     cap80: 2576,
     ratioPct: 5,
@@ -68,8 +71,8 @@ export const WAREHOUSES: WarehouseNode[] = [
     short: "CBU",
     region: "north",
     type: "owned",
-    x: 38,
-    y: 20,
+    lat: 21.275,
+    lng: 105.61,
     cap100: 4000,
     cap80: 3200,
     ratioPct: 7,
@@ -82,8 +85,8 @@ export const WAREHOUSES: WarehouseNode[] = [
     short: "LOG3",
     region: "north",
     type: "owned",
-    x: 42,
-    y: 18,
+    lat: 21.295,
+    lng: 105.64,
     cap100: 4021,
     cap80: 3234,
     ratioPct: 7,
@@ -95,8 +98,8 @@ export const WAREHOUSES: WarehouseNode[] = [
     short: "NKV",
     region: "north",
     type: "rented",
-    x: 44,
-    y: 13,
+    lat: 21.05,
+    lng: 105.78,
     cap100: 3000,
     cap80: 2400,
     ratioPct: 5,
@@ -109,22 +112,23 @@ export const WAREHOUSES: WarehouseNode[] = [
     short: "NBF",
     region: "north",
     type: "rented",
-    x: 30,
-    y: 15,
+    lat: 21.18,
+    lng: 105.52,
     cap100: 7021,
     cap80: 5634,
     ratioPct: 12,
     city: "Miền Bắc",
     note: "Kho thuê · mid-term expand",
   },
+  // ── Trung ──
   {
     id: "nghe-an",
     name: "Nghệ An WH",
     short: "N.An",
     region: "central",
     type: "rented",
-    x: 36,
-    y: 38,
+    lat: 18.679,
+    lng: 105.681,
     cap100: 8000,
     cap80: 6400,
     ratioPct: 13,
@@ -136,21 +140,22 @@ export const WAREHOUSES: WarehouseNode[] = [
     short: "ĐN",
     region: "central",
     type: "rented",
-    x: 44,
-    y: 48,
+    lat: 16.054,
+    lng: 108.202,
     cap100: 5500,
     cap80: 4400,
     ratioPct: 9,
     city: "Đà Nẵng",
   },
+  // ── Nam ──
   {
     id: "dong-nai",
     name: "Đồng Nai WH",
     short: "ĐNai",
     region: "south",
     type: "rented",
-    x: 42,
-    y: 74,
+    lat: 10.957,
+    lng: 106.843,
     cap100: 11000,
     cap80: 8800,
     ratioPct: 18,
@@ -162,8 +167,8 @@ export const WAREHOUSES: WarehouseNode[] = [
     short: "LA",
     region: "south",
     type: "rented",
-    x: 36,
-    y: 78,
+    lat: 10.695,
+    lng: 106.243,
     cap100: 11000,
     cap80: 8800,
     ratioPct: 18,
@@ -175,21 +180,22 @@ export const WAREHOUSES: WarehouseNode[] = [
     short: "CC",
     region: "south",
     type: "rented",
-    x: 30,
-    y: 84,
+    lat: 10.045,
+    lng: 105.747,
     cap100: 2500,
     cap80: 2000,
     ratioPct: 4,
     city: "Cần Thơ / Cái Cui",
   },
+  // ── Biển Đông · Lãnh thổ Việt Nam ──
   {
     id: "hoang-sa",
     name: "Quần đảo Hoàng Sa",
     short: "HS",
     region: "east_sea",
     type: "sovereignty",
-    x: 72,
-    y: 36,
+    lat: 16.5,
+    lng: 112.0,
     cap100: 0,
     cap80: 0,
     ratioPct: 0,
@@ -202,14 +208,33 @@ export const WAREHOUSES: WarehouseNode[] = [
     short: "TS",
     region: "east_sea",
     type: "sovereignty",
-    x: 68,
-    y: 68,
+    lat: 10.0,
+    lng: 114.0,
     cap100: 0,
     cap80: 0,
     ratioPct: 0,
     city: "Biển Đông · Việt Nam",
     note: "Lãnh thổ Việt Nam — Quần đảo Trường Sa",
   },
+];
+
+/** Các đảo nhỏ xung quanh Hoàng Sa (hiển thị cụm) */
+export const HOANG_SA_ISLETS: { lat: number; lng: number; name: string }[] = [
+  { lat: 16.83, lng: 112.33, name: "Đá Bắc" },
+  { lat: 16.53, lng: 111.61, name: "Đảo Phú Lâm" },
+  { lat: 16.45, lng: 111.72, name: "Đảo Linh Côn" },
+  { lat: 16.55, lng: 112.25, name: "Đảo Cây" },
+  { lat: 16.32, lng: 112.0, name: "Đá Châu Nhai" },
+];
+
+/** Các đảo nhỏ xung quanh Trường Sa */
+export const TRUONG_SA_ISLETS: { lat: number; lng: number; name: string }[] = [
+  { lat: 8.64, lng: 111.92, name: "Đảo Trường Sa" },
+  { lat: 9.55, lng: 112.88, name: "Đảo Song Tử Tây" },
+  { lat: 11.43, lng: 114.35, name: "Đảo Thị Tứ" },
+  { lat: 10.38, lng: 114.48, name: "Đảo Nam Yết" },
+  { lat: 10.18, lng: 114.22, name: "Đảo Sơn Ca" },
+  { lat: 8.85, lng: 112.6, name: "Đảo Sinh Tồn" },
 ];
 
 export const REGION_CAPS = {
@@ -280,3 +305,11 @@ export const REGION_COLOR: Record<Region, string> = {
   south: "#0f766e",
   east_sea: "#c4a35a",
 };
+
+/** Bounds hiển thị full VN + HS + TS */
+export const VN_MAP_BOUNDS: [[number, number], [number, number]] = [
+  [7.5, 102.0],
+  [23.5, 117.5],
+];
+
+export const VN_MAP_CENTER: [number, number] = [15.9, 108.0];

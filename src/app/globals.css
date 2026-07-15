@@ -200,36 +200,59 @@ input[type="range"]::-webkit-slider-thumb {
   pointer-events: none;
 }
 
-/* 3D floating map stage */
+/* 3D floating map stage — real Leaflet sits inside */
 .map-stage {
-  perspective: 1400px;
-  perspective-origin: 50% 40%;
+  perspective: 1600px;
+  perspective-origin: 50% 35%;
+  padding-bottom: 12px;
 }
 .map-float {
-  transform: rotateX(12deg) rotateZ(-2deg);
+  transform: rotateX(10deg) translateZ(0);
   transform-style: preserve-3d;
-  transition: transform 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+  transition: transform 0.45s cubic-bezier(0.22, 1, 0.36, 1);
   box-shadow:
-    0 25px 50px -12px rgba(10, 22, 40, 0.35),
-    0 0 0 1px rgba(255, 255, 255, 0.08) inset;
+    0 30px 60px -18px rgba(10, 22, 40, 0.4),
+    0 12px 24px -12px rgba(10, 22, 40, 0.25);
+  border-radius: 10px;
 }
 .map-stage:hover .map-float {
-  transform: rotateX(8deg) rotateZ(-1deg) translateY(-4px);
+  transform: rotateX(6deg) translateY(-6px);
 }
 .map-base-shadow {
   position: absolute;
-  left: 8%;
-  right: 8%;
-  bottom: 4%;
-  height: 28px;
+  left: 10%;
+  right: 10%;
+  bottom: 0;
+  height: 36px;
   background: radial-gradient(
     ellipse at center,
-    rgba(10, 22, 40, 0.35) 0%,
-    transparent 70%
+    rgba(10, 22, 40, 0.28) 0%,
+    transparent 72%
   );
-  filter: blur(8px);
+  filter: blur(10px);
   pointer-events: none;
   z-index: 0;
+}
+
+/* Leaflet overrides — bank clean */
+.leaflet-container {
+  font-family: "Be Vietnam Pro", system-ui, sans-serif;
+  z-index: 1;
+}
+.bank-map-marker {
+  background: transparent !important;
+  border: none !important;
+}
+.leaflet-popup-content-wrapper {
+  border-radius: 6px !important;
+  box-shadow: 0 8px 24px rgba(10, 22, 40, 0.15) !important;
+  border: 1px solid #d8dee8;
+}
+.leaflet-popup-content {
+  margin: 10px 12px !important;
+}
+.leaflet-control-zoom a {
+  color: #0a1628 !important;
 }
 
 /* Bank primary button */
