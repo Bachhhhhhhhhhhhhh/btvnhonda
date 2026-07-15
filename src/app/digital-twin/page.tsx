@@ -34,6 +34,9 @@ import {
   Ship,
   TrendingDown,
 } from "lucide-react";
+import { VietnamNetworkMap } from "@/components/map/VietnamNetworkMap";
+import Link from "next/link";
+import { ArrowRight } from "lucide-react";
 
 export default function DigitalTwinPage() {
   const { result, params } = useTwinStore();
@@ -215,6 +218,28 @@ export default function DigitalTwinPage() {
                   </motion.div>
                 ))}
               </div>
+            </CardContent>
+          </Card>
+
+          <Card>
+            <CardHeader className="flex flex-row items-center justify-between">
+              <div>
+                <div className="section-kicker">Geo</div>
+                <CardTitle>Bản đồ mạng lưới (live)</CardTitle>
+                <CardDescription>
+                  Transfer Twin năm: {fmt(a.transferVol)} xe ·{" "}
+                  {fmt(a.nsContainersBase)} cont N→S
+                </CardDescription>
+              </div>
+              <Link
+                href="/map"
+                className="inline-flex items-center gap-1 rounded-lg border border-slate-200 bg-white px-3 py-1.5 text-xs font-bold text-slate-700 hover:bg-slate-50"
+              >
+                Full map <ArrowRight className="h-3.5 w-3.5" />
+              </Link>
+            </CardHeader>
+            <CardContent>
+              <VietnamNetworkMap compact showLanes />
             </CardContent>
           </Card>
         </div>

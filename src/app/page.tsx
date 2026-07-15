@@ -46,7 +46,10 @@ import {
   Gauge,
   ArrowUpRight,
   Warehouse,
+  MapPinned,
 } from "lucide-react";
+import { VietnamNetworkMap } from "@/components/map/VietnamNetworkMap";
+import { REGION_CAPS } from "@/lib/data/warehouseNetwork";
 
 export default function DashboardPage() {
   const { result, params } = useTwinStore();
@@ -140,6 +143,13 @@ export default function DashboardPage() {
                 className="inline-flex items-center gap-2 rounded-xl border border-white/25 bg-white/10 px-5 py-3 text-sm font-semibold text-white backdrop-blur transition hover:bg-white/15"
               >
                 Báo cáo tư vấn
+              </Link>
+              <Link
+                href="/map"
+                className="inline-flex items-center gap-2 rounded-xl border border-white/25 bg-white/10 px-5 py-3 text-sm font-semibold text-white backdrop-blur transition hover:bg-white/15"
+              >
+                <MapPinned className="h-4 w-4" />
+                Bản đồ mạng lưới
               </Link>
               <Link
                 href="/scenarios"
@@ -309,6 +319,29 @@ export default function DashboardPage() {
           </motion.div>
         ))}
       </div>
+
+      {/* NETWORK MAP */}
+      <Card>
+        <CardHeader className="flex flex-row flex-wrap items-start justify-between gap-3">
+          <div>
+            <div className="section-kicker">Network map</div>
+            <CardTitle>Bản đồ kho Bắc · Trung · Nam + tuyến N→S</CardTitle>
+            <CardDescription>
+              PPT BACKGROUND MC WH · {fmt(REGION_CAPS.nationwide.cap100)} xe nationwide · owned {REGION_CAPS.hvnOwned.ratio}% / rented {REGION_CAPS.outside.ratio}%
+            </CardDescription>
+          </div>
+          <Link
+            href="/map"
+            className="inline-flex items-center gap-1.5 rounded-xl border border-blue-200 bg-blue-50 px-3 py-2 text-xs font-bold text-blue-800 hover:bg-blue-100"
+          >
+            Mở full map
+            <ArrowRight className="h-3.5 w-3.5" />
+          </Link>
+        </CardHeader>
+        <CardContent>
+          <VietnamNetworkMap compact showLanes />
+        </CardContent>
+      </Card>
 
       {/* MAIN CHARTS */}
       <div className="grid gap-5 xl:grid-cols-5">

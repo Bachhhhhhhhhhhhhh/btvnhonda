@@ -6,6 +6,7 @@ import { Sidebar } from "./sidebar";
 const TITLES: Record<string, string> = {
   "/": "Bảng điều hành cấp cao",
   "/digital-twin": "Digital Twin — Mô phỏng mạng lưới kho & vận tải",
+  "/map": "Bản đồ mạng lưới kho & vận tải Việt Nam",
   "/overview": "Tổng quan dự án tối ưu stacking",
   "/warehouse": "Năng lực kho miền Bắc",
   "/vehicle": "Năng lực xe & mật độ lưu kho",

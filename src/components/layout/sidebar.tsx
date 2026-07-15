@@ -22,12 +22,14 @@ import {
   Settings,
   Network,
   Bike,
+  MapPinned,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 const NAV = [
   { href: "/", label: "Bảng điều hành", icon: LayoutDashboard, group: "Tổng quan" },
   { href: "/digital-twin", label: "Digital Twin", icon: Network, group: "Tổng quan", hot: true },
+  { href: "/map", label: "Bản đồ mạng lưới", icon: MapPinned, group: "Tổng quan", hot: true },
   { href: "/overview", label: "Tổng quan dự án", icon: BookOpen, group: "Tổng quan" },
   { href: "/warehouse", label: "Năng lực kho", icon: Warehouse, group: "Vận hành" },
   { href: "/vehicle", label: "Năng lực xe", icon: Bike, group: "Vận hành" },
