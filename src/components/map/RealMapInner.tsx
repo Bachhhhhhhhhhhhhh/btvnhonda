@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo } from "react";
+import { useEffect, useMemo, useState } from "react";
 import {
   MapContainer,
   TileLayer,
@@ -9,9 +9,11 @@ import {
   Polyline,
   CircleMarker,
   Tooltip,
+  GeoJSON,
   useMap,
 } from "react-leaflet";
-import L from "leaflet";
+import L, { type PathOptions, type Layer, type LeafletMouseEvent } from "leaflet";
+import type { Feature, FeatureCollection, Geometry } from "geojson";
 import {
   HOANG_SA_ISLETS,
   LANES,
@@ -26,6 +28,45 @@ import { fmt } from "@/lib/utils";
 import { useTwinStore } from "@/lib/store";
 
 import "leaflet/dist/leaflet.css";
+
+/** GitHub Pages basePath (empty on localhost) */
+function assetUrl(path: string) {
+  const base = process.env.NEXT_PUBLIC_BASE_PATH || "";
+  return `${base}${path.startsWith("/") ? path : `/${path}`}`;
+}
+
+/** Region palette (id_region từ vdporiginals/vietnam_geo) */
+const REGION_STYLE: Record<string, { fill: string; stroke: string }> = {
+  "2": { fill: "#bfdbfe", stroke: "#1e40af" }, // Đông Bắc
+  "3": { fill: "#93c5fd", stroke: "#1d4ed8" }, // Tây Bắc
+  "4": { fill: "#a5b4fc", stroke: "#4338ca" }, // Đồng bằng sông Hồng
+  "5": { fill: "#99f6e4", stroke: "#0f766e" }, // Bắc Trung Bộ
+  "6": { fill: "#6ee7b7", stroke: "#047857" }, // Duyên hải Nam Trung
+  "7": { fill: "#fde68a", stroke: "#b45309" }, // Tây Nguyên
+  "8": { fill: "#fdba74", stroke: "#c2410c" }, // Đông Nam Bộ
+  "9": { fill: "#fca5a5", stroke: "#b91c1c" }, // Đồng bằng sông Cửu Long
+};
+
+const DEFAULT_PROV = { fill: "#cbd5e1", stroke: "#475569" };
+const ISLAND_STYLE: PathOptions = {
+  color: "#c4a35a",
+  weight: 2,
+  fillColor: "#f5e6b8",
+  fillOpacity: 0.75,
+  opacity: 1,
+};
+
+function provinceStyle(feature?: Feature<Geometry, Record<string, unknown>>): PathOptions {
+  const id = String(feature?.properties?.id_region ?? "");
+  const s = REGION_STYLE[id] ?? DEFAULT_PROV;
+  return {
+    color: s.stroke,
+    weight: 0.9,
+    fillColor: s.fill,
+    fillOpacity: 0.42,
+    opacity: 0.9,
+  };
+}
 
 function makeIcon(color: string, label: string, kind: "circle" | "square" | "star") {
   const size = 28;
@@ -66,7 +107,18 @@ const ICONS = {
 function FitBounds({ region }: { region: Region | "all" }) {
   const map = useMap();
   useEffect(() => {
-    if (region === "all" || region === "east_sea") {
+    if (region === "east_sea") {
+      // Hoàng Sa + Trường Sa + vùng biển Đông
+      map.fitBounds(
+        L.latLngBounds([
+          [7.5, 110],
+          [17.5, 118],
+        ]),
+        { padding: [28, 28] }
+      );
+      return;
+    }
+    if (region === "all") {
       map.fitBounds(VN_MAP_BOUNDS, { padding: [24, 24] });
       return;
     }
@@ -78,6 +130,41 @@ function FitBounds({ region }: { region: Region | "all" }) {
     }
   }, [map, region]);
   return null;
+}
+
+function onEachProvince(feature: Feature<Geometry, Record<string, unknown>>, layer: Layer) {
+  const name = String(feature.properties?.ten_tinh ?? feature.properties?.name ?? "—");
+  const code = String(feature.properties?.code ?? "");
+  layer.bindTooltip(
+    `<strong>${name}</strong>${code ? ` · ${code}` : ""}`,
+    { sticky: true, className: "vn-geo-tooltip" }
+  );
+  layer.on({
+    mouseover: (e: LeafletMouseEvent) => {
+      const t = e.target as L.Path;
+      t.setStyle({ weight: 2, fillOpacity: 0.65 });
+      t.bringToFront();
+    },
+    mouseout: (e: LeafletMouseEvent) => {
+      const t = e.target as L.Path;
+      const st = provinceStyle(feature);
+      t.setStyle(st);
+    },
+  });
+}
+
+function onEachIsland(feature: Feature<Geometry, Record<string, unknown>>, layer: Layer) {
+  const name = String(
+    feature.properties?.name ?? feature.properties?.NAME_0 ?? "Quần đảo Việt Nam"
+  );
+  layer.bindPopup(
+    `<div style="font-family:'Be Vietnam Pro',system-ui;min-width:180px">
+      <div style="font-size:10px;font-weight:700;color:#7a6230;text-transform:uppercase;letter-spacing:.05em">Lãnh thổ Việt Nam</div>
+      <div style="font-size:14px;font-weight:800;color:#0a1628">${name}</div>
+      <div style="margin-top:6px;font-size:11px;color:#64748b">Ranh giới từ dữ liệu GIS mở · chủ quyền Việt Nam</div>
+    </div>`
+  );
+  layer.bindTooltip(name, { sticky: true });
 }
 
 type Props = {
@@ -98,6 +185,47 @@ export default function RealMapInner({
   const transferVol = useTwinStore((s) => s.result.annual.transferVol);
   const nsCont = useTwinStore((s) => s.result.annual.nsContainersBase);
 
+  const [provinces, setProvinces] = useState<FeatureCollection | null>(null);
+  const [hoangSa, setHoangSa] = useState<FeatureCollection | null>(null);
+  const [truongSa, setTruongSa] = useState<FeatureCollection | null>(null);
+  const [geoError, setGeoError] = useState<string | null>(null);
+  const [geoLoading, setGeoLoading] = useState(true);
+
+  useEffect(() => {
+    let cancelled = false;
+    setGeoLoading(true);
+    Promise.all([
+      fetch(assetUrl("/geo/vietnam-provinces.geojson")).then((r) => {
+        if (!r.ok) throw new Error(`provinces ${r.status}`);
+        return r.json();
+      }),
+      fetch(assetUrl("/geo/hoang-sa-fc.geojson")).then((r) => {
+        if (!r.ok) throw new Error(`hoang-sa ${r.status}`);
+        return r.json();
+      }),
+      fetch(assetUrl("/geo/truong-sa-fc.geojson")).then((r) => {
+        if (!r.ok) throw new Error(`truong-sa ${r.status}`);
+        return r.json();
+      }),
+    ])
+      .then(([p, hs, ts]) => {
+        if (cancelled) return;
+        setProvinces(p);
+        setHoangSa(hs);
+        setTruongSa(ts);
+        setGeoError(null);
+      })
+      .catch((e: Error) => {
+        if (!cancelled) setGeoError(e.message || "Không tải được GeoJSON");
+      })
+      .finally(() => {
+        if (!cancelled) setGeoLoading(false);
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
   const nodes = useMemo(() => {
     if (filterRegion === "all") return WAREHOUSES;
     if (filterRegion === "east_sea")
@@ -113,6 +241,8 @@ export default function RealMapInner({
   }, []);
 
   const height = compact ? 420 : 620;
+  const showMainland = filterRegion !== "east_sea";
+  const showIslands = filterRegion === "all" || filterRegion === "east_sea";
 
   return (
     <div
@@ -122,7 +252,9 @@ export default function RealMapInner({
       {/* Bank chrome bar */}
       <div className="absolute left-0 right-0 top-0 z-[1000] flex items-center justify-between border-b border-slate-200 bg-white/95 px-3 py-2 text-[11px] font-semibold text-[#0a1628] backdrop-blur">
         <span>
-          Bản đồ thật · OpenStreetMap · Việt Nam (gồm Hoàng Sa & Trường Sa)
+          Bản đồ GIS Việt Nam · 63 tỉnh/TP + Hoàng Sa & Trường Sa
+          {geoLoading ? " · đang tải ranh giới…" : ""}
+          {geoError ? ` · lỗi: ${geoError}` : ""}
         </span>
         <span className="hidden text-slate-500 sm:inline">
           Twin: {fmt(transferVol)} xe N→S · {fmt(nsCont)} cont/năm
@@ -139,10 +271,48 @@ export default function RealMapInner({
         style={{ background: "#d4e4f0" }}
       >
         <TileLayer
-          attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+          attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OSM</a> · ranh giới: <a href="https://github.com/vdporiginals/vietnam_geo">vdporiginals/vietnam_geo</a>'
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
         />
         <FitBounds region={filterRegion} />
+
+        {/* 63 provinces — free GeoJSON from GitHub */}
+        {showMainland && provinces && (
+          <GeoJSON
+            key="vn-provinces"
+            data={provinces}
+            style={(f) =>
+              provinceStyle(f as Feature<Geometry, Record<string, unknown>>)
+            }
+            onEachFeature={(f, layer) =>
+              onEachProvince(f as Feature<Geometry, Record<string, unknown>>, layer)
+            }
+          />
+        )}
+
+        {/* Hoàng Sa — free island geometry */}
+        {showIslands && hoangSa && (
+          <GeoJSON
+            key="hoang-sa"
+            data={hoangSa}
+            style={() => ISLAND_STYLE}
+            onEachFeature={(f, layer) =>
+              onEachIsland(f as Feature<Geometry, Record<string, unknown>>, layer)
+            }
+          />
+        )}
+
+        {/* Trường Sa */}
+        {showIslands && truongSa && (
+          <GeoJSON
+            key="truong-sa"
+            data={truongSa}
+            style={() => ISLAND_STYLE}
+            onEachFeature={(f, layer) =>
+              onEachIsland(f as Feature<Geometry, Record<string, unknown>>, layer)
+            }
+          />
+        )}
 
         {/* Transport lanes */}
         {laneOn &&
@@ -177,39 +347,41 @@ export default function RealMapInner({
             );
           })}
 
-        {/* Hoàng Sa islets */}
-        {HOANG_SA_ISLETS.map((p) => (
-          <CircleMarker
-            key={`hs-${p.name}`}
-            center={[p.lat, p.lng]}
-            radius={4}
-            pathOptions={{
-              color: "#fff",
-              weight: 1,
-              fillColor: "#c4a35a",
-              fillOpacity: 0.95,
-            }}
-          >
-            <Tooltip>{p.name} · Hoàng Sa · Việt Nam</Tooltip>
-          </CircleMarker>
-        ))}
+        {/* Hoàng Sa islets (điểm tên đảo) */}
+        {showIslands &&
+          HOANG_SA_ISLETS.map((p) => (
+            <CircleMarker
+              key={`hs-${p.name}`}
+              center={[p.lat, p.lng]}
+              radius={4}
+              pathOptions={{
+                color: "#fff",
+                weight: 1,
+                fillColor: "#c4a35a",
+                fillOpacity: 0.95,
+              }}
+            >
+              <Tooltip>{p.name} · Hoàng Sa · Việt Nam</Tooltip>
+            </CircleMarker>
+          ))}
 
         {/* Trường Sa islets */}
-        {TRUONG_SA_ISLETS.map((p) => (
-          <CircleMarker
-            key={`ts-${p.name}`}
-            center={[p.lat, p.lng]}
-            radius={4}
-            pathOptions={{
-              color: "#fff",
-              weight: 1,
-              fillColor: "#c4a35a",
-              fillOpacity: 0.95,
-            }}
-          >
-            <Tooltip>{p.name} · Trường Sa · Việt Nam</Tooltip>
-          </CircleMarker>
-        ))}
+        {showIslands &&
+          TRUONG_SA_ISLETS.map((p) => (
+            <CircleMarker
+              key={`ts-${p.name}`}
+              center={[p.lat, p.lng]}
+              radius={4}
+              pathOptions={{
+                color: "#fff",
+                weight: 1,
+                fillColor: "#c4a35a",
+                fillOpacity: 0.95,
+              }}
+            >
+              <Tooltip>{p.name} · Trường Sa · Việt Nam</Tooltip>
+            </CircleMarker>
+          ))}
 
         {/* Warehouses + sovereignty hubs */}
         {nodes.map((w) => {
@@ -308,7 +480,7 @@ export default function RealMapInner({
                     </div>
                   )}
                   <div style={{ marginTop: 6, fontSize: 10, color: "#94a3b8" }}>
-                    {w.lat.toFixed(3)}°N, {w.lng.toFixed(3)}°E · OSM
+                    {w.lat.toFixed(3)}°N, {w.lng.toFixed(3)}°E · GIS VN
                   </div>
                 </div>
               </Popup>
@@ -318,7 +490,7 @@ export default function RealMapInner({
       </MapContainer>
 
       {/* Floating legend */}
-      <div className="absolute bottom-3 left-3 z-[1000] rounded-md border border-slate-200 bg-white/95 p-2.5 text-[10px] font-semibold text-slate-700 shadow-md backdrop-blur">
+      <div className="absolute bottom-3 left-3 z-[1000] max-w-[220px] rounded-md border border-slate-200 bg-white/95 p-2.5 text-[10px] font-semibold text-slate-700 shadow-md backdrop-blur">
         <div className="mb-1 font-bold uppercase tracking-wide text-slate-400">
           Chú giải
         </div>
@@ -332,10 +504,16 @@ export default function RealMapInner({
           <span className="inline-block h-2.5 w-2.5 rounded-full bg-[#c4a35a]" /> Hoàng Sa · Trường Sa
         </div>
         <div className="mt-0.5 flex items-center gap-1.5">
+          <span className="inline-block h-2.5 w-3 rounded-sm bg-[#93c5fd]/opacity-70 ring-1 ring-[#1d4ed8]" /> Ranh giới tỉnh (GeoJSON)
+        </div>
+        <div className="mt-0.5 flex items-center gap-1.5">
           <span className="inline-block h-0.5 w-4 border-t-2 border-dashed border-[#0c4a6e]" /> Tuyến Sea
         </div>
         <div className="mt-0.5 flex items-center gap-1.5">
           <span className="inline-block h-0.5 w-4 border-t-2 border-dotted border-[#c4a35a]" /> Tuyến Truck
+        </div>
+        <div className="mt-1.5 border-t border-slate-100 pt-1 text-[9px] font-medium leading-snug text-slate-400">
+          Nguồn ranh giới mở: github.com/vdporiginals/vietnam_geo · nền OSM
         </div>
       </div>
     </div>

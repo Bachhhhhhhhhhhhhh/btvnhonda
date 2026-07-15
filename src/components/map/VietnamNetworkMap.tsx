@@ -98,7 +98,7 @@ export function VietnamNetworkMap({
           ))}
         </div>
         <div className="ml-auto text-[10px] font-semibold text-slate-500">
-          Nền: OpenStreetMap · {fmt(REGION_CAPS.nationwide.cap100)} xe nationwide
+          GIS VN (63 tỉnh + HS/TS) · {fmt(REGION_CAPS.nationwide.cap100)} xe nationwide
         </div>
       </div>
 
