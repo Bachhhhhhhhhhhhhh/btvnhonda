@@ -44,13 +44,13 @@ export function NetworkFlow() {
   ];
 
   return (
-    <div className="rounded-lg border border-slate-200 bg-white p-5 shadow-sm">
-      <div className="mb-4 flex flex-wrap items-end justify-between gap-2 border-b border-slate-100 pb-3">
+    <div className="rounded-[4px] border border-[#dce3ec] bg-white p-5 shadow-[0_1px_2px_rgba(7,20,40,0.05)]">
+      <div className="mb-4 flex flex-wrap items-end justify-between gap-2 border-b border-[#eef2f6] pb-3">
         <div>
-          <div className="text-[11px] font-bold uppercase tracking-[0.12em] text-slate-400">
+          <div className="text-[10px] font-bold uppercase tracking-[0.16em] text-[#b8954a]">
             Luồng giá trị
           </div>
-          <h3 className="text-base font-bold text-[#0a1628]">
+          <h3 className="text-base font-bold text-[#071428]">
             Chuỗi tối ưu toàn mạng lưới
           </h3>
           <p className="text-xs text-slate-500">

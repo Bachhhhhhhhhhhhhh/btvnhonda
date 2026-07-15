@@ -1,21 +1,35 @@
 @import "tailwindcss";
 
-/* ── Banking / institutional design system ── */
+/* ═══════════════════════════════════════════════════════════
+   LOG Twin — Institutional banking design system
+   Inspired by corporate internet-banking portals (navy · gold · trust)
+   ═══════════════════════════════════════════════════════════ */
+
 :root {
-  --navy: #0a1628;
-  --navy-mid: #12253f;
-  --navy-soft: #1a3355;
-  --gold: #c4a35a;
-  --gold-soft: #e8d5a3;
-  --ink: #0f172a;
-  --muted: #64748b;
-  --line: #e2e8f0;
-  --bg: #f0f3f7;
+  --navy: #071428;
+  --navy-mid: #0d2137;
+  --navy-soft: #152f4a;
+  --navy-muted: #1e3a5f;
+  --gold: #b8954a;
+  --gold-bright: #d4b76a;
+  --gold-soft: #f3ead3;
+  --ink: #0b1526;
+  --muted: #5b6b7c;
+  --line: #dce3ec;
+  --line-soft: #eef2f6;
+  --bg: #eef1f5;
+  --bg-deep: #e4e9f0;
   --card: #ffffff;
-  --good: #0f766e;
-  --warn: #b45309;
-  --bad: #b91c1c;
-  --link: #0c4a6e;
+  --good: #0d6b63;
+  --warn: #a65c12;
+  --bad: #a31d1d;
+  --link: #0a4d6e;
+  --radius: 4px;
+  --shadow-sm: 0 1px 2px rgba(7, 20, 40, 0.05);
+  --shadow-md: 0 4px 16px -4px rgba(7, 20, 40, 0.1);
+  --shadow-lg: 0 12px 32px -8px rgba(7, 20, 40, 0.14);
+  --header-h: 56px;
+  --util-h: 32px;
 }
 
 * {
@@ -30,93 +44,117 @@ body {
   margin: 0;
   min-height: 100vh;
   color: var(--ink);
-  background: #eef1f6;
+  background: var(--bg);
   font-family:
     "Be Vietnam Pro",
     "Segoe UI",
     system-ui,
     -apple-system,
     sans-serif;
+  font-size: 14px;
+  line-height: 1.5;
   -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  font-feature-settings: "tnum" 1;
 }
 
 h1,
 h2,
-h3 {
-  letter-spacing: -0.02em;
+h3,
+h4 {
+  letter-spacing: -0.015em;
   color: var(--navy);
+  font-weight: 700;
 }
 
+/* Scrollbar — thin institutional */
 ::-webkit-scrollbar {
-  width: 8px;
-  height: 8px;
+  width: 6px;
+  height: 6px;
 }
 ::-webkit-scrollbar-thumb {
-  background: #c5cdd8;
+  background: #b8c2d0;
   border-radius: 99px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
 }
 ::-webkit-scrollbar-track {
   background: transparent;
 }
 
-/* Banking card — clean, sharp, trusted */
+/* ── Surfaces ── */
 .glass {
-  background: #ffffff;
-  border: 1px solid #d8dee8;
-  box-shadow: 0 1px 2px rgba(10, 22, 40, 0.04);
+  background: var(--card);
+  border: 1px solid var(--line);
+  box-shadow: var(--shadow-sm);
 }
 
 .glass-hover {
-  transition: box-shadow 0.2s ease, border-color 0.2s ease;
+  transition:
+    box-shadow 0.18s ease,
+    border-color 0.18s ease;
 }
 .glass-hover:hover {
-  border-color: #c5cdd8;
-  box-shadow: 0 4px 16px rgba(10, 22, 40, 0.08);
+  border-color: #c8d2de;
+  box-shadow: var(--shadow-md);
 }
 
 .grad-text {
-  color: #0c4a6e;
+  color: var(--link);
 }
 
-/* KPI top gold accent like bank cards */
+/* Gold top hairline — bank product card */
 .kpi-ring {
   position: relative;
   overflow: hidden;
 }
-.kpi-ring::after {
+.kpi-ring::before {
   content: "";
   position: absolute;
   top: 0;
   left: 0;
   right: 0;
   height: 3px;
-  background: linear-gradient(90deg, #0a1628 0%, #c4a35a 55%, #0a1628 100%);
+  background: linear-gradient(
+    90deg,
+    var(--navy) 0%,
+    var(--gold) 40%,
+    var(--gold-bright) 60%,
+    var(--navy) 100%
+  );
 }
 
+/* Sidebar nav active — gold left rail */
 .nav-active {
-  background: #f0f5fa !important;
-  color: #0a1628 !important;
-  font-weight: 700;
-  border: 1px solid #d0dae6 !important;
-  border-left: 3px solid #c4a35a !important;
+  background: rgba(184, 149, 74, 0.12) !important;
+  color: #fff !important;
+  font-weight: 600 !important;
+  border-color: transparent !important;
+  box-shadow: inset 3px 0 0 var(--gold);
+}
+.nav-active svg {
+  color: var(--gold-bright) !important;
+  opacity: 1 !important;
 }
 
+/* Range sliders */
 input[type="range"] {
   -webkit-appearance: none;
   appearance: none;
-  height: 6px;
+  height: 4px;
   border-radius: 999px;
-  background: #e2e8f0;
+  background: #dce3ec;
   outline: none;
 }
 input[type="range"]::-webkit-slider-thumb {
   -webkit-appearance: none;
-  width: 18px;
-  height: 18px;
+  width: 16px;
+  height: 16px;
   border-radius: 50%;
-  background: #0a1628;
-  border: 3px solid #fff;
-  box-shadow: 0 1px 4px rgba(10, 22, 40, 0.25);
+  background: var(--navy);
+  border: 2px solid #fff;
+  box-shadow: 0 1px 4px rgba(7, 20, 40, 0.3);
   cursor: pointer;
 }
 
@@ -128,16 +166,28 @@ input[type="range"]::-webkit-slider-thumb {
   font-size: 0.98rem;
 }
 
+/* Bank data tables */
 .table-dark th {
   color: #64748b;
-  font-size: 0.68rem;
+  font-size: 0.65rem;
   text-transform: uppercase;
-  letter-spacing: 0.06em;
+  letter-spacing: 0.08em;
   font-weight: 700;
+  background: #f7f9fc;
+  padding: 10px 12px;
+  border-bottom: 1px solid var(--line);
 }
 .table-dark td {
-  border-color: #eef2f6;
+  border-color: var(--line-soft);
   color: #1e293b;
+  padding: 10px 12px;
+  font-size: 13px;
+}
+.table-dark tbody tr:hover td {
+  background: #f8fafc;
+}
+.table-dark tbody tr.selected td {
+  background: #f3f7fb;
 }
 
 @keyframes pulse-dot {
@@ -146,131 +196,302 @@ input[type="range"]::-webkit-slider-thumb {
     opacity: 1;
   }
   50% {
-    opacity: 0.4;
+    opacity: 0.35;
   }
 }
 .live-dot {
-  animation: pulse-dot 1.8s ease-in-out infinite;
+  animation: pulse-dot 2s ease-in-out infinite;
 }
 
 .section-kicker {
-  font-size: 11px;
+  font-size: 10px;
   font-weight: 700;
-  letter-spacing: 0.14em;
+  letter-spacing: 0.16em;
   text-transform: uppercase;
-  color: #64748b;
+  color: var(--gold);
 }
 
 .badge {
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  border-radius: 4px;
+  border-radius: 2px;
   padding: 4px 10px;
   font-size: 11px;
   font-weight: 650;
 }
 
-/* Bank hero — solid navy, no neon mesh */
+/* Bank hero — solid navy with gold hairline */
 .hero-mesh {
-  background: linear-gradient(135deg, #0a1628 0%, #12253f 55%, #0f3a4a 100%);
+  background: linear-gradient(135deg, #071428 0%, #0d2137 48%, #0f2f3f 100%);
   position: relative;
   overflow: hidden;
+  border: 1px solid rgba(184, 149, 74, 0.25);
 }
 .hero-mesh::before {
   content: "";
   position: absolute;
-  inset: 0;
-  background: linear-gradient(
-    105deg,
-    transparent 0%,
-    rgba(196, 163, 90, 0.08) 45%,
-    transparent 70%
-  );
-  pointer-events: none;
+  left: 0;
+  right: 0;
+  top: 0;
+  height: 3px;
+  background: linear-gradient(90deg, var(--gold) 0%, var(--gold-bright) 50%, transparent 100%);
+  z-index: 2;
 }
 .hero-mesh::after {
   content: "";
   position: absolute;
-  right: 0;
-  top: 0;
-  bottom: 0;
-  width: 40%;
-  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.03));
-  pointer-events: none;
-}
-
-/* 3D floating map stage — real Leaflet sits inside */
-.map-stage {
-  perspective: 1600px;
-  perspective-origin: 50% 35%;
-  padding-bottom: 12px;
-}
-.map-float {
-  transform: rotateX(10deg) translateZ(0);
-  transform-style: preserve-3d;
-  transition: transform 0.45s cubic-bezier(0.22, 1, 0.36, 1);
-  box-shadow:
-    0 30px 60px -18px rgba(10, 22, 40, 0.4),
-    0 12px 24px -12px rgba(10, 22, 40, 0.25);
-  border-radius: 10px;
-}
-.map-stage:hover .map-float {
-  transform: rotateX(6deg) translateY(-6px);
-}
-.map-base-shadow {
-  position: absolute;
-  left: 10%;
-  right: 10%;
-  bottom: 0;
-  height: 36px;
+  right: -10%;
+  top: -40%;
+  width: 55%;
+  height: 180%;
   background: radial-gradient(
     ellipse at center,
-    rgba(10, 22, 40, 0.28) 0%,
-    transparent 72%
+    rgba(184, 149, 74, 0.07) 0%,
+    transparent 65%
   );
-  filter: blur(10px);
   pointer-events: none;
-  z-index: 0;
 }
 
-/* Leaflet overrides — bank clean */
+/* Map frame — bank branch locator style (subtle lift, not toy 3D) */
+.map-stage {
+  position: relative;
+  padding: 0;
+}
+.map-float {
+  position: relative;
+  border-radius: 4px;
+  overflow: hidden;
+  border: 1px solid #c5cdd8;
+  box-shadow:
+    0 1px 0 rgba(255, 255, 255, 0.6) inset,
+    0 8px 28px -10px rgba(7, 20, 40, 0.22),
+    0 2px 6px rgba(7, 20, 40, 0.06);
+  transition: box-shadow 0.25s ease;
+}
+.map-stage:hover .map-float {
+  box-shadow:
+    0 1px 0 rgba(255, 255, 255, 0.6) inset,
+    0 14px 36px -10px rgba(7, 20, 40, 0.28),
+    0 4px 10px rgba(7, 20, 40, 0.08);
+}
+.map-base-shadow {
+  display: none;
+}
+
+/* Map chrome strip */
+.map-chrome {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 8px 14px;
+  background: linear-gradient(180deg, #0d2137 0%, #071428 100%);
+  color: #e8eef5;
+  font-size: 11px;
+  font-weight: 600;
+  border-bottom: 1px solid rgba(184, 149, 74, 0.35);
+}
+.map-chrome .gold {
+  color: var(--gold-bright);
+}
+
+/* Leaflet bank polish */
 .leaflet-container {
   font-family: "Be Vietnam Pro", system-ui, sans-serif;
   z-index: 1;
+  background: #d9e4ee !important;
 }
 .bank-map-marker {
   background: transparent !important;
   border: none !important;
 }
 .leaflet-popup-content-wrapper {
-  border-radius: 6px !important;
-  box-shadow: 0 8px 24px rgba(10, 22, 40, 0.15) !important;
-  border: 1px solid #d8dee8;
+  border-radius: 4px !important;
+  box-shadow: var(--shadow-lg) !important;
+  border: 1px solid var(--line);
+  padding: 0 !important;
 }
 .leaflet-popup-content {
-  margin: 10px 12px !important;
+  margin: 12px 14px !important;
+}
+.leaflet-popup-tip {
+  box-shadow: none !important;
+}
+.leaflet-control-zoom {
+  border: 1px solid var(--line) !important;
+  border-radius: 4px !important;
+  overflow: hidden;
+  box-shadow: var(--shadow-sm) !important;
 }
 .leaflet-control-zoom a {
-  color: #0a1628 !important;
+  color: var(--navy) !important;
+  width: 30px !important;
+  height: 30px !important;
+  line-height: 30px !important;
+  font-weight: 700 !important;
+}
+.leaflet-control-attribution {
+  font-size: 9px !important;
+  background: rgba(255, 255, 255, 0.9) !important;
+  color: #64748b !important;
+}
+.vn-geo-tooltip {
+  font-family: "Be Vietnam Pro", system-ui, sans-serif !important;
+  font-size: 11px !important;
+  font-weight: 600 !important;
+  border: 1px solid var(--line) !important;
+  border-radius: 3px !important;
+  box-shadow: var(--shadow-sm) !important;
 }
 
-/* Bank primary button */
+/* Buttons */
 .btn-bank {
-  background: #0a1628;
+  background: var(--navy);
   color: #fff;
-  font-weight: 700;
-  border-radius: 6px;
-  transition: background 0.15s ease;
+  font-weight: 650;
+  border-radius: 3px;
+  border: 1px solid transparent;
+  transition:
+    background 0.15s ease,
+    box-shadow 0.15s ease;
 }
 .btn-bank:hover {
-  background: #12253f;
+  background: var(--navy-soft);
+  box-shadow: 0 2px 8px rgba(7, 20, 40, 0.2);
 }
 .btn-bank-gold {
-  background: linear-gradient(180deg, #d4b76a, #c4a35a);
-  color: #0a1628;
+  background: linear-gradient(180deg, #dcc07a 0%, #b8954a 100%);
+  color: var(--navy);
   font-weight: 700;
-  border-radius: 6px;
+  border-radius: 3px;
+  border: 1px solid #a6853f;
+  box-shadow: 0 1px 0 rgba(255, 255, 255, 0.35) inset;
+  transition: filter 0.15s ease;
+}
+.btn-bank-gold:hover {
+  filter: brightness(1.05);
+}
+.btn-bank-outline {
+  background: #fff;
+  color: var(--navy);
+  font-weight: 650;
+  border-radius: 3px;
+  border: 1px solid var(--line);
+  transition: border-color 0.15s ease, background 0.15s ease;
+}
+.btn-bank-outline:hover {
+  border-color: #b0bccb;
+  background: #f8fafc;
+}
+
+/* Utility top strip */
+.bank-util-bar {
+  height: var(--util-h);
+  background: #050e1a;
+  color: #94a3b8;
+  font-size: 11px;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 20px;
+  border-bottom: 1px solid rgba(184, 149, 74, 0.2);
+}
+.bank-util-bar a {
+  color: #cbd5e1;
+  text-decoration: none;
+}
+.bank-util-bar a:hover {
+  color: var(--gold-bright);
+}
+
+/* Content area subtle pattern */
+.bank-content {
+  background:
+    linear-gradient(180deg, #f4f6f9 0%, #eef1f5 120px, #eef1f5 100%);
+}
+
+/* Divider with gold accent */
+.gold-rule {
+  height: 1px;
+  background: linear-gradient(90deg, var(--gold), transparent 70%);
+  border: 0;
+  margin: 0;
+}
+
+/* Trust footer strip */
+.bank-trust {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px 24px;
+  align-items: center;
+  padding: 12px 16px;
+  background: #f7f9fc;
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  font-size: 11px;
+  color: var(--muted);
+  font-weight: 500;
+}
+.bank-trust strong {
+  color: var(--navy);
+  font-weight: 700;
+}
+
+/* Segmented control (bank filter pills) */
+.seg-control {
+  display: inline-flex;
+  padding: 3px;
+  background: #eef2f6;
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  gap: 2px;
+}
+.seg-control button {
+  border: none;
+  background: transparent;
+  padding: 6px 12px;
+  font-size: 11px;
+  font-weight: 650;
+  color: #64748b;
+  border-radius: 3px;
+  cursor: pointer;
+  transition: all 0.12s ease;
+}
+.seg-control button.active {
+  background: #fff;
+  color: var(--navy);
+  box-shadow: var(--shadow-sm);
+  border: 1px solid #d8dee8;
+}
+
+/* Stat tile inside navy panels */
+.stat-tile-dark {
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.04);
+  border-radius: 4px;
+  padding: 14px 16px;
+}
+.stat-tile-dark .label {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--gold-bright);
+}
+.stat-tile-dark .value {
+  margin-top: 4px;
+  font-size: 1.5rem;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.02em;
+  color: #fff;
+}
+.stat-tile-dark .sub {
+  margin-top: 4px;
+  font-size: 11px;
+  color: #94a3b8;
 }
 
 @media print {
@@ -281,6 +502,6 @@ input[type="range"]::-webkit-slider-thumb {
     display: none !important;
   }
   .map-float {
-    transform: none !important;
+    box-shadow: none !important;
   }
 }

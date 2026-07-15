@@ -112,23 +112,23 @@ export default function DashboardPage() {
         initial={{ opacity: 0, y: 16 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
-        className="hero-mesh relative rounded-[28px] p-6 text-white shadow-2xl shadow-slate-900/20 sm:p-9"
+        className="hero-mesh relative rounded-[4px] p-6 text-white shadow-[0_12px_32px_-12px_rgba(7,20,40,0.45)] sm:p-8"
       >
         <div className="relative z-10 grid gap-8 lg:grid-cols-12 lg:items-end">
           <div className="lg:col-span-7">
-            <div className="badge mb-4 border border-[#c4a35a]/40 bg-[#c4a35a]/10 text-[#e8d5a3]">
+            <div className="badge mb-4 border border-[#b8954a]/35 bg-[#b8954a]/10 text-[#e8d5a3]">
               <Sparkles className="h-3.5 w-3.5" />
               Hệ thống hỗ trợ quyết định · Honda MC Logistics
             </div>
-            <h1 className="max-w-2xl text-3xl font-bold leading-[1.15] tracking-tight sm:text-4xl">
+            <h1 className="max-w-2xl text-[1.85rem] font-bold leading-[1.2] tracking-tight sm:text-[2.1rem]">
               Tối ưu capacity miền Bắc —{" "}
-              <span className="text-[#c4a35a]">quyết định dựa trên số liệu</span>
+              <span className="text-[#d4b76a]">quyết định dựa trên số liệu</span>
             </h1>
-            <p className="mt-4 max-w-xl text-sm leading-relaxed text-slate-300 sm:text-[15px]">
+            <p className="mt-3 max-w-xl text-sm leading-relaxed text-slate-300">
               Stacking nhập khẩu · Transfer Bắc–Nam · Thuê ngoài có kiểm soát.
               KPI bám Excel 103Ki 2QFC, Word tối ưu và PPT Yamagomori.
             </p>
-            <div className="mt-6 flex flex-wrap gap-3">
+            <div className="mt-6 flex flex-wrap gap-2.5">
               <Link
                 href="/digital-twin"
                 className="btn-bank-gold inline-flex items-center gap-2 px-5 py-2.5 text-sm"
@@ -138,21 +138,21 @@ export default function DashboardPage() {
               </Link>
               <Link
                 href="/map"
-                className="inline-flex items-center gap-2 rounded-md border border-white/25 bg-white/10 px-5 py-2.5 text-sm font-semibold text-white hover:bg-white/15"
+                className="inline-flex items-center gap-2 rounded-[3px] border border-white/20 bg-white/8 px-5 py-2.5 text-sm font-semibold text-white hover:bg-white/12"
               >
                 <MapPinned className="h-4 w-4" />
                 Bản đồ mạng lưới
               </Link>
               <Link
                 href="/report"
-                className="inline-flex items-center gap-2 rounded-md border border-white/20 px-4 py-2.5 text-sm font-medium text-slate-200 hover:bg-white/5"
+                className="inline-flex items-center gap-2 rounded-[3px] border border-white/15 px-4 py-2.5 text-sm font-medium text-slate-200 hover:bg-white/5"
               >
                 Báo cáo tư vấn
               </Link>
             </div>
           </div>
 
-          <div className="grid grid-cols-2 gap-3 lg:col-span-5">
+          <div className="grid grid-cols-2 gap-2.5 lg:col-span-5">
             {[
               {
                 l: "Tiết kiệm ròng",
@@ -180,15 +180,11 @@ export default function DashboardPage() {
                 initial={{ opacity: 0, y: 8 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.12 + i * 0.05 }}
-                className="rounded-md border border-white/15 bg-white/8 p-4"
+                className="stat-tile-dark"
               >
-                <div className="text-[10px] font-bold uppercase tracking-wider text-[#c4a35a]">
-                  {x.l}
-                </div>
-                <div className="mt-1 text-2xl font-bold tabular-nums tracking-tight">
-                  {x.v}
-                </div>
-                <div className="mt-1 text-[11px] text-slate-400">{x.s}</div>
+                <div className="label">{x.l}</div>
+                <div className="value" style={{ fontSize: "1.4rem" }}>{x.v}</div>
+                <div className="sub">{x.s}</div>
               </motion.div>
             ))}
           </div>
@@ -310,9 +306,9 @@ export default function DashboardPage() {
             initial={{ opacity: 0, y: 12 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.25 + i * 0.05 }}
-            className={`glass-hover flex gap-4 rounded-2xl border bg-gradient-to-br p-5 ${x.c}`}
+            className={`glass-hover flex gap-4 rounded-[4px] border bg-gradient-to-br p-5 ${x.c}`}
           >
-            <div className={`flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl ${x.ic}`}>
+            <div className={`flex h-11 w-11 shrink-0 items-center justify-center rounded-[3px] ${x.ic}`}>
               <x.icon className="h-5 w-5" />
             </div>
             <div>
@@ -330,10 +326,11 @@ export default function DashboardPage() {
       <Card>
         <CardHeader className="flex flex-row flex-wrap items-start justify-between gap-3">
           <div>
-            <div className="section-kicker">Geo command center</div>
-            <CardTitle>Bản đồ kho Bắc · Trung · Nam + tuyến N→S live</CardTitle>
+            <div className="section-kicker">Mạng lưới địa lý</div>
+            <CardTitle>Bản đồ kho Bắc · Trung · Nam + tuyến N→S</CardTitle>
             <CardDescription>
-              PPT BACKGROUND MC WH · {fmt(REGION_CAPS.nationwide.cap100)} xe nationwide · owned {REGION_CAPS.hvnOwned.ratio}% / rented {REGION_CAPS.outside.ratio}% · chấm sáng = cargo flow
+              GIS Việt Nam · {fmt(REGION_CAPS.nationwide.cap100)} xe nationwide · owned{" "}
+              {REGION_CAPS.hvnOwned.ratio}% / rented {REGION_CAPS.outside.ratio}% · Hoàng Sa & Trường Sa
             </CardDescription>
           </div>
           <Link

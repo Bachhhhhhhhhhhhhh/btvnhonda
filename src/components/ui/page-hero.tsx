@@ -19,14 +19,14 @@ export function PageHero({
   if (variant === "light") {
     return (
       <motion.div
-        initial={{ opacity: 0, y: 8 }}
+        initial={{ opacity: 0, y: 6 }}
         animate={{ opacity: 1, y: 0 }}
-        className="rounded-lg border border-slate-200 bg-white p-6 shadow-sm"
+        className="rounded-[4px] border border-[#dce3ec] bg-white p-6 shadow-[0_1px_2px_rgba(7,20,40,0.05)]"
       >
-        <div className="text-[11px] font-bold uppercase tracking-[0.14em] text-slate-500">
+        <div className="text-[10px] font-bold uppercase tracking-[0.16em] text-[#b8954a]">
           {kicker}
         </div>
-        <h1 className="mt-1 text-2xl font-bold tracking-tight text-[#0a1628]">
+        <h1 className="mt-1.5 text-2xl font-bold tracking-tight text-[#071428]">
           {title}
         </h1>
         {subtitle && (
@@ -41,15 +41,15 @@ export function PageHero({
 
   return (
     <motion.div
-      initial={{ opacity: 0, y: 8 }}
+      initial={{ opacity: 0, y: 6 }}
       animate={{ opacity: 1, y: 0 }}
-      className="hero-mesh relative overflow-hidden rounded-lg p-6 text-white shadow-lg sm:p-7"
+      className="hero-mesh relative overflow-hidden rounded-[4px] p-6 text-white shadow-[0_8px_24px_-8px_rgba(7,20,40,0.35)] sm:p-7"
     >
       <div className="relative z-10">
-        <div className="text-[11px] font-bold uppercase tracking-[0.14em] text-[#c4a35a]">
+        <div className="text-[10px] font-bold uppercase tracking-[0.16em] text-[#d4b76a]">
           {kicker}
         </div>
-        <h1 className="mt-1 max-w-3xl text-2xl font-bold tracking-tight sm:text-[1.75rem]">
+        <h1 className="mt-1.5 max-w-3xl text-2xl font-bold tracking-tight sm:text-[1.7rem]">
           {title}
         </h1>
         {subtitle && (

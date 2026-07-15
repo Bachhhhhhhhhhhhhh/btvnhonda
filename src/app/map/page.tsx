@@ -28,7 +28,7 @@ import {
 } from "recharts";
 import { chartTheme } from "@/components/charts/theme";
 import { useTwinStore } from "@/lib/store";
-import { Building2, MapPinned, Route, Warehouse } from "lucide-react";
+import { Building2, MapPinned, Route, Warehouse, ShieldCheck } from "lucide-react";
 import { PageHero } from "@/components/ui/page-hero";
 
 export default function MapPage() {
@@ -44,24 +44,26 @@ export default function MapPage() {
   }));
 
   const ownership = [
-    { name: "HVN owned 33%", value: REGION_CAPS.hvnOwned.cap, fill: "#1d4ed8" },
-    { name: "Outside 67%", value: REGION_CAPS.outside.cap, fill: "#d97706" },
+    { name: "HVN owned 33%", value: REGION_CAPS.hvnOwned.cap, fill: "#0a4d6e" },
+    { name: "Outside 67%", value: REGION_CAPS.outside.cap, fill: "#b8954a" },
   ];
 
   const list = useMemo(() => {
     const rows =
-      filter === "all" ? WAREHOUSES : WAREHOUSES.filter((w) => w.region === filter);
+      filter === "all"
+        ? WAREHOUSES.filter((w) => w.type !== "sovereignty")
+        : WAREHOUSES.filter((w) => w.region === filter && w.type !== "sovereignty");
     return [...rows].sort((a, b) => b.cap100 - a.cap100);
   }, [filter]);
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-5">
       <PageHero
-        kicker="Network map · PPT BACKGROUND MC WH"
+        kicker="Network intelligence · GIS Việt Nam"
         title="Bản đồ mạng lưới kho & vận tải"
-        subtitle="Click node xem capacity. Live cargo dots trên tuyến Sea/Truck N→S (To South&Sum). Owned tròn · Rented vuông · thuê ngoài 67%."
+        subtitle="Ranh giới 63 tỉnh/thành + Hoàng Sa & Trường Sa (dữ liệu GIS mở). Click node để xem capacity — Owned tròn · Rented vuông · tuyến Sea/Truck N→S."
       >
-        <div className="flex flex-wrap gap-2">
+        <div className="seg-control !bg-white/10 !border-white/15">
           {(
             [
               ["all", "Toàn quốc"],
@@ -74,11 +76,7 @@ export default function MapPage() {
               key={k}
               type="button"
               onClick={() => setFilter(k)}
-              className={`rounded-full px-4 py-1.5 text-xs font-bold transition ${
-                filter === k
-                  ? "bg-white text-slate-900 shadow"
-                  : "bg-white/10 text-white hover:bg-white/20"
-              }`}
+              className={filter === k ? "active !bg-white !text-[#071428]" : "!text-slate-200 hover:!text-white"}
             >
               {lab}
             </button>
@@ -116,13 +114,13 @@ export default function MapPage() {
         />
       </div>
 
-      <div className="grid gap-5 xl:grid-cols-5">
-        <Card className="xl:col-span-3">
+      <div className="grid gap-4 xl:grid-cols-5">
+        <Card className="xl:col-span-3" accent>
           <CardHeader>
             <div className="section-kicker">Interactive map</div>
             <CardTitle>Việt Nam MC WH Network</CardTitle>
             <CardDescription>
-              Node size ~ capacity · Hover/click chi tiết · Dashed = Sea / dotted = Truck
+              GeoJSON tỉnh/thành · Hoàng Sa / Trường Sa · marker kho HVN · tuyến vận tải live Twin
             </CardDescription>
           </CardHeader>
           <CardContent>
@@ -134,10 +132,11 @@ export default function MapPage() {
           </CardContent>
         </Card>
 
-        <div className="space-y-5 xl:col-span-2">
-          <Card>
+        <div className="space-y-4 xl:col-span-2">
+          <Card accent>
             <CardHeader>
               <CardTitle>Capacity theo vùng</CardTitle>
+              <CardDescription>Cap 100% theo miền (PPT MC WH)</CardDescription>
             </CardHeader>
             <CardContent className="h-56">
               <ResponsiveContainer width="100%" height="100%">
@@ -146,7 +145,7 @@ export default function MapPage() {
                   <XAxis dataKey="name" tick={{ fill: chartTheme.tick, fontSize: 11 }} axisLine={false} />
                   <YAxis tick={{ fill: chartTheme.tick, fontSize: 11 }} axisLine={false} />
                   <Tooltip {...chartTheme.tooltip} />
-                  <Bar dataKey="Cap 100%" radius={[6, 6, 0, 0]}>
+                  <Bar dataKey="Cap 100%" radius={[3, 3, 0, 0]}>
                     {regionBars.map((e, i) => (
                       <Cell key={i} fill={e.fill} />
                     ))}
@@ -188,52 +187,55 @@ export default function MapPage() {
       <Card>
         <CardHeader>
           <CardTitle>
-            Danh sách kho{" "}
+            Danh mục kho{" "}
             {filter === "all" ? "toàn quốc" : REGION_LABEL[filter]}
-            {selected && (
-              <span className="ml-2 text-sm font-semibold text-blue-600">
+            {selected && selected.type !== "sovereignty" && (
+              <span className="ml-2 text-sm font-semibold text-[#0a4d6e]">
                 · đang chọn: {selected.name}
               </span>
             )}
           </CardTitle>
+          <CardDescription>
+            Bảng tra cứu capacity — click dòng để đồng bộ với bản đồ
+          </CardDescription>
         </CardHeader>
-        <CardContent className="overflow-x-auto">
+        <CardContent className="overflow-x-auto p-0">
           <table className="table-dark w-full text-left text-sm">
-            <thead className="border-b border-slate-200">
+            <thead>
               <tr>
-                <th className="py-2 pr-3">Kho</th>
-                <th className="pr-3">Vùng</th>
-                <th className="pr-3">Loại</th>
-                <th className="pr-3">Cap 100%</th>
-                <th className="pr-3">Cap 80%</th>
-                <th className="pr-3">Ratio</th>
+                <th>Kho</th>
+                <th>Vùng</th>
+                <th>Loại</th>
+                <th>Cap 100%</th>
+                <th>Cap 80%</th>
+                <th>Ratio</th>
                 <th>Ghi chú</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-slate-100">
+            <tbody className="divide-y divide-[#eef2f6]">
               {list.map((w) => (
                 <tr
                   key={w.id}
                   onClick={() => setSelected(w)}
-                  className={`cursor-pointer transition hover:bg-slate-50 ${
-                    selected?.id === w.id ? "bg-blue-50" : ""
+                  className={`cursor-pointer transition ${
+                    selected?.id === w.id ? "selected" : ""
                   }`}
                 >
-                  <td className="py-2.5 pr-3 font-bold text-slate-900">{w.name}</td>
-                  <td className="pr-3">
+                  <td className="font-bold text-[#071428]">{w.name}</td>
+                  <td>
                     <span
-                      className="rounded-md px-2 py-0.5 text-[10px] font-bold text-white"
+                      className="rounded-[2px] px-2 py-0.5 text-[10px] font-bold text-white"
                       style={{ background: REGION_COLOR[w.region] }}
                     >
                       {REGION_LABEL[w.region]}
                     </span>
                   </td>
-                  <td className="pr-3 text-slate-600">
+                  <td className="text-slate-600">
                     {w.type === "owned" ? "Owned" : "Rented"}
                   </td>
-                  <td className="pr-3 tabular-nums font-semibold">{fmt(w.cap100)}</td>
-                  <td className="pr-3 tabular-nums">{fmt(w.cap80)}</td>
-                  <td className="pr-3 tabular-nums">{w.ratioPct}%</td>
+                  <td className="tabular-nums font-semibold">{fmt(w.cap100)}</td>
+                  <td className="tabular-nums">{fmt(w.cap80)}</td>
+                  <td className="tabular-nums">{w.ratioPct}%</td>
                   <td className="max-w-[200px] truncate text-xs text-slate-500">
                     {w.note || w.city}
                   </td>
@@ -244,7 +246,7 @@ export default function MapPage() {
         </CardContent>
       </Card>
 
-      <div className="grid gap-4 md:grid-cols-3">
+      <div className="grid gap-3 md:grid-cols-3">
         {[
           {
             t: "Flow N→S",
@@ -261,12 +263,23 @@ export default function MapPage() {
         ].map((x) => (
           <div
             key={x.t}
-            className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm"
+            className="rounded-[4px] border border-[#dce3ec] bg-white p-5 shadow-[0_1px_2px_rgba(7,20,40,0.05)]"
           >
-            <div className="text-sm font-bold text-slate-900">{x.t}</div>
+            <div className="text-[10px] font-bold uppercase tracking-[0.12em] text-[#b8954a]">
+              {x.t}
+            </div>
             <p className="mt-2 text-xs leading-relaxed text-slate-600">{x.d}</p>
           </div>
         ))}
+      </div>
+
+      <div className="bank-trust">
+        <ShieldCheck className="h-4 w-4 text-[#0d6b63]" />
+        <div>
+          <strong>Nguồn bản đồ</strong> · OpenStreetMap + GeoJSON mở vdporiginals/vietnam_geo
+          (63 tỉnh, Hoàng Sa, Trường Sa)
+        </div>
+        <div className="ml-auto">Chỉ phục vụ mô hình DSS nội bộ</div>
       </div>
     </div>
   );

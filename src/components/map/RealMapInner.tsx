@@ -240,24 +240,22 @@ export default function RealMapInner({
     return m;
   }, []);
 
-  const height = compact ? 420 : 620;
+  const height = compact ? 440 : 640;
   const showMainland = filterRegion !== "east_sea";
   const showIslands = filterRegion === "all" || filterRegion === "east_sea";
 
   return (
-    <div
-      className="relative overflow-hidden rounded-lg border border-slate-300 shadow-lg"
-      style={{ height }}
-    >
-      {/* Bank chrome bar */}
-      <div className="absolute left-0 right-0 top-0 z-[1000] flex items-center justify-between border-b border-slate-200 bg-white/95 px-3 py-2 text-[11px] font-semibold text-[#0a1628] backdrop-blur">
+    <div className="relative overflow-hidden" style={{ height }}>
+      {/* Bank chrome bar — navy strip */}
+      <div className="map-chrome absolute left-0 right-0 top-0 z-[1000]">
         <span>
-          Bản đồ GIS Việt Nam · 63 tỉnh/TP + Hoàng Sa & Trường Sa
-          {geoLoading ? " · đang tải ranh giới…" : ""}
-          {geoError ? ` · lỗi: ${geoError}` : ""}
+          <span className="gold">GIS Việt Nam</span>
+          {" · "}
+          63 tỉnh/TP + Hoàng Sa & Trường Sa
+          {geoLoading ? " · đang tải ranh giới…" : geoError ? ` · ${geoError}` : " · sẵn sàng"}
         </span>
-        <span className="hidden text-slate-500 sm:inline">
-          Twin: {fmt(transferVol)} xe N→S · {fmt(nsCont)} cont/năm
+        <span className="hidden sm:inline">
+          Twin · {fmt(transferVol)} xe N→S · {fmt(nsCont)} cont/năm
         </span>
       </div>
 
@@ -268,7 +266,7 @@ export default function RealMapInner({
         maxZoom={14}
         scrollWheelZoom
         className="h-full w-full"
-        style={{ background: "#d4e4f0" }}
+        style={{ background: "#d9e4ee", paddingTop: 0 }}
       >
         <TileLayer
           attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OSM</a> · ranh giới: <a href="https://github.com/vdporiginals/vietnam_geo">vdporiginals/vietnam_geo</a>'
@@ -489,31 +487,33 @@ export default function RealMapInner({
         })}
       </MapContainer>
 
-      {/* Floating legend */}
-      <div className="absolute bottom-3 left-3 z-[1000] max-w-[220px] rounded-md border border-slate-200 bg-white/95 p-2.5 text-[10px] font-semibold text-slate-700 shadow-md backdrop-blur">
-        <div className="mb-1 font-bold uppercase tracking-wide text-slate-400">
+      {/* Floating legend — bank card */}
+      <div className="absolute bottom-3 left-3 z-[1000] max-w-[230px] rounded-[3px] border border-[#dce3ec] bg-white/96 p-3 text-[10px] font-semibold text-slate-700 shadow-[0_4px_16px_-4px_rgba(7,20,40,0.18)] backdrop-blur-sm">
+        <div className="mb-1.5 text-[9px] font-bold uppercase tracking-[0.14em] text-[#b8954a]">
           Chú giải
         </div>
-        <div className="flex items-center gap-1.5">
-          <span className="inline-block h-2.5 w-2.5 rounded-full bg-[#0c4a6e]" /> HVN owned
+        <div className="space-y-1">
+          <div className="flex items-center gap-1.5">
+            <span className="inline-block h-2.5 w-2.5 rounded-full bg-[#0c4a6e]" /> HVN owned
+          </div>
+          <div className="flex items-center gap-1.5">
+            <span className="inline-block h-2.5 w-2.5 rounded-[2px] bg-[#b45309]" /> Kho thuê
+          </div>
+          <div className="flex items-center gap-1.5">
+            <span className="inline-block h-2.5 w-2.5 rounded-full bg-[#b8954a]" /> Hoàng Sa · Trường Sa
+          </div>
+          <div className="flex items-center gap-1.5">
+            <span className="inline-block h-2.5 w-3 rounded-[1px] bg-[#93c5fd]/opacity-70 ring-1 ring-[#1d4ed8]" /> Ranh giới tỉnh
+          </div>
+          <div className="flex items-center gap-1.5">
+            <span className="inline-block h-0.5 w-4 border-t-2 border-dashed border-[#0c4a6e]" /> Tuyến Sea
+          </div>
+          <div className="flex items-center gap-1.5">
+            <span className="inline-block h-0.5 w-4 border-t-2 border-dotted border-[#b8954a]" /> Tuyến Truck
+          </div>
         </div>
-        <div className="mt-0.5 flex items-center gap-1.5">
-          <span className="inline-block h-2.5 w-2.5 rounded-sm bg-[#b45309]" /> Kho thuê
-        </div>
-        <div className="mt-0.5 flex items-center gap-1.5">
-          <span className="inline-block h-2.5 w-2.5 rounded-full bg-[#c4a35a]" /> Hoàng Sa · Trường Sa
-        </div>
-        <div className="mt-0.5 flex items-center gap-1.5">
-          <span className="inline-block h-2.5 w-3 rounded-sm bg-[#93c5fd]/opacity-70 ring-1 ring-[#1d4ed8]" /> Ranh giới tỉnh (GeoJSON)
-        </div>
-        <div className="mt-0.5 flex items-center gap-1.5">
-          <span className="inline-block h-0.5 w-4 border-t-2 border-dashed border-[#0c4a6e]" /> Tuyến Sea
-        </div>
-        <div className="mt-0.5 flex items-center gap-1.5">
-          <span className="inline-block h-0.5 w-4 border-t-2 border-dotted border-[#c4a35a]" /> Tuyến Truck
-        </div>
-        <div className="mt-1.5 border-t border-slate-100 pt-1 text-[9px] font-medium leading-snug text-slate-400">
-          Nguồn ranh giới mở: github.com/vdporiginals/vietnam_geo · nền OSM
+        <div className="mt-2 border-t border-[#eef2f6] pt-1.5 text-[9px] font-medium leading-snug text-slate-400">
+          Nguồn GIS: vdporiginals/vietnam_geo · nền OpenStreetMap
         </div>
       </div>
     </div>
