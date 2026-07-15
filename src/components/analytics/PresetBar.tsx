@@ -3,6 +3,7 @@
 import { POLICY_PRESETS, useTwinStore } from "@/lib/store";
 import { cn } from "@/lib/utils";
 import { RotateCcw, Camera } from "lucide-react";
+import { useToast } from "@/components/wow/ToastHost";
 
 export function PresetBar({
   showSnapshot = true,
@@ -16,6 +17,7 @@ export function PresetBar({
     saveSnapshot,
     snapshots,
   } = useTwinStore();
+  const pushToast = useToast((s) => s.push);
 
   return (
     <div className="flex flex-wrap items-center gap-2 rounded-[4px] border border-[#dce3ec] bg-white p-2.5 shadow-sm">
@@ -27,11 +29,18 @@ export function PresetBar({
           key={p.id}
           type="button"
           title={p.description}
-          onClick={() => applyPolicyPreset(p)}
+          onClick={() => {
+            applyPolicyPreset(p);
+            pushToast({
+              title: `Preset · ${p.name}`,
+              detail: p.description,
+              tone: "info",
+            });
+          }}
           className={cn(
             "rounded-[3px] border px-2.5 py-1.5 text-[11px] font-bold transition",
             activePresetId === p.id
-              ? "border-[#071428] bg-[#071428] text-white"
+              ? "border-[#071428] bg-[#071428] text-white pulse-ring"
               : "border-[#dce3ec] bg-[#f7f9fc] text-slate-700 hover:border-[#b8954a]/50"
           )}
         >
@@ -40,7 +49,10 @@ export function PresetBar({
       ))}
       <button
         type="button"
-        onClick={() => reset()}
+        onClick={() => {
+          reset();
+          pushToast({ title: "Đã reset Twin về default", tone: "warn" });
+        }}
         className="inline-flex items-center gap-1 rounded-[3px] border border-[#dce3ec] px-2.5 py-1.5 text-[11px] font-semibold text-slate-600 hover:bg-slate-50"
       >
         <RotateCcw className="h-3 w-3" />
@@ -49,9 +61,14 @@ export function PresetBar({
       {showSnapshot && (
         <button
           type="button"
-          onClick={() =>
-            saveSnapshot(`Policy ${new Date().toLocaleTimeString("vi-VN")}`)
-          }
+          onClick={() => {
+            saveSnapshot(`Policy ${new Date().toLocaleTimeString("vi-VN")}`);
+            pushToast({
+              title: "Snapshot đã lưu",
+              detail: "Xem trong Insights · A/B",
+              tone: "good",
+            });
+          }}
           className="btn-bank-outline ml-auto inline-flex items-center gap-1 px-2.5 py-1.5 text-[11px]"
         >
           <Camera className="h-3 w-3" />

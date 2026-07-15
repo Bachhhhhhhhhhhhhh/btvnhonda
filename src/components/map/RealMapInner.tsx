@@ -26,6 +26,7 @@ import {
 } from "@/lib/data/warehouseNetwork";
 import { fmt } from "@/lib/utils";
 import { useTwinStore } from "@/lib/store";
+import { CargoPulse } from "@/components/wow/CargoPulse";
 
 import "leaflet/dist/leaflet.css";
 
@@ -311,6 +312,9 @@ export default function RealMapInner({
             }
           />
         )}
+
+        {/* Animated cargo on lanes */}
+        {laneOn && <CargoPulse active={laneOn} />}
 
         {/* Transport lanes */}
         {laneOn &&

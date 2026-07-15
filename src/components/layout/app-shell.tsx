@@ -15,6 +15,7 @@ import {
 } from "lucide-react";
 import { useTwinStore } from "@/lib/store";
 import { exportTwinPack } from "@/lib/export";
+import { ToastHost, useToast } from "@/components/wow/ToastHost";
 
 const TITLES: Record<string, { title: string; crumb: string }> = {
   "/": { title: "Tổng quan điều hành", crumb: "Dashboard" },
@@ -53,6 +54,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
   const meta = resolveMeta(path);
   const [mobileOpen, setMobileOpen] = useState(false);
   const { params, result } = useTwinStore();
+  const pushToast = useToast((s) => s.push);
   const today = new Date().toLocaleDateString("vi-VN", {
     weekday: "long",
     day: "2-digit",
@@ -64,6 +66,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
     <div className="flex min-h-screen bg-[#eef1f5]">
       <Sidebar mobileOpen={mobileOpen} onClose={() => setMobileOpen(false)} />
       <CommandPalette />
+      <ToastHost />
       <div className="flex min-w-0 flex-1 flex-col">
         <div className="bank-util-bar no-print">
           <div className="flex items-center gap-4">
@@ -131,7 +134,14 @@ export function AppShell({ children }: { children: React.ReactNode }) {
             </button>
             <button
               type="button"
-              onClick={() => exportTwinPack(params, result)}
+              onClick={() => {
+                exportTwinPack(params, result);
+                pushToast({
+                  title: "Đã export Twin pack",
+                  detail: "JSON params + CSV monthly/annual",
+                  tone: "good",
+                });
+              }}
               className="inline-flex items-center gap-1 rounded-[3px] border border-[#dce3ec] px-2 py-1.5 text-[11px] font-bold text-slate-700 hover:bg-slate-50"
               title="Export JSON + CSV"
             >

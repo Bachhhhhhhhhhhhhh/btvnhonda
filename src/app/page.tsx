@@ -56,6 +56,10 @@ import { ScorecardRing } from "@/components/analytics/ScorecardRing";
 import { buildInsights, optimizePolicy } from "@/lib/engine/analytics";
 import { useMemo } from "react";
 import { Brain } from "lucide-react";
+import { LiveTicker } from "@/components/wow/LiveTicker";
+import { MonthPlayback } from "@/components/wow/MonthPlayback";
+import { PresentationMode } from "@/components/wow/PresentationMode";
+import { AnimatedNumber } from "@/components/ui/animated-counter";
 
 export default function DashboardPage() {
   const { result, params } = useTwinStore();
@@ -117,61 +121,59 @@ export default function DashboardPage() {
     a.baseOutsourceVol > 0 ? a.outsourceReduction / a.baseOutsourceVol : 0;
 
   return (
-    <div className="space-y-7">
-      {/* HERO — light bank panel for readability */}
+    <div className="space-y-5">
+      <LiveTicker />
+
+      {/* WOW HERO */}
       <motion.section
-        initial={{ opacity: 0, y: 12 }}
+        initial={{ opacity: 0, y: 16 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.4 }}
-        className="kpi-ring overflow-hidden rounded-[4px] border border-[#dce3ec] bg-white shadow-[0_1px_3px_rgba(7,20,40,0.06)]"
+        transition={{ duration: 0.5 }}
+        className="hero-wow relative overflow-hidden rounded-[8px] border border-[#0a1628] text-white shadow-[0_20px_50px_-20px_rgba(7,20,40,0.55)]"
       >
-        <div className="grid gap-6 p-6 sm:p-7 lg:grid-cols-12 lg:items-center lg:gap-8">
+        <div className="orb left-[-40px] top-[-40px] h-48 w-48 bg-[#b8954a]" />
+        <div
+          className="orb bottom-[-60px] right-[10%] h-56 w-56 bg-cyan-600"
+          style={{ animationDelay: "1.2s" }}
+        />
+        <div className="relative z-10 grid gap-8 p-6 sm:p-8 lg:grid-cols-12 lg:items-end">
           <div className="lg:col-span-7">
-            <div className="mb-3 inline-flex items-center gap-2 rounded-[3px] border border-[#e8d5a3] bg-[#faf6eb] px-2.5 py-1 text-[11px] font-bold text-[#7a6230]">
+            <div className="mb-4 inline-flex items-center gap-2 rounded-full border border-[#d4b76a]/40 bg-[#d4b76a]/10 px-3 py-1 text-[11px] font-bold text-[#e8d5a3]">
               <Sparkles className="h-3.5 w-3.5" />
-              DSS · Honda MC Logistics
+              LOG Twin · Live Decision Theater
             </div>
-            <h1 className="max-w-2xl text-[1.65rem] font-bold leading-snug tracking-tight text-[#071428] sm:text-[1.9rem]">
+            <h1 className="max-w-2xl text-[1.85rem] font-black leading-[1.15] tracking-tight sm:text-[2.35rem]">
               Tối ưu capacity miền Bắc
+              <span className="mt-1 block bg-gradient-to-r from-[#d4b76a] via-[#f5e6b8] to-[#d4b76a] bg-clip-text text-transparent">
+                quyết định realtime trên số liệu
+              </span>
             </h1>
-            <p className="mt-1 text-base font-semibold text-[#0a4d6e] sm:text-lg">
-              Quyết định dựa trên số liệu vận hành
+            <p className="mt-3 max-w-xl text-sm leading-relaxed text-slate-300">
+              Stacking NK · Transfer N→S · Outsource có kiểm soát. Playback 12 tháng,
+              presentation board, cargo live trên bản đồ GIS Việt Nam.
             </p>
-            <p className="mt-3 max-w-xl text-[13.5px] leading-relaxed text-slate-600">
-              Mô hình stacking nhập khẩu, chuyển kho Bắc–Nam và thuê ngoài có kiểm soát.
-              KPI đồng bộ từ Excel 103Ki 2QFC, Word và PPT Yamagomori.
-            </p>
-            <div className="mt-3 flex flex-wrap gap-1.5">
-              {["Stacking NK", "Transfer N→S", "Thuê ngoài"].map((t) => (
-                <span
-                  key={t}
-                  className="rounded-[3px] border border-[#dce3ec] bg-[#f7f9fc] px-2.5 py-1 text-[11px] font-bold text-slate-700"
-                >
-                  {t}
-                </span>
-              ))}
-            </div>
             <div className="mt-5 flex flex-wrap gap-2.5">
               <Link
                 href="/digital-twin"
-                className="btn-bank-gold inline-flex items-center gap-2 px-5 py-2.5 text-sm"
+                className="btn-bank-gold inline-flex items-center gap-2 px-5 py-2.5 text-sm shadow-lg shadow-amber-900/20"
               >
                 Mở Digital Twin
                 <ArrowRight className="h-4 w-4" />
               </Link>
               <Link
-                href="/map"
-                className="btn-bank inline-flex items-center gap-2 px-5 py-2.5 text-sm"
+                href="/wsb"
+                className="inline-flex items-center gap-2 rounded-[3px] border border-white/25 bg-white/10 px-4 py-2.5 text-sm font-bold text-white backdrop-blur hover:bg-white/15"
               >
-                <MapPinned className="h-4 w-4" />
-                Bản đồ mạng lưới
+                WSB What-if
               </Link>
               <Link
-                href="/report"
-                className="btn-bank-outline inline-flex items-center gap-2 px-4 py-2.5 text-sm"
+                href="/map"
+                className="inline-flex items-center gap-2 rounded-[3px] border border-white/15 px-4 py-2.5 text-sm font-semibold text-slate-200 hover:bg-white/5"
               >
-                Báo cáo tư vấn
+                <MapPinned className="h-4 w-4" />
+                Bản đồ live
               </Link>
+              <PresentationMode />
             </div>
           </div>
 
@@ -179,39 +181,48 @@ export default function DashboardPage() {
             {[
               {
                 l: "Tiết kiệm ròng",
-                v: `${fmt(a.totalSavings / 1e9, 2)} tỷ`,
+                num: a.totalSavings / 1e9,
+                digits: 2,
+                suf: " tỷ",
                 s: "VND / năm mô hình",
               },
               {
                 l: "Giảm thuê ngoài",
-                v: fmtPct(reductionPct),
+                num: reductionPct * 100,
+                digits: 1,
+                suf: "%",
                 s: `${fmt(a.outsourceReduction)} xe-eq`,
               },
               {
                 l: "m² giải phóng",
-                v: fmt(a.m2Saved),
+                num: a.m2Saved,
+                digits: 0,
+                suf: "",
                 s: "từ stacking NK",
               },
               {
                 l: "ROI stacking",
-                v: fmtPct(a.roi),
+                num: a.roi * 100,
+                digits: 1,
+                suf: "%",
                 s: `NPV 3y ${fmt(a.npv / 1e9, 1)} tỷ`,
               },
             ].map((x, i) => (
               <motion.div
                 key={x.l}
-                initial={{ opacity: 0, y: 6 }}
+                initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.1 + i * 0.04 }}
-                className="rounded-[3px] border border-[#e8edf2] bg-[#f7f9fc] px-3.5 py-3"
+                transition={{ delay: 0.12 + i * 0.05 }}
+                className="stat-glass rounded-[6px] px-3.5 py-3"
               >
-                <div className="text-[10px] font-bold uppercase tracking-[0.1em] text-slate-500">
+                <div className="text-[10px] font-bold uppercase tracking-[0.1em] text-[#d4b76a]">
                   {x.l}
                 </div>
-                <div className="mt-1 text-[1.35rem] font-bold tabular-nums tracking-tight text-[#071428]">
-                  {x.v}
+                <div className="mt-1 text-[1.45rem] font-black tabular-nums tracking-tight text-white">
+                  <AnimatedNumber value={x.num} digits={x.digits} />
+                  {x.suf}
                 </div>
-                <div className="mt-0.5 text-[11px] text-slate-500">{x.s}</div>
+                <div className="mt-0.5 text-[11px] text-slate-400">{x.s}</div>
               </motion.div>
             ))}
           </div>
@@ -221,22 +232,27 @@ export default function DashboardPage() {
       <PresetBar showSnapshot={false} />
       <OpsAlerts max={3} />
 
-      <div className="grid gap-4 xl:grid-cols-3">
-        <div className="xl:col-span-2 grid gap-3 sm:grid-cols-2">
-          {topInsights.map((ins) => (
-            <div
-              key={ins.id}
-              className="rounded-[4px] border border-[#dce3ec] bg-white p-4 shadow-sm"
-            >
-              <div className="text-[10px] font-bold uppercase tracking-wide text-[#b8954a]">
-                {ins.category} · {ins.impact}
-              </div>
-              <div className="mt-1 text-sm font-bold text-[#071428]">{ins.headline}</div>
-              <p className="mt-1 text-[12px] leading-relaxed text-slate-600">{ins.body}</p>
-            </div>
-          ))}
+      <div className="grid gap-4 xl:grid-cols-5">
+        <div className="xl:col-span-3">
+          <MonthPlayback />
         </div>
-        <ScorecardRing />
+        <div className="space-y-4 xl:col-span-2">
+          <ScorecardRing />
+          <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-1">
+            {topInsights.slice(0, 2).map((ins) => (
+              <div
+                key={ins.id}
+                className="wow-card rounded-[6px] border border-[#dce3ec] bg-white p-4"
+              >
+                <div className="text-[10px] font-bold uppercase tracking-wide text-[#b8954a]">
+                  {ins.category} · {ins.impact}
+                </div>
+                <div className="mt-1 text-sm font-bold text-[#071428]">{ins.headline}</div>
+                <p className="mt-1 text-[12px] leading-relaxed text-slate-600">{ins.body}</p>
+              </div>
+            ))}
+          </div>
+        </div>
       </div>
 
       <div className="flex flex-wrap items-center gap-3 rounded-[4px] border border-[#e8d5a3] bg-[#faf6eb] px-4 py-3 text-sm">

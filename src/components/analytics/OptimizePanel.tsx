@@ -26,10 +26,12 @@ import {
 } from "recharts";
 import { chartTheme } from "@/components/charts/theme";
 import { Sparkles, Check } from "lucide-react";
+import { useToast } from "@/components/wow/ToastHost";
 
 export function OptimizePanel() {
-  const { params, setParam, result } = useTwinStore();
+  const { params, setParams, result } = useTwinStore();
   const [applied, setApplied] = useState(false);
+  const pushToast = useToast((s) => s.push);
 
   const opt = useMemo(() => optimizePolicy(params), [params]);
 
@@ -53,9 +55,18 @@ export function OptimizePanel() {
     opt.bestSavings - result.annual.totalSavings;
 
   const applyBest = () => {
-    setParam("importStackRatio", opt.bestStackRatio);
-    setParam("transferRatio", opt.bestTransferRatio);
+    setParams({
+      ...params,
+      importStackRatio: opt.bestStackRatio,
+      transferRatio: opt.bestTransferRatio,
+      cost: { ...params.cost },
+    });
     setApplied(true);
+    pushToast({
+      title: "Đã áp dụng policy tối ưu",
+      detail: `Stack ${Math.round(opt.bestStackRatio * 100)}% · TF ${Math.round(opt.bestTransferRatio * 100)}%`,
+      tone: "good",
+    });
     setTimeout(() => setApplied(false), 2500);
   };
 
