@@ -22,6 +22,10 @@ import { exportTwinPack } from "@/lib/export";
 import { ToastHost, useToast } from "@/components/wow/ToastHost";
 import { useThemeStore } from "@/lib/theme-store";
 import { cn } from "@/lib/utils";
+import { NotificationCenter } from "@/components/command/NotificationCenter";
+import { QuickFab } from "@/components/command/QuickFab";
+import { OnboardingTour } from "@/components/command/OnboardingTour";
+import { ShortcutsModal } from "@/components/command/ShortcutsModal";
 
 const TITLES: Record<string, { title: string; crumb: string }> = {
   "/": { title: "Command Center · Tổng quan", crumb: "Command" },
@@ -59,6 +63,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
   const path = usePathname();
   const meta = resolveMeta(path);
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [shortcutsOpen, setShortcutsOpen] = useState(false);
   const { params, result } = useTwinStore();
   const pushToast = useToast((s) => s.push);
   const { mode, density, toggleMode, setDensity } = useThemeStore();
@@ -74,6 +79,9 @@ export function AppShell({ children }: { children: React.ReactNode }) {
       <Sidebar mobileOpen={mobileOpen} onClose={() => setMobileOpen(false)} />
       <CommandPalette />
       <ToastHost />
+      <OnboardingTour />
+      <ShortcutsModal open={shortcutsOpen} onClose={() => setShortcutsOpen(false)} />
+      <QuickFab onShortcuts={() => setShortcutsOpen(true)} />
       <div className="flex min-w-0 flex-1 flex-col">
         <div className="bank-util-bar no-print">
           <div className="flex items-center gap-4">
@@ -83,7 +91,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
             </span>
             <span className="hidden text-slate-600 md:inline">|</span>
             <span className="hidden md:inline">
-              Honda Việt Nam · Command Center DSS v3
+              Honda Việt Nam · Command Center DSS v4
             </span>
           </div>
           <div className="flex items-center gap-3 sm:gap-4">
@@ -174,6 +182,8 @@ export function AppShell({ children }: { children: React.ReactNode }) {
               )}
             </button>
 
+            <NotificationCenter />
+
             <button
               type="button"
               onClick={() => {
@@ -208,7 +218,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
           <footer className="no-print mt-8 border-t border-[var(--line)] pt-5 pb-2">
             <div className="bank-trust">
               <div>
-                <strong>LOG Twin Command Center v3</strong>
+                <strong>LOG Twin Command Center v4</strong>
               </div>
               <div className="hidden sm:block">
                 Digital Twin DSS · không thay thế phê duyệt chính thức

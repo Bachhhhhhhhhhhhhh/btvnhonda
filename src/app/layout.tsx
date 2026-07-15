@@ -29,7 +29,7 @@ export default function RootLayout({
         />
         <script
           dangerouslySetInnerHTML={{
-            __html: `(function(){try{var t=localStorage.getItem('log-twin-theme-v1');var m='dark';if(t){var p=JSON.parse(t);if(p.state&&p.state.mode)m=p.state.mode==='light'?'light':'dark';}document.documentElement.setAttribute('data-theme',m);}catch(e){}})();`,
+            __html: `(function(){try{var t=localStorage.getItem('log-twin-theme-v2')||localStorage.getItem('log-twin-theme-v1');var m='dark';if(t){var p=JSON.parse(t);if(p.state&&p.state.mode)m=p.state.mode==='light'?'light':'dark';}document.documentElement.setAttribute('data-theme',m);}catch(e){}})();`,
           }}
         />
       </head>

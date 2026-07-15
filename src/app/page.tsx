@@ -59,6 +59,9 @@ import { AnimatedNumber } from "@/components/ui/animated-counter";
 import { ExecutiveBrief } from "@/components/command/ExecutiveBrief";
 import { ActivityFeed } from "@/components/command/ActivityFeed";
 import { MetricOrbit } from "@/components/command/MetricOrbit";
+import { HeatCalendar } from "@/components/command/HeatCalendar";
+import { BreakEvenGauge } from "@/components/command/BreakEvenGauge";
+import { SparkKpi } from "@/components/command/SparkKpi";
 
 const PIE_COLORS = ["#0a4d6e", "#0d6b63", "#b8954a", "#5b21b6", "#64748b"];
 
@@ -228,6 +231,38 @@ export default function DashboardPage() {
       <PresetBar />
       <OpsAlerts max={3} />
 
+      {/* Spark strip */}
+      <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
+        <SparkKpi
+          label="Residual trend"
+          value={fmt(result.months[result.months.length - 1]?.residualAfterImport ?? 0)}
+          sub="tháng cuối"
+          data={result.months.map((m) => ({ v: m.residualAfterImport }))}
+          tone="amber"
+        />
+        <SparkKpi
+          label="Transfer trend"
+          value={fmt(a.transferVol)}
+          sub="xe / năm"
+          data={result.months.map((m) => ({ v: m.transferVol }))}
+          tone="sky"
+        />
+        <SparkKpi
+          label="Outsource trend"
+          value={fmt(a.outsourceVol)}
+          sub="xe-eq / năm"
+          data={result.months.map((m) => ({ v: m.outsourceVol }))}
+          tone="rose"
+        />
+        <SparkKpi
+          label="Cost trend"
+          value={`${fmt(a.totalCost / 1e9, 2)} tỷ`}
+          sub="tổng năm"
+          data={result.months.map((m) => ({ v: m.totalCost / 1e9 }))}
+          tone="teal"
+        />
+      </div>
+
       {/* Brief + orbit + activity */}
       <div className="grid gap-4 xl:grid-cols-12">
         <div className="xl:col-span-8">
@@ -235,11 +270,14 @@ export default function DashboardPage() {
         </div>
         <div className="grid gap-4 sm:grid-cols-2 xl:col-span-4 xl:grid-cols-1">
           <MetricOrbit />
-          <div className="min-h-[280px]">
+          <BreakEvenGauge />
+          <div className="min-h-[240px] sm:col-span-2 xl:col-span-1">
             <ActivityFeed />
           </div>
         </div>
       </div>
+
+      <HeatCalendar />
 
       {/* Playback + optimizer banner */}
       <div className="grid gap-4 xl:grid-cols-5">
