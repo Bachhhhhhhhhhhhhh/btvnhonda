@@ -1,4 +1,8 @@
+"use client";
+
 import { cn } from "@/lib/utils";
+import { motion } from "framer-motion";
+import type { LucideIcon } from "lucide-react";
 
 export function Kpi({
   label,
@@ -7,6 +11,8 @@ export function Kpi({
   tone = "default",
   source,
   delta,
+  icon: Icon,
+  delay = 0,
 }: {
   label: string;
   value: string;
@@ -14,70 +20,96 @@ export function Kpi({
   tone?: "default" | "good" | "warn" | "bad" | "accent";
   source?: string;
   delta?: string;
+  icon?: LucideIcon;
+  delay?: number;
 }) {
   const shells = {
-    default: "border-slate-200 bg-white",
-    good: "border-emerald-200 bg-emerald-50/60",
-    warn: "border-amber-200 bg-amber-50/60",
-    bad: "border-rose-200 bg-rose-50/60",
-    accent: "border-sky-200 bg-sky-50/60",
+    default: "from-white to-slate-50 border-slate-200/80",
+    good: "from-emerald-50 to-white border-emerald-200",
+    warn: "from-amber-50 to-white border-amber-200",
+    bad: "from-rose-50 to-white border-rose-200",
+    accent: "from-blue-50 to-white border-blue-200",
   };
   const valueTones = {
     default: "text-slate-900",
     good: "text-emerald-700",
     warn: "text-amber-700",
     bad: "text-rose-700",
-    accent: "text-sky-800",
+    accent: "text-blue-800",
+  };
+  const iconBg = {
+    default: "bg-slate-100 text-slate-600",
+    good: "bg-emerald-100 text-emerald-700",
+    warn: "bg-amber-100 text-amber-700",
+    bad: "bg-rose-100 text-rose-700",
+    accent: "bg-blue-100 text-blue-700",
   };
   const deltaTones = {
     default: "bg-slate-100 text-slate-600",
-    good: "bg-emerald-100 text-emerald-700",
+    good: "bg-emerald-100 text-emerald-800",
     warn: "bg-amber-100 text-amber-800",
-    bad: "bg-rose-100 text-rose-700",
-    accent: "bg-sky-100 text-sky-800",
+    bad: "bg-rose-100 text-rose-800",
+    accent: "bg-blue-100 text-blue-800",
   };
 
   return (
-    <div
+    <motion.div
+      initial={{ opacity: 0, y: 14 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.4, delay, ease: [0.22, 1, 0.36, 1] }}
       className={cn(
-        "kpi-ring glass-hover rounded-xl border p-4",
+        "kpi-ring glass-hover rounded-2xl border bg-gradient-to-br p-5",
         shells[tone]
       )}
     >
-      <div className="flex items-start justify-between gap-2">
-        <div className="text-[11px] font-semibold uppercase tracking-wide text-slate-500">
-          {label}
-        </div>
-        {delta && (
-          <span
+      <div className="flex items-start justify-between gap-3">
+        <div className="min-w-0">
+          <div className="text-[11px] font-bold uppercase tracking-[0.12em] text-slate-500">
+            {label}
+          </div>
+          <div
             className={cn(
-              "rounded-md px-2 py-0.5 text-[10px] font-semibold",
-              deltaTones[tone]
+              "mt-2 text-[1.75rem] font-extrabold tabular-nums tracking-tight leading-none sm:text-[1.9rem]",
+              valueTones[tone]
             )}
           >
-            {delta}
-          </span>
-        )}
-      </div>
-      <div
-        className={cn(
-          "mt-2 text-2xl font-bold tabular-nums tracking-tight sm:text-[1.65rem]",
-          valueTones[tone]
-        )}
-      >
-        {value}
+            {value}
+          </div>
+        </div>
+        <div className="flex flex-col items-end gap-2">
+          {Icon && (
+            <div
+              className={cn(
+                "flex h-10 w-10 items-center justify-center rounded-xl",
+                iconBg[tone]
+              )}
+            >
+              <Icon className="h-5 w-5" />
+            </div>
+          )}
+          {delta && (
+            <span
+              className={cn(
+                "rounded-full px-2 py-0.5 text-[10px] font-bold",
+                deltaTones[tone]
+              )}
+            >
+              {delta}
+            </span>
+          )}
+        </div>
       </div>
       {sub && (
-        <div className="mt-1.5 text-xs leading-snug text-slate-600">{sub}</div>
+        <div className="mt-3 text-xs leading-relaxed text-slate-600">{sub}</div>
       )}
       {source && (
         <div
-          className="mt-3 truncate border-t border-slate-100 pt-2 text-[10px] text-slate-400"
+          className="mt-3 truncate border-t border-slate-100/80 pt-2 text-[10px] text-slate-400"
           title={source}
         >
           {source}
         </div>
       )}
-    </div>
+    </motion.div>
   );
 }

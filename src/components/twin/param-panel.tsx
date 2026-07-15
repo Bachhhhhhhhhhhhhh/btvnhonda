@@ -2,32 +2,45 @@
 
 import { useTwinStore } from "@/lib/store";
 import { SliderField } from "@/components/ui/slider-field";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { RotateCcw } from "lucide-react";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { RotateCcw, SlidersHorizontal } from "lucide-react";
 
 export function ParamPanel() {
   const { params, setParam, setCost, reset } = useTwinStore();
 
   return (
-    <Card className="h-full">
-      <CardHeader className="flex flex-row items-start justify-between gap-2">
-        <div>
-          <CardTitle>Bảng điều khiển Digital Twin</CardTitle>
-          <p className="mt-1 text-xs text-slate-500">
-            Kéo thanh trượt — chi phí & utilization tính lại tức thì
-          </p>
+    <Card className="h-full overflow-hidden">
+      <CardHeader className="bg-gradient-to-r from-slate-50 to-white">
+        <div className="flex items-start justify-between gap-2">
+          <div className="flex items-start gap-3">
+            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-blue-600 to-teal-600 text-white shadow-md">
+              <SlidersHorizontal className="h-5 w-5" />
+            </div>
+            <div>
+              <CardTitle>Bảng điều khiển Twin</CardTitle>
+              <CardDescription>
+                Kéo — chi phí & utilization tính lại tức thì
+              </CardDescription>
+            </div>
+          </div>
+          <button
+            onClick={reset}
+            className="flex items-center gap-1.5 rounded-xl border border-slate-200 bg-white px-2.5 py-1.5 text-xs font-semibold text-slate-700 shadow-sm hover:bg-slate-50"
+          >
+            <RotateCcw className="h-3.5 w-3.5" />
+            Reset
+          </button>
         </div>
-        <button
-          onClick={reset}
-          className="flex items-center gap-1.5 rounded-lg border border-slate-200 bg-white px-2.5 py-1.5 text-xs font-medium text-slate-700 hover:bg-slate-50"
-        >
-          <RotateCcw className="h-3.5 w-3.5" />
-          Đặt lại
-        </button>
       </CardHeader>
-      <CardContent className="max-h-[calc(100vh-220px)] space-y-5 overflow-y-auto">
+      <CardContent className="max-h-[calc(100vh-240px)] space-y-5 overflow-y-auto pb-6">
         <section className="space-y-2.5">
-          <h4 className="text-[10px] font-bold uppercase tracking-wider text-sky-700">
+          <h4 className="text-[10px] font-bold uppercase tracking-[0.14em] text-blue-700">
             Diện tích & stacking
           </h4>
           <SliderField
@@ -68,21 +81,21 @@ export function ParamPanel() {
             step={100}
             onChange={(v) => setParam("ttlCap", v)}
             unit="xe"
-            hint="Rental WH!F59 = 28.495 (gồm open + HNM)"
+            hint="Rental WH!F59 = 28.495"
           />
-          <label className="flex cursor-pointer items-center gap-2.5 rounded-xl border border-slate-100 bg-slate-50 px-3 py-2.5 text-xs text-slate-300">
+          <label className="flex cursor-pointer items-center gap-2.5 rounded-xl border border-slate-200 bg-white px-3 py-3 text-xs font-medium text-slate-700 shadow-sm">
             <input
               type="checkbox"
               checked={params.useTtlCapacity}
               onChange={(e) => setParam("useTtlCapacity", e.target.checked)}
-              className="accent-sky-500"
+              className="h-4 w-4 accent-blue-600"
             />
-            Dùng TTL Cap (Excel) thay vì Fact Cap (Word) để tính vượt kho
+            Dùng TTL Cap (Excel) thay Fact Cap (Word)
           </label>
         </section>
 
         <section className="space-y-2.5">
-          <h4 className="text-[10px] font-bold uppercase tracking-[0.16em] text-violet-700">
+          <h4 className="text-[10px] font-bold uppercase tracking-[0.14em] text-violet-700">
             Đòn bẩy chính sách
           </h4>
           <SliderField
@@ -92,7 +105,7 @@ export function ParamPanel() {
             max={1}
             step={0.05}
             onChange={(v) => setParam("importStackRatio", v)}
-            hint="1.0 = stack 100% volume nhập khẩu"
+            hint="1.0 = stack 100% volume NK"
           />
           <SliderField
             label="Tỷ lệ chuyển residual N→S"
@@ -101,7 +114,7 @@ export function ParamPanel() {
             max={1}
             step={0.05}
             onChange={(v) => setParam("transferRatio", v)}
-            hint="Phần residual sau import stack chuyển vào Nam"
+            hint="Phần residual sau stack NK chuyển Nam"
           />
           <SliderField
             label="Xe / kiện (mix)"
@@ -110,7 +123,7 @@ export function ParamPanel() {
             max={4}
             step={0.1}
             onChange={(v) => setParam("mcPerCase", v)}
-            hint="To South&Sum!X1 = 3.5 MCs/case"
+            hint="To South&Sum!X1 = 3.5"
           />
           <SliderField
             label="Kiện / container N→S"
@@ -119,7 +132,7 @@ export function ParamPanel() {
             max={16}
             step={1}
             onChange={(v) => setParam("casesPerContainerNS", v)}
-            hint="Đề bài: 12 kiện → ~42 xe @ 3.5"
+            hint="12 kiện → ~42 xe @ 3.5"
           />
           <SliderField
             label="Xe / container (Excel)"
@@ -137,7 +150,7 @@ export function ParamPanel() {
             max={100}
             step={1}
             onChange={(v) => setParam("casesPerContainerReturn", v)}
-            hint="Đề bài: 80 kiện/container S→N"
+            hint="80 kiện/container S→N"
           />
           <SliderField
             label="Lead time (ngày)"
@@ -158,8 +171,8 @@ export function ParamPanel() {
         </section>
 
         <section className="space-y-2.5">
-          <h4 className="text-[10px] font-bold uppercase tracking-[0.16em] text-amber-700">
-            Đơn giá (VND) — Rate card Finance
+          <h4 className="text-[10px] font-bold uppercase tracking-[0.14em] text-amber-700">
+            Rate card (VND)
           </h4>
           <SliderField
             label="Thuê ngoài Bắc / xe-tháng"
@@ -184,7 +197,7 @@ export function ParamPanel() {
             max={700000}
             step={10000}
             onChange={(v) => setCost("nsFreightPerMc", v)}
-            hint="≈ To South sea ~350k VND/xe"
+            hint="≈ sea ~350k VND/xe"
           />
           <SliderField
             label="Đóng kiện nội địa / xe"
@@ -195,7 +208,7 @@ export function ParamPanel() {
             onChange={(v) => setCost("packingPerMc", v)}
           />
           <SliderField
-            label="Kho Nam incremental / xe-tháng"
+            label="Kho Nam / xe-tháng"
             value={params.cost.southWhPerMcMonth}
             min={0}
             max={150000}

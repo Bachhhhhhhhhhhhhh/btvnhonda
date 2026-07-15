@@ -32,25 +32,26 @@ export function AppShell({ children }: { children: React.ReactNode }) {
     "Hệ thống hỗ trợ quyết định";
 
   return (
-    <div className="flex min-h-screen bg-slate-100">
+    <div className="flex min-h-screen">
       <Sidebar />
       <div className="flex min-w-0 flex-1 flex-col">
-        <header className="no-print sticky top-0 z-20 flex h-14 items-center justify-between border-b border-slate-200 bg-white/95 px-6 backdrop-blur">
+        <header className="no-print sticky top-0 z-20 flex h-[60px] items-center justify-between border-b border-slate-200/70 bg-white/80 px-5 backdrop-blur-xl sm:px-8">
           <div className="min-w-0">
-            <div className="truncate text-sm font-semibold text-slate-900 sm:text-[15px]">
+            <div className="truncate text-[15px] font-bold text-slate-900">
               {title}
             </div>
             <div className="truncate text-[11px] text-slate-500">
-              Hệ thống hỗ trợ quyết định logistics · Honda Việt Nam · Mùa cao điểm miền Bắc
+              Logistics Decision Support · Honda Việt Nam · Peak season North WH
             </div>
           </div>
           <div className="flex shrink-0 items-center gap-2">
-            <div className="hidden rounded-full border border-slate-200 bg-slate-50 px-3 py-1 text-[11px] font-medium text-slate-600 md:block">
+            <div className="hidden items-center gap-2 rounded-full border border-slate-200 bg-white px-3 py-1.5 text-[11px] font-semibold text-slate-600 shadow-sm md:flex">
+              <span className="h-1.5 w-1.5 rounded-full bg-blue-500" />
               103Ki 2QFC · Jun
             </div>
-            <div className="flex items-center gap-1.5 rounded-full border border-emerald-200 bg-emerald-50 px-3 py-1 text-[11px] font-semibold text-emerald-700">
+            <div className="flex items-center gap-1.5 rounded-full border border-emerald-200 bg-emerald-50 px-3 py-1.5 text-[11px] font-bold text-emerald-700 shadow-sm">
               <span className="live-dot h-1.5 w-1.5 rounded-full bg-emerald-500" />
-              Live
+              LIVE
             </div>
           </div>
         </header>
