@@ -33,7 +33,16 @@ npm install
 npm run dev
 ```
 
-Mở http://localhost:3000
+Mở **http://localhost:3000**
+
+> **Lưu ý quan trọng:** project dùng static export (`output: "export"`).
+> - Chạy dev: `npm run dev` (không dùng `npm start` trước đây — sẽ lỗi).
+> - Build + xem bản production local:
+>   ```bash
+>   npm run build
+>   npm start
+>   ```
+>   (`npm start` phục vụ thư mục `out/` qua `serve`)
 
 ### API FastAPI (tuỳ chọn)
 
