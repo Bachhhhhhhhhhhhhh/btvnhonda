@@ -188,6 +188,58 @@ input[type="range"]::-webkit-slider-thumb {
   font-weight: 650;
 }
 
+/* Floating ambient orbs */
+.orb {
+  position: absolute;
+  border-radius: 999px;
+  filter: blur(40px);
+  pointer-events: none;
+  opacity: 0.55;
+}
+.orb-a {
+  width: 220px;
+  height: 220px;
+  background: rgba(37, 99, 235, 0.15);
+  top: -40px;
+  right: 10%;
+  animation: floaty 12s ease-in-out infinite;
+}
+.orb-b {
+  width: 180px;
+  height: 180px;
+  background: rgba(13, 148, 136, 0.12);
+  bottom: 10%;
+  left: 5%;
+  animation: floaty 15s ease-in-out infinite reverse;
+}
+@keyframes floaty {
+  0%, 100% { transform: translate(0, 0); }
+  50% { transform: translate(12px, -18px); }
+}
+
+/* Shimmer button */
+.btn-shimmer {
+  position: relative;
+  overflow: hidden;
+}
+.btn-shimmer::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    105deg,
+    transparent 40%,
+    rgba(255, 255, 255, 0.35) 50%,
+    transparent 60%
+  );
+  transform: translateX(-120%);
+  animation: shimmer 2.8s ease-in-out infinite;
+}
+@keyframes shimmer {
+  0% { transform: translateX(-120%); }
+  40%, 100% { transform: translateX(120%); }
+}
+
 /* Chart container */
 .chart-shell {
   border-radius: 16px;

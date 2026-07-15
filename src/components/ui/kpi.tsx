@@ -3,6 +3,7 @@
 import { cn } from "@/lib/utils";
 import { motion } from "framer-motion";
 import type { LucideIcon } from "lucide-react";
+import { AnimatedNumber } from "@/components/ui/animated-counter";
 
 export function Kpi({
   label,
@@ -13,6 +14,8 @@ export function Kpi({
   delta,
   icon: Icon,
   delay = 0,
+  numericValue,
+  digits = 0,
 }: {
   label: string;
   value: string;
@@ -22,6 +25,9 @@ export function Kpi({
   delta?: string;
   icon?: LucideIcon;
   delay?: number;
+  /** If set, animate count-up for this number (display still uses value prefix/suffix via value if needed) */
+  numericValue?: number;
+  digits?: number;
 }) {
   const shells = {
     default: "from-white to-slate-50 border-slate-200/80",
@@ -73,7 +79,24 @@ export function Kpi({
               valueTones[tone]
             )}
           >
-            {value}
+            {numericValue !== undefined ? (
+              <>
+                <AnimatedNumber value={numericValue} digits={digits} />
+                {(() => {
+                  const suffix = value.replace(/^[\d.,\s%]+/, "").trim();
+                  const hasPct = value.includes("%") && !suffix.includes("%");
+                  if (!suffix && !hasPct) return null;
+                  return (
+                    <span className="ml-1 text-[0.85em] font-bold opacity-80">
+                      {hasPct ? "%" : ""}
+                      {suffix ? ` ${suffix}` : ""}
+                    </span>
+                  );
+                })()}
+              </>
+            ) : (
+              value
+            )}
           </div>
         </div>
         <div className="flex flex-col items-end gap-2">

@@ -29,7 +29,7 @@ import {
 import { chartTheme } from "@/components/charts/theme";
 import { useTwinStore } from "@/lib/store";
 import { Building2, MapPinned, Route, Warehouse } from "lucide-react";
-import { motion } from "framer-motion";
+import { PageHero } from "@/components/ui/page-hero";
 
 export default function MapPage() {
   const [filter, setFilter] = useState<Region | "all">("all");
@@ -58,22 +58,12 @@ export default function MapPage() {
 
   return (
     <div className="space-y-6">
-      <motion.div
-        initial={{ opacity: 0, y: 10 }}
-        animate={{ opacity: 1, y: 0 }}
-        className="rounded-2xl border border-slate-200 bg-gradient-to-r from-[#0b1f3a] via-[#132f54] to-[#0f766e] p-6 text-white shadow-xl sm:p-8"
+      <PageHero
+        kicker="Network map · PPT BACKGROUND MC WH"
+        title="Bản đồ mạng lưới kho & vận tải"
+        subtitle="Click node xem capacity. Live cargo dots trên tuyến Sea/Truck N→S (To South&Sum). Owned tròn · Rented vuông · thuê ngoài 67%."
       >
-        <div className="text-[11px] font-bold uppercase tracking-[0.16em] text-sky-200">
-          Network map · PPT BACKGROUND MC WH
-        </div>
-        <h1 className="mt-1 text-2xl font-black tracking-tight sm:text-3xl">
-          Bản đồ mạng lưới kho & vận tải
-        </h1>
-        <p className="mt-2 max-w-3xl text-sm leading-relaxed text-slate-200">
-          Click từng node để xem capacity. Bật tuyến N→S (Sea/Truck) theo lane
-          To South&Sum. Owned (tròn) vs Rented (vuông) — phụ thuộc thuê ngoài 67%.
-        </p>
-        <div className="mt-4 flex flex-wrap gap-2">
+        <div className="flex flex-wrap gap-2">
           {(
             [
               ["all", "Toàn quốc"],
@@ -88,7 +78,7 @@ export default function MapPage() {
               onClick={() => setFilter(k)}
               className={`rounded-full px-4 py-1.5 text-xs font-bold transition ${
                 filter === k
-                  ? "bg-white text-slate-900"
+                  ? "bg-white text-slate-900 shadow"
                   : "bg-white/10 text-white hover:bg-white/20"
               }`}
             >
@@ -96,7 +86,7 @@ export default function MapPage() {
             </button>
           ))}
         </div>
-      </motion.div>
+      </PageHero>
 
       <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
         <Kpi

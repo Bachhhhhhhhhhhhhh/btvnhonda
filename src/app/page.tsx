@@ -50,6 +50,7 @@ import {
 } from "lucide-react";
 import { VietnamNetworkMap } from "@/components/map/VietnamNetworkMap";
 import { REGION_CAPS } from "@/lib/data/warehouseNetwork";
+import { NetworkFlow } from "@/components/flow/NetworkFlow";
 
 export default function DashboardPage() {
   const { result, params } = useTwinStore();
@@ -133,7 +134,7 @@ export default function DashboardPage() {
             <div className="mt-6 flex flex-wrap gap-3">
               <Link
                 href="/digital-twin"
-                className="inline-flex items-center gap-2 rounded-xl bg-white px-5 py-3 text-sm font-bold text-slate-900 shadow-lg transition hover:bg-sky-50"
+                className="btn-shimmer inline-flex items-center gap-2 rounded-xl bg-white px-5 py-3 text-sm font-bold text-slate-900 shadow-lg transition hover:bg-sky-50"
               >
                 Mở Digital Twin
                 <ArrowRight className="h-4 w-4" />
@@ -209,6 +210,7 @@ export default function DashboardPage() {
         <Kpi
           label="m² tiết kiệm / năm"
           value={fmt(a.m2Saved)}
+          numericValue={a.m2Saved}
           sub={`Stack NK @ ${fmtPct(params.importStackRatio, 0)} · Δ ${(params.unpackM2 - params.stackM2).toFixed(2)} m²/xe`}
           tone="good"
           delta="Relief"
@@ -219,6 +221,8 @@ export default function DashboardPage() {
         <Kpi
           label="Tăng năng lực kho"
           value={fmtPct(a.capacityIncreasePct)}
+          numericValue={a.capacityIncreasePct * 100}
+          digits={1}
           sub={`${params.unpackM2} → ${params.stackM2} m²/xe footprint`}
           tone="accent"
           icon={Gauge}
@@ -227,6 +231,7 @@ export default function DashboardPage() {
         <Kpi
           label="Giảm thuê ngoài"
           value={fmt(a.outsourceReduction)}
+          numericValue={a.outsourceReduction}
           sub={`${fmt(a.baseOutsourceVol)} → ${fmt(a.outsourceVol)} xe-eq`}
           tone="good"
           icon={TrendingDown}
@@ -235,6 +240,8 @@ export default function DashboardPage() {
         <Kpi
           label="Tiết kiệm logistics"
           value={`${fmt(a.totalSavings / 1e9, 2)} tỷ`}
+          numericValue={a.totalSavings / 1e9}
+          digits={2}
           sub={`ROI ${fmtPct(a.roi)} · Hoàn vốn ${Number.isFinite(a.paybackMonths) ? fmt(a.paybackMonths, 1) : "∞"} tháng`}
           tone={a.totalSavings > 0 ? "good" : "bad"}
           delta={a.totalSavings > 0 ? "Net +" : "Net −"}
@@ -247,6 +254,7 @@ export default function DashboardPage() {
         <Kpi
           label="Container N→S (base)"
           value={fmt(a.nsContainersBase)}
+          numericValue={a.nsContainersBase}
           sub={`Excel @46.6: ${fmt(a.nsContainersExcel)} cont`}
           icon={Container}
           delay={0.08}
@@ -254,6 +262,7 @@ export default function DashboardPage() {
         <Kpi
           label="Case pool đỉnh"
           value={fmt(a.peakCasePool)}
+          numericValue={a.peakCasePool}
           sub={`Chu kỳ ${params.leadTimeDays}+${params.freeTimeDays} ngày`}
           tone="warn"
           icon={Ship}
@@ -262,6 +271,8 @@ export default function DashboardPage() {
         <Kpi
           label="WH util peak"
           value={fmtPct(a.warehouseUtilPeak)}
+          numericValue={a.warehouseUtilPeak * 100}
+          digits={1}
           sub={`vs ${params.useTtlCapacity ? "TTL Cap" : "Fact Cap"}`}
           tone={a.warehouseUtilPeak > 1 ? "bad" : a.warehouseUtilPeak > 0.85 ? "warn" : "good"}
           icon={Warehouse}
@@ -270,6 +281,8 @@ export default function DashboardPage() {
         <Kpi
           label="NPV 3 năm"
           value={`${fmt(a.npv / 1e9, 2)} tỷ`}
+          numericValue={a.npv / 1e9}
+          digits={2}
           sub={`r=${fmtPct(params.cost.discountRate)}`}
           tone="accent"
           icon={Target}
@@ -320,21 +333,24 @@ export default function DashboardPage() {
         ))}
       </div>
 
+      {/* VALUE STREAM */}
+      <NetworkFlow />
+
       {/* NETWORK MAP */}
       <Card>
         <CardHeader className="flex flex-row flex-wrap items-start justify-between gap-3">
           <div>
-            <div className="section-kicker">Network map</div>
-            <CardTitle>Bản đồ kho Bắc · Trung · Nam + tuyến N→S</CardTitle>
+            <div className="section-kicker">Geo command center</div>
+            <CardTitle>Bản đồ kho Bắc · Trung · Nam + tuyến N→S live</CardTitle>
             <CardDescription>
-              PPT BACKGROUND MC WH · {fmt(REGION_CAPS.nationwide.cap100)} xe nationwide · owned {REGION_CAPS.hvnOwned.ratio}% / rented {REGION_CAPS.outside.ratio}%
+              PPT BACKGROUND MC WH · {fmt(REGION_CAPS.nationwide.cap100)} xe nationwide · owned {REGION_CAPS.hvnOwned.ratio}% / rented {REGION_CAPS.outside.ratio}% · chấm sáng = cargo flow
             </CardDescription>
           </div>
           <Link
             href="/map"
             className="inline-flex items-center gap-1.5 rounded-xl border border-blue-200 bg-blue-50 px-3 py-2 text-xs font-bold text-blue-800 hover:bg-blue-100"
           >
-            Mở full map
+            Full map studio
             <ArrowRight className="h-3.5 w-3.5" />
           </Link>
         </CardHeader>
