@@ -9,13 +9,12 @@ export function Card({
   className?: string;
   children: React.ReactNode;
   hover?: boolean;
-  /** Gold top hairline like bank product cards */
   accent?: boolean;
 }) {
   return (
     <div
       className={cn(
-        "glass overflow-hidden rounded-[4px]",
+        "cc-panel overflow-hidden rounded-xl border border-[var(--line)] bg-[var(--card)]",
         hover && "glass-hover",
         accent && "kpi-ring",
         className
@@ -36,7 +35,7 @@ export function CardHeader({
   return (
     <div
       className={cn(
-        "border-b border-[#eef2f6] bg-[#fafbfc] px-5 py-3.5",
+        "border-b border-[var(--line-soft)] bg-[var(--bg)]/40 px-5 py-3.5",
         className
       )}
     >
@@ -55,7 +54,7 @@ export function CardTitle({
   return (
     <h3
       className={cn(
-        "text-[14px] font-bold tracking-tight text-[#071428]",
+        "text-[14px] font-extrabold tracking-tight text-[var(--ink)]",
         className
       )}
     >
@@ -72,7 +71,7 @@ export function CardDescription({
   children: React.ReactNode;
 }) {
   return (
-    <p className={cn("mt-0.5 text-xs leading-relaxed text-slate-500", className)}>
+    <p className={cn("mt-0.5 text-xs leading-relaxed text-[var(--muted)]", className)}>
       {children}
     </p>
   );

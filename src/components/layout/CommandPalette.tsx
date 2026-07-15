@@ -28,6 +28,7 @@ import {
 import { cn } from "@/lib/utils";
 import { exportTwinPack } from "@/lib/export";
 import { useTwinStore } from "@/lib/store";
+import { useThemeStore } from "@/lib/theme-store";
 
 const ROUTES = [
   { href: "/", label: "Tổng quan", icon: LayoutDashboard, kw: "dashboard home" },
@@ -57,6 +58,7 @@ export function CommandPalette() {
   const [q, setQ] = useState("");
   const router = useRouter();
   const { params, result, saveSnapshot } = useTwinStore();
+  const toggleMode = useThemeStore((s) => s.toggleMode);
 
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
@@ -99,9 +101,15 @@ export function CommandPalette() {
         run: () => router.push("/wsb"),
         show: !qq || "wsb whatif".includes(qq),
       },
+      {
+        id: "theme",
+        label: "Toggle Dark / Light mode",
+        run: () => toggleMode(),
+        show: !qq || "theme dark light".includes(qq),
+      },
     ].filter((a) => a.show);
     return { routes, actions };
-  }, [q, params, result, router, saveSnapshot]);
+  }, [q, params, result, router, saveSnapshot, toggleMode]);
 
   if (!open) return null;
 

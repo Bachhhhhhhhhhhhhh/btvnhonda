@@ -154,7 +154,7 @@ export function Sidebar({
   return (
     <>
       {/* Desktop */}
-      <aside className="no-print hidden h-screen w-[248px] shrink-0 flex-col bg-[#071428] text-slate-300 lg:flex">
+      <aside className="cc-sidebar no-print hidden h-screen w-[248px] shrink-0 flex-col bg-[var(--sidebar)] text-slate-300 lg:flex">
         {body}
       </aside>
 
@@ -167,7 +167,7 @@ export function Sidebar({
             aria-label="Close menu"
             onClick={onClose}
           />
-          <aside className="absolute left-0 top-0 flex h-full w-[280px] flex-col bg-[#071428] text-slate-300 shadow-2xl">
+          <aside className="cc-sidebar absolute left-0 top-0 flex h-full w-[280px] flex-col bg-[var(--sidebar)] text-slate-300 shadow-2xl">
             {body}
           </aside>
         </div>

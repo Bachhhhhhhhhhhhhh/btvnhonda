@@ -28,33 +28,26 @@ export function Kpi({
   numericValue?: number;
   digits?: number;
 }) {
-  const shells = {
-    default: "border-[#dce3ec] bg-white",
-    good: "border-[#dce3ec] bg-white",
-    warn: "border-[#dce3ec] bg-white",
-    bad: "border-[#dce3ec] bg-white",
-    accent: "border-[#dce3ec] bg-white",
-  };
   const valueTones = {
-    default: "text-[#071428]",
-    good: "text-[#0d6b63]",
-    warn: "text-[#a65c12]",
-    bad: "text-[#a31d1d]",
-    accent: "text-[#0a4d6e]",
+    default: "text-[var(--ink)]",
+    good: "text-teal-700 dark:text-teal-300",
+    warn: "text-amber-700 dark:text-amber-300",
+    bad: "text-rose-700 dark:text-rose-300",
+    accent: "text-sky-800 dark:text-sky-300",
   };
   const iconBg = {
-    default: "bg-[#f0f3f7] text-[#334155]",
-    good: "bg-teal-50 text-teal-800",
-    warn: "bg-amber-50 text-amber-800",
-    bad: "bg-rose-50 text-rose-800",
-    accent: "bg-sky-50 text-sky-900",
+    default: "bg-[var(--bg)] text-[var(--muted)]",
+    good: "bg-teal-500/15 text-teal-700 dark:text-teal-300",
+    warn: "bg-amber-500/15 text-amber-700 dark:text-amber-300",
+    bad: "bg-rose-500/15 text-rose-700 dark:text-rose-300",
+    accent: "bg-sky-500/15 text-sky-800 dark:text-sky-300",
   };
   const deltaTones = {
-    default: "bg-slate-100 text-slate-600",
-    good: "bg-teal-50 text-teal-800",
-    warn: "bg-amber-50 text-amber-800",
-    bad: "bg-rose-50 text-rose-800",
-    accent: "bg-sky-50 text-sky-900",
+    default: "bg-[var(--bg)] text-[var(--muted)]",
+    good: "bg-teal-500/15 text-teal-800 dark:text-teal-300",
+    warn: "bg-amber-500/15 text-amber-800 dark:text-amber-300",
+    bad: "bg-rose-500/15 text-rose-800 dark:text-rose-300",
+    accent: "bg-sky-500/15 text-sky-800 dark:text-sky-300",
   };
   const accentBar = {
     default: "from-[#071428] via-[#b8954a] to-[#071428]",
@@ -66,13 +59,10 @@ export function Kpi({
 
   return (
     <motion.div
-      initial={{ opacity: 0, y: 6 }}
+      initial={{ opacity: 0, y: 8 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.3, delay }}
-      className={cn(
-        "glass-hover relative overflow-hidden rounded-[4px] border p-4 shadow-[0_1px_2px_rgba(7,20,40,0.05)]",
-        shells[tone]
-      )}
+      className="cc-panel relative overflow-hidden rounded-xl border border-[var(--line)] bg-[var(--card)] p-4"
     >
       <div
         className={cn(
@@ -82,12 +72,12 @@ export function Kpi({
       />
       <div className="flex items-start justify-between gap-3">
         <div className="min-w-0">
-          <div className="text-[10px] font-bold uppercase tracking-[0.12em] text-slate-500">
+          <div className="text-[10px] font-bold uppercase tracking-[0.12em] text-[var(--muted)]">
             {label}
           </div>
           <div
             className={cn(
-              "mt-2 text-[1.55rem] font-bold tabular-nums tracking-tight leading-none",
+              "mt-2 text-[1.55rem] font-black tabular-nums tracking-tight leading-none",
               valueTones[tone]
             )}
           >
@@ -115,7 +105,7 @@ export function Kpi({
           {Icon && (
             <div
               className={cn(
-                "flex h-9 w-9 items-center justify-center rounded-[3px]",
+                "flex h-9 w-9 items-center justify-center rounded-lg",
                 iconBg[tone]
               )}
             >
@@ -125,7 +115,7 @@ export function Kpi({
           {delta && (
             <span
               className={cn(
-                "rounded-[2px] px-2 py-0.5 text-[10px] font-bold",
+                "rounded-md px-2 py-0.5 text-[10px] font-bold",
                 deltaTones[tone]
               )}
             >
@@ -135,11 +125,11 @@ export function Kpi({
         </div>
       </div>
       {sub && (
-        <div className="mt-2.5 text-xs leading-relaxed text-slate-500">{sub}</div>
+        <div className="mt-2.5 text-xs leading-relaxed text-[var(--muted)]">{sub}</div>
       )}
       {source && (
         <div
-          className="mt-2.5 truncate border-t border-[#eef2f6] pt-2 text-[10px] text-slate-400"
+          className="mt-2.5 truncate border-t border-[var(--line-soft)] pt-2 text-[10px] text-[var(--muted)]"
           title={source}
         >
           Nguồn · {source}

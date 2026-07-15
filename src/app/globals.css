@@ -5,7 +5,8 @@
    Inspired by corporate internet-banking portals (navy · gold · trust)
    ═══════════════════════════════════════════════════════════ */
 
-:root {
+:root,
+[data-theme="light"] {
   --navy: #071428;
   --navy-mid: #0d2137;
   --navy-soft: #152f4a;
@@ -17,19 +18,59 @@
   --muted: #5b6b7c;
   --line: #dce3ec;
   --line-soft: #eef2f6;
-  --bg: #eef1f5;
-  --bg-deep: #e4e9f0;
+  --bg: #e8ecf2;
+  --bg-deep: #dfe5ee;
   --card: #ffffff;
   --good: #0d6b63;
   --warn: #a65c12;
   --bad: #a31d1d;
   --link: #0a4d6e;
-  --radius: 4px;
+  --radius: 8px;
   --shadow-sm: 0 1px 2px rgba(7, 20, 40, 0.05);
-  --shadow-md: 0 4px 16px -4px rgba(7, 20, 40, 0.1);
-  --shadow-lg: 0 12px 32px -8px rgba(7, 20, 40, 0.14);
+  --shadow-md: 0 8px 24px -8px rgba(7, 20, 40, 0.12);
+  --shadow-lg: 0 20px 48px -16px rgba(7, 20, 40, 0.2);
   --header-h: 56px;
   --util-h: 32px;
+  --sidebar: #071428;
+  --header-bg: rgba(255, 255, 255, 0.92);
+  --glass: rgba(255, 255, 255, 0.72);
+}
+
+[data-theme="dark"] {
+  --navy: #e8eef8;
+  --navy-mid: #1a2d48;
+  --navy-soft: #243b5c;
+  --navy-muted: #2f4a70;
+  --gold: #d4b76a;
+  --gold-bright: #e8d5a3;
+  --gold-soft: #3a3220;
+  --ink: #e8eef5;
+  --muted: #94a3b8;
+  --line: #243247;
+  --line-soft: #1a2638;
+  --bg: #0b1220;
+  --bg-deep: #080e18;
+  --card: #121c2e;
+  --good: #2dd4bf;
+  --warn: #fbbf24;
+  --bad: #fb7185;
+  --link: #7dd3fc;
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.35);
+  --shadow-md: 0 12px 32px -12px rgba(0, 0, 0, 0.55);
+  --shadow-lg: 0 24px 56px -16px rgba(0, 0, 0, 0.65);
+  --sidebar: #060b14;
+  --header-bg: rgba(12, 20, 34, 0.92);
+  --glass: rgba(18, 28, 46, 0.8);
+}
+
+[data-density="compact"] {
+  --header-h: 48px;
+}
+[data-density="compact"] body {
+  font-size: 13px;
+}
+[data-density="compact"] main.bank-content {
+  padding: 0.75rem !important;
 }
 
 * {
@@ -56,15 +97,24 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   font-feature-settings: "tnum" 1;
+  transition: background 0.25s ease, color 0.25s ease;
 }
 
 h1,
 h2,
 h3,
 h4 {
-  letter-spacing: -0.015em;
-  color: var(--navy);
-  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: var(--ink);
+  font-weight: 800;
+}
+
+.reduce-motion *,
+.reduce-motion *::before,
+.reduce-motion *::after {
+  animation-duration: 0.01ms !important;
+  animation-iteration-count: 1 !important;
+  transition-duration: 0.01ms !important;
 }
 
 /* Scrollbar — thin institutional */
@@ -406,10 +456,62 @@ input[type="range"]::-webkit-slider-thumb {
   color: var(--gold-bright);
 }
 
-/* Content area subtle pattern */
+/* Content area */
 .bank-content {
   background:
-    linear-gradient(180deg, #f4f6f9 0%, #eef1f5 120px, #eef1f5 100%);
+    radial-gradient(ellipse 80% 40% at 50% -10%, color-mix(in srgb, var(--gold) 8%, transparent), transparent 55%),
+    var(--bg);
+}
+
+/* Command center panels */
+.cc-panel {
+  box-shadow: var(--shadow-sm);
+  transition: box-shadow 0.2s ease, border-color 0.2s ease, transform 0.2s ease;
+}
+.cc-panel:hover {
+  box-shadow: var(--shadow-md);
+}
+
+.cc-shell {
+  background: var(--bg);
+}
+.cc-header {
+  background: var(--header-bg) !important;
+  border-color: var(--line) !important;
+  backdrop-filter: blur(12px);
+}
+.cc-sidebar {
+  background: var(--sidebar) !important;
+}
+
+/* Dark mode utility helpers for hard-coded legacy classes */
+[data-theme="dark"] .bg-white {
+  background-color: var(--card) !important;
+}
+[data-theme="dark"] .bg-slate-50,
+[data-theme="dark"] .bg-\[\#f7f9fc\],
+[data-theme="dark"] .bg-\[\#fafbfc\],
+[data-theme="dark"] .bg-\[\#faf6eb\] {
+  background-color: var(--line-soft) !important;
+}
+[data-theme="dark"] .text-slate-900,
+[data-theme="dark"] .text-\[\#071428\],
+[data-theme="dark"] .text-\[\#0a1628\] {
+  color: var(--ink) !important;
+}
+[data-theme="dark"] .text-slate-600,
+[data-theme="dark"] .text-slate-500,
+[data-theme="dark"] .text-slate-700 {
+  color: var(--muted) !important;
+}
+[data-theme="dark"] .border-slate-200,
+[data-theme="dark"] .border-\[\#dce3ec\],
+[data-theme="dark"] .border-\[\#eef2f6\] {
+  border-color: var(--line) !important;
+}
+[data-theme="dark"] .bg-\[\#eef1f5\],
+[data-theme="dark"] .bg-\[\#eef1f6\] {
+  background-color: var(--bg) !important;
 }
 
 /* Divider with gold accent */
@@ -427,15 +529,15 @@ input[type="range"]::-webkit-slider-thumb {
   gap: 16px 24px;
   align-items: center;
   padding: 12px 16px;
-  background: #f7f9fc;
+  background: var(--card);
   border: 1px solid var(--line);
-  border-radius: 4px;
+  border-radius: 8px;
   font-size: 11px;
   color: var(--muted);
   font-weight: 500;
 }
 .bank-trust strong {
-  color: var(--navy);
+  color: var(--ink);
   font-weight: 700;
 }
 
@@ -443,9 +545,9 @@ input[type="range"]::-webkit-slider-thumb {
 .seg-control {
   display: inline-flex;
   padding: 3px;
-  background: #eef2f6;
+  background: var(--bg);
   border: 1px solid var(--line);
-  border-radius: 4px;
+  border-radius: 8px;
   gap: 2px;
 }
 .seg-control button {
@@ -454,16 +556,16 @@ input[type="range"]::-webkit-slider-thumb {
   padding: 6px 12px;
   font-size: 11px;
   font-weight: 650;
-  color: #64748b;
-  border-radius: 3px;
+  color: var(--muted);
+  border-radius: 6px;
   cursor: pointer;
   transition: all 0.12s ease;
 }
 .seg-control button.active {
-  background: #fff;
-  color: var(--navy);
+  background: var(--card);
+  color: var(--ink);
   box-shadow: var(--shadow-sm);
-  border: 1px solid #d8dee8;
+  border: 1px solid var(--line);
 }
 
 /* Stat tile inside navy panels */

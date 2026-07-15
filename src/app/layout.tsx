@@ -1,11 +1,12 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import { AppShell } from "@/components/layout/app-shell";
+import { ThemeProvider } from "@/components/layout/ThemeProvider";
 
 export const metadata: Metadata = {
-  title: "LOG Twin · DSS Kho miền Bắc Honda MC",
+  title: "LOG Twin Command Center · Honda MC DSS",
   description:
-    "Digital Twin hỗ trợ quyết định tối ưu stacking, chuyển kho Bắc–Nam và thuê ngoài — Honda Việt Nam",
+    "Command Center Digital Twin — stacking, transfer Bắc–Nam, what-if, Monte Carlo — Honda Việt Nam",
 };
 
 export default function RootLayout({
@@ -14,7 +15,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="vi">
+    <html lang="vi" data-theme="dark" suppressHydrationWarning>
       <head>
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link
@@ -23,12 +24,19 @@ export default function RootLayout({
           crossOrigin="anonymous"
         />
         <link
-          href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800&display=swap"
+          href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@500;700&display=swap"
           rel="stylesheet"
+        />
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `(function(){try{var t=localStorage.getItem('log-twin-theme-v1');var m='dark';if(t){var p=JSON.parse(t);if(p.state&&p.state.mode)m=p.state.mode==='light'?'light':'dark';}document.documentElement.setAttribute('data-theme',m);}catch(e){}})();`,
+          }}
         />
       </head>
       <body className="antialiased">
-        <AppShell>{children}</AppShell>
+        <ThemeProvider>
+          <AppShell>{children}</AppShell>
+        </ThemeProvider>
       </body>
     </html>
   );

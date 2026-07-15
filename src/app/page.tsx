@@ -1,25 +1,43 @@
 "use client";
 
+import { useMemo } from "react";
+import Link from "next/link";
 import {
+  Area,
+  AreaChart,
   Bar,
   BarChart,
   CartesianGrid,
+  Cell,
   Legend,
   Line,
-  LineChart,
+  Pie,
+  PieChart,
   ResponsiveContainer,
   Tooltip,
   XAxis,
   YAxis,
-  Area,
-  AreaChart,
-  Cell,
-  Pie,
-  PieChart,
-  RadialBar,
-  RadialBarChart,
 } from "recharts";
+import { motion } from "framer-motion";
+import {
+  ArrowRight,
+  Brain,
+  Container,
+  FlaskConical,
+  Gauge,
+  Landmark,
+  Layers,
+  MapPinned,
+  Ship,
+  Sparkles,
+  Target,
+  TrendingDown,
+  Warehouse,
+} from "lucide-react";
 import { useTwinStore } from "@/lib/store";
+import { fmt, fmtPct } from "@/lib/utils";
+import { SOURCES } from "@/lib/data/projectData";
+import { chartTheme } from "@/components/charts/theme";
 import { Kpi } from "@/components/ui/kpi";
 import {
   Card,
@@ -28,540 +46,376 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { fmt, fmtPct } from "@/lib/utils";
-import { ASSUMPTIONS, SOURCES } from "@/lib/data/projectData";
-import { chartTheme } from "@/components/charts/theme";
-import Link from "next/link";
-import { motion } from "framer-motion";
-import {
-  ArrowRight,
-  Zap,
-  Target,
-  TrendingDown,
-  Layers,
-  Ship,
-  Container,
-  Landmark,
-  Sparkles,
-  Gauge,
-  Warehouse,
-  MapPinned,
-} from "lucide-react";
 import { VietnamNetworkMap } from "@/components/map/VietnamNetworkMap";
 import { REGION_CAPS } from "@/lib/data/warehouseNetwork";
 import { NetworkFlow } from "@/components/flow/NetworkFlow";
 import { OpsAlerts } from "@/components/analytics/OpsAlerts";
 import { PresetBar } from "@/components/analytics/PresetBar";
-import { ScorecardRing } from "@/components/analytics/ScorecardRing";
 import { buildInsights, optimizePolicy } from "@/lib/engine/analytics";
-import { useMemo } from "react";
-import { Brain } from "lucide-react";
 import { LiveTicker } from "@/components/wow/LiveTicker";
 import { MonthPlayback } from "@/components/wow/MonthPlayback";
 import { PresentationMode } from "@/components/wow/PresentationMode";
 import { AnimatedNumber } from "@/components/ui/animated-counter";
+import { ExecutiveBrief } from "@/components/command/ExecutiveBrief";
+import { ActivityFeed } from "@/components/command/ActivityFeed";
+import { MetricOrbit } from "@/components/command/MetricOrbit";
+
+const PIE_COLORS = ["#0a4d6e", "#0d6b63", "#b8954a", "#5b21b6", "#64748b"];
 
 export default function DashboardPage() {
   const { result, params } = useTwinStore();
   const a = result.annual;
+  const opt = useMemo(() => optimizePolicy(params), [params]);
   const topInsights = useMemo(
-    () => buildInsights(result, params).slice(0, 4),
+    () => buildInsights(result, params).slice(0, 3),
     [result, params]
   );
-  const opt = useMemo(() => optimizePolicy(params), [params]);
-
-  const chartData = result.months.map((m) => ({
-    month: m.month,
-    "Vượt gốc": Math.round(m.baseOver),
-    "Sau stack NK": Math.round(m.residualAfterImport),
-    "Chuyển N→S": Math.round(m.transferVol),
-    "Thuê ngoài": Math.round(m.outsourceVol),
-    "Relief NK": Math.round(m.importRelief),
-    Container: Math.round(m.nsContainersBase),
-  }));
-
-  const scenarioData = [
-    { name: "Hiện trạng", value: Math.round(result.scenarios.asIs), fill: "#e11d48" },
-    { name: "Chỉ stack NK", value: Math.round(result.scenarios.importOnly), fill: "#d97706" },
-    { name: "Full stack", value: Math.round(result.scenarios.fullStackTheory), fill: "#7c3aed" },
-    { name: "Tối ưu", value: Math.round(result.scenarios.optimized), fill: "#059669" },
-  ];
-
-  const costPie = [
-    {
-      name: "Thuê + bonus",
-      value: Math.round(
-        result.months.reduce((s, m) => s + m.northRentalCost + m.bonusCost, 0) / 1e9 * 100
-      ) / 100,
-    },
-    {
-      name: "Cước + return",
-      value: Math.round(
-        result.months.reduce((s, m) => s + m.freightCost + m.returnCost, 0) / 1e9 * 100
-      ) / 100,
-    },
-    {
-      name: "Pack + kho Nam",
-      value: Math.round(
-        result.months.reduce((s, m) => s + m.packingCost + m.southWhCost, 0) / 1e9 * 100
-      ) / 100,
-    },
-    {
-      name: "Stack + risk",
-      value: Math.round(
-        result.months.reduce((s, m) => s + m.importStackCost + m.riskCost, 0) / 1e9 * 100
-      ) / 100,
-    },
-  ];
-
-  const utilPct = Math.min(100, Math.round(a.warehouseUtilPeak * 100));
-  const radial = [{ name: "Util", value: utilPct, fill: utilPct > 100 ? "#e11d48" : utilPct > 85 ? "#d97706" : "#059669" }];
 
   const reductionPct =
     a.baseOutsourceVol > 0 ? a.outsourceReduction / a.baseOutsourceVol : 0;
 
+  const chartData = result.months.map((m) => ({
+    month: m.month,
+    Over: Math.round(m.baseOver),
+    Residual: Math.round(m.residualAfterImport),
+    Transfer: Math.round(m.transferVol),
+    Outsource: Math.round(m.outsourceVol),
+    CostBn: +(m.totalCost / 1e9).toFixed(3),
+  }));
+
+  const costPie = [
+    {
+      name: "Thuê+bonus",
+      value:
+        Math.round(
+          (result.months.reduce(
+            (s, m) => s + m.northRentalCost + m.bonusCost,
+            0
+          ) /
+            1e9) *
+            100
+        ) / 100,
+    },
+    {
+      name: "Lane N→S",
+      value:
+        Math.round(
+          (result.months.reduce(
+            (s, m) => s + m.freightCost + m.packingCost + m.returnCost,
+            0
+          ) /
+            1e9) *
+            100
+        ) / 100,
+    },
+    {
+      name: "Nam+risk+stack",
+      value:
+        Math.round(
+          (result.months.reduce(
+            (s, m) => s + m.southWhCost + m.riskCost + m.importStackCost,
+            0
+          ) /
+            1e9) *
+            100
+        ) / 100,
+    },
+  ];
+
   return (
-    <div className="space-y-5">
+    <div className="space-y-4">
       <LiveTicker />
 
-      {/* WOW HERO */}
+      {/* Command hero */}
       <motion.section
-        initial={{ opacity: 0, y: 16 }}
+        initial={{ opacity: 0, y: 14 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5 }}
-        className="hero-wow relative overflow-hidden rounded-[8px] border border-[#0a1628] text-white shadow-[0_20px_50px_-20px_rgba(7,20,40,0.55)]"
+        className="hero-wow relative overflow-hidden rounded-2xl border border-[var(--line)] text-white shadow-[0_24px_60px_-24px_rgba(0,0,0,0.55)]"
       >
-        <div className="orb left-[-40px] top-[-40px] h-48 w-48 bg-[#b8954a]" />
+        <div className="orb left-[-40px] top-[-40px] h-52 w-52 bg-[#b8954a]" />
         <div
-          className="orb bottom-[-60px] right-[10%] h-56 w-56 bg-cyan-600"
-          style={{ animationDelay: "1.2s" }}
+          className="orb bottom-[-50px] right-[8%] h-60 w-60 bg-cyan-700"
+          style={{ animationDelay: "1s" }}
         />
-        <div className="relative z-10 grid gap-8 p-6 sm:p-8 lg:grid-cols-12 lg:items-end">
-          <div className="lg:col-span-7">
-            <div className="mb-4 inline-flex items-center gap-2 rounded-full border border-[#d4b76a]/40 bg-[#d4b76a]/10 px-3 py-1 text-[11px] font-bold text-[#e8d5a3]">
+        <div className="relative z-10 grid gap-8 p-6 sm:p-8 xl:grid-cols-12 xl:items-end">
+          <div className="xl:col-span-7">
+            <div className="mb-3 inline-flex items-center gap-2 rounded-full border border-[#d4b76a]/35 bg-[#d4b76a]/10 px-3 py-1 text-[11px] font-bold text-[#e8d5a3]">
               <Sparkles className="h-3.5 w-3.5" />
-              LOG Twin · Live Decision Theater
+              Command Center v3 · Honda MC Logistics
             </div>
-            <h1 className="max-w-2xl text-[1.85rem] font-black leading-[1.15] tracking-tight sm:text-[2.35rem]">
-              Tối ưu capacity miền Bắc
-              <span className="mt-1 block bg-gradient-to-r from-[#d4b76a] via-[#f5e6b8] to-[#d4b76a] bg-clip-text text-transparent">
-                quyết định realtime trên số liệu
+            <h1 className="max-w-2xl text-[1.9rem] font-black leading-[1.12] tracking-tight sm:text-[2.5rem]">
+              Digital Twin
+              <span className="mt-1 block bg-gradient-to-r from-[#d4b76a] via-[#fff3c4] to-[#d4b76a] bg-clip-text text-transparent">
+                Capacity · Network · Capital
               </span>
             </h1>
             <p className="mt-3 max-w-xl text-sm leading-relaxed text-slate-300">
-              Stacking NK · Transfer N→S · Outsource có kiểm soát. Playback 12 tháng,
-              presentation board, cargo live trên bản đồ GIS Việt Nam.
+              Một màn hình điều hành: playback mùa cao điểm, AI brief, optimizer,
+              bản đồ cargo live, WSB what-if và board presentation.
             </p>
-            <div className="mt-5 flex flex-wrap gap-2.5">
+            <div className="mt-5 flex flex-wrap gap-2">
               <Link
                 href="/digital-twin"
-                className="btn-bank-gold inline-flex items-center gap-2 px-5 py-2.5 text-sm shadow-lg shadow-amber-900/20"
+                className="btn-bank-gold inline-flex items-center gap-2 px-5 py-2.5 text-sm shadow-lg"
               >
-                Mở Digital Twin
+                Control Twin
                 <ArrowRight className="h-4 w-4" />
               </Link>
               <Link
                 href="/wsb"
-                className="inline-flex items-center gap-2 rounded-[3px] border border-white/25 bg-white/10 px-4 py-2.5 text-sm font-bold text-white backdrop-blur hover:bg-white/15"
+                className="inline-flex items-center gap-2 rounded-lg border border-white/20 bg-white/10 px-4 py-2.5 text-sm font-bold backdrop-blur hover:bg-white/15"
               >
-                WSB What-if
+                <FlaskConical className="h-4 w-4" />
+                WSB
+              </Link>
+              <Link
+                href="/insights"
+                className="inline-flex items-center gap-2 rounded-lg border border-white/15 px-4 py-2.5 text-sm font-semibold text-slate-200 hover:bg-white/5"
+              >
+                <Brain className="h-4 w-4" />
+                Insights
               </Link>
               <Link
                 href="/map"
-                className="inline-flex items-center gap-2 rounded-[3px] border border-white/15 px-4 py-2.5 text-sm font-semibold text-slate-200 hover:bg-white/5"
+                className="inline-flex items-center gap-2 rounded-lg border border-white/15 px-4 py-2.5 text-sm font-semibold text-slate-200 hover:bg-white/5"
               >
                 <MapPinned className="h-4 w-4" />
-                Bản đồ live
+                Map
               </Link>
               <PresentationMode />
             </div>
           </div>
 
-          <div className="grid grid-cols-2 gap-2.5 lg:col-span-5">
+          <div className="grid grid-cols-2 gap-2.5 xl:col-span-5">
             {[
               {
-                l: "Tiết kiệm ròng",
+                l: "Tiết kiệm",
                 num: a.totalSavings / 1e9,
-                digits: 2,
-                suf: " tỷ",
-                s: "VND / năm mô hình",
+                d: 2,
+                s: "tỷ VND/năm",
               },
               {
-                l: "Giảm thuê ngoài",
+                l: "Giảm outsource",
                 num: reductionPct * 100,
-                digits: 1,
-                suf: "%",
-                s: `${fmt(a.outsourceReduction)} xe-eq`,
+                d: 1,
+                s: "%",
               },
-              {
-                l: "m² giải phóng",
-                num: a.m2Saved,
-                digits: 0,
-                suf: "",
-                s: "từ stacking NK",
-              },
-              {
-                l: "ROI stacking",
-                num: a.roi * 100,
-                digits: 1,
-                suf: "%",
-                s: `NPV 3y ${fmt(a.npv / 1e9, 1)} tỷ`,
-              },
+              { l: "m² free", num: a.m2Saved, d: 0, s: "m²" },
+              { l: "ROI", num: a.roi * 100, d: 1, s: "%" },
             ].map((x, i) => (
               <motion.div
                 key={x.l}
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.12 + i * 0.05 }}
-                className="stat-glass rounded-[6px] px-3.5 py-3"
+                transition={{ delay: 0.1 + i * 0.05 }}
+                className="stat-glass rounded-xl px-3.5 py-3"
               >
-                <div className="text-[10px] font-bold uppercase tracking-[0.1em] text-[#d4b76a]">
+                <div className="text-[10px] font-bold uppercase tracking-[0.12em] text-[#d4b76a]">
                   {x.l}
                 </div>
-                <div className="mt-1 text-[1.45rem] font-black tabular-nums tracking-tight text-white">
-                  <AnimatedNumber value={x.num} digits={x.digits} />
-                  {x.suf}
+                <div className="mt-1 text-[1.5rem] font-black tabular-nums text-white">
+                  <AnimatedNumber value={x.num} digits={x.d} />
+                  <span className="ml-1 text-sm font-bold text-slate-400">
+                    {x.s}
+                  </span>
                 </div>
-                <div className="mt-0.5 text-[11px] text-slate-400">{x.s}</div>
               </motion.div>
             ))}
           </div>
         </div>
       </motion.section>
 
-      <PresetBar showSnapshot={false} />
+      <PresetBar />
       <OpsAlerts max={3} />
 
-      <div className="grid gap-4 xl:grid-cols-5">
-        <div className="xl:col-span-3">
-          <MonthPlayback />
+      {/* Brief + orbit + activity */}
+      <div className="grid gap-4 xl:grid-cols-12">
+        <div className="xl:col-span-8">
+          <ExecutiveBrief />
         </div>
-        <div className="space-y-4 xl:col-span-2">
-          <ScorecardRing />
-          <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-1">
-            {topInsights.slice(0, 2).map((ins) => (
-              <div
-                key={ins.id}
-                className="wow-card rounded-[6px] border border-[#dce3ec] bg-white p-4"
-              >
-                <div className="text-[10px] font-bold uppercase tracking-wide text-[#b8954a]">
-                  {ins.category} · {ins.impact}
-                </div>
-                <div className="mt-1 text-sm font-bold text-[#071428]">{ins.headline}</div>
-                <p className="mt-1 text-[12px] leading-relaxed text-slate-600">{ins.body}</p>
-              </div>
-            ))}
+        <div className="grid gap-4 sm:grid-cols-2 xl:col-span-4 xl:grid-cols-1">
+          <MetricOrbit />
+          <div className="min-h-[280px]">
+            <ActivityFeed />
           </div>
         </div>
       </div>
 
-      <div className="flex flex-wrap items-center gap-3 rounded-[4px] border border-[#e8d5a3] bg-[#faf6eb] px-4 py-3 text-sm">
-        <Brain className="h-4 w-4 text-[#7a6230]" />
-        <span className="font-semibold text-[#071428]">
-          Optimizer gợi ý stack {fmtPct(opt.bestStackRatio, 0)} · TF{" "}
-          {fmtPct(opt.bestTransferRatio, 0)} → max {fmt(opt.bestSavings / 1e9, 2)} tỷ
-        </span>
-        <Link href="/insights" className="ml-auto text-xs font-bold text-[#0a4d6e] underline">
-          Mở Insights & tối ưu →
-        </Link>
+      {/* Playback + optimizer banner */}
+      <div className="grid gap-4 xl:grid-cols-5">
+        <div className="xl:col-span-3">
+          <MonthPlayback />
+        </div>
+        <div className="space-y-3 xl:col-span-2">
+          <div className="cc-panel rounded-xl border border-[var(--gold)]/35 bg-gradient-to-br from-[var(--gold-soft)]/40 to-[var(--card)] p-4">
+            <div className="text-[10px] font-bold uppercase tracking-[0.14em] text-[var(--gold)]">
+              Optimizer suggestion
+            </div>
+            <div className="mt-2 text-lg font-black text-[var(--ink)]">
+              Stack {fmtPct(opt.bestStackRatio, 0)} · TF{" "}
+              {fmtPct(opt.bestTransferRatio, 0)}
+            </div>
+            <p className="mt-1 text-xs text-[var(--muted)]">
+              Max savings {fmt(opt.bestSavings / 1e9, 2)} tỷ · Δ{" "}
+              {fmt((opt.bestSavings - a.totalSavings) / 1e9, 2)} tỷ vs Twin
+            </p>
+            <Link
+              href="/insights"
+              className="btn-bank mt-3 inline-flex items-center gap-1 px-3 py-2 text-xs"
+            >
+              Mở optimizer <ArrowRight className="h-3.5 w-3.5" />
+            </Link>
+          </div>
+          {topInsights.map((ins) => (
+            <div
+              key={ins.id}
+              className="cc-panel rounded-xl border border-[var(--line)] bg-[var(--card)] p-3.5"
+            >
+              <div className="text-[10px] font-bold uppercase text-[var(--gold)]">
+                {ins.category}
+              </div>
+              <div className="mt-1 text-sm font-bold text-[var(--ink)]">
+                {ins.headline}
+              </div>
+              <p className="mt-1 text-[12px] leading-relaxed text-[var(--muted)]">
+                {ins.body}
+              </p>
+            </div>
+          ))}
+        </div>
       </div>
 
-      {/* KPI ROW */}
-      <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
+      {/* KPI grid */}
+      <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
         <Kpi
           label="m² tiết kiệm / năm"
           value={fmt(a.m2Saved)}
           numericValue={a.m2Saved}
-          sub={`Stack NK @ ${fmtPct(params.importStackRatio, 0)} · Δ ${(params.unpackM2 - params.stackM2).toFixed(2)} m²/xe`}
+          sub={`Stack @ ${fmtPct(params.importStackRatio, 0)}`}
           tone="good"
           delta="Relief"
           icon={Layers}
-          delay={0.05}
           source={`Word · ${SOURCES.word}`}
         />
         <Kpi
-          label="Tăng năng lực kho"
+          label="Tăng năng lực"
           value={fmtPct(a.capacityIncreasePct)}
           numericValue={a.capacityIncreasePct * 100}
           digits={1}
-          sub={`${params.unpackM2} → ${params.stackM2} m²/xe footprint`}
+          sub={`${params.unpackM2} → ${params.stackM2} m²/xe`}
           tone="accent"
           icon={Gauge}
-          delay={0.1}
         />
         <Kpi
           label="Giảm thuê ngoài"
           value={fmt(a.outsourceReduction)}
           numericValue={a.outsourceReduction}
-          sub={`${fmt(a.baseOutsourceVol)} → ${fmt(a.outsourceVol)} xe-eq`}
+          sub={`${fmt(a.baseOutsourceVol)} → ${fmt(a.outsourceVol)}`}
           tone="good"
           icon={TrendingDown}
-          delay={0.15}
         />
         <Kpi
           label="Tiết kiệm logistics"
           value={`${fmt(a.totalSavings / 1e9, 2)} tỷ`}
           numericValue={a.totalSavings / 1e9}
           digits={2}
-          sub={`ROI ${fmtPct(a.roi)} · Hoàn vốn ${Number.isFinite(a.paybackMonths) ? fmt(a.paybackMonths, 1) : "∞"} tháng`}
+          sub={`ROI ${fmtPct(a.roi)}`}
           tone={a.totalSavings > 0 ? "good" : "bad"}
-          delta={a.totalSavings > 0 ? "Net +" : "Net −"}
           icon={Landmark}
-          delay={0.2}
         />
-      </div>
-
-      <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
         <Kpi
-          label="Container N→S (base)"
+          label="Cont N→S"
           value={fmt(a.nsContainersBase)}
           numericValue={a.nsContainersBase}
-          sub={`Excel @46.6: ${fmt(a.nsContainersExcel)} cont`}
+          sub={`Excel: ${fmt(a.nsContainersExcel)}`}
           icon={Container}
-          delay={0.08}
         />
         <Kpi
-          label="Case pool đỉnh"
+          label="Case pool peak"
           value={fmt(a.peakCasePool)}
           numericValue={a.peakCasePool}
-          sub={`Chu kỳ ${params.leadTimeDays}+${params.freeTimeDays} ngày`}
+          sub={`${params.leadTimeDays}+${params.freeTimeDays}n`}
           tone="warn"
           icon={Ship}
-          delay={0.12}
         />
         <Kpi
           label="WH util peak"
           value={fmtPct(a.warehouseUtilPeak)}
           numericValue={a.warehouseUtilPeak * 100}
           digits={1}
-          sub={`vs ${params.useTtlCapacity ? "TTL Cap" : "Fact Cap"}`}
-          tone={a.warehouseUtilPeak > 1 ? "bad" : a.warehouseUtilPeak > 0.85 ? "warn" : "good"}
+          tone={
+            a.warehouseUtilPeak > 1
+              ? "bad"
+              : a.warehouseUtilPeak > 0.85
+                ? "warn"
+                : "good"
+          }
           icon={Warehouse}
-          delay={0.16}
         />
         <Kpi
           label="NPV 3 năm"
           value={`${fmt(a.npv / 1e9, 2)} tỷ`}
           numericValue={a.npv / 1e9}
           digits={2}
-          sub={`r=${fmtPct(params.cost.discountRate)}`}
           tone="accent"
           icon={Target}
-          delay={0.2}
         />
       </div>
 
-      {/* INSIGHT STRIP */}
-      <div className="grid gap-4 md:grid-cols-3">
-        {[
-          {
-            icon: Layers,
-            t: "Nhánh 1 — Nhập khẩu",
-            d: "Baseline benefit rõ: stack case sẵn có, relief ~41% capacity/xe. PPT ~3 tỷ VND/năm.",
-            c: "from-blue-50 to-white border-blue-100",
-            ic: "bg-blue-100 text-blue-700",
-          },
-          {
-            icon: Ship,
-            t: "Nhánh 2 — Nội địa",
-            d: "Chỉ transfer N→S khi chi phí tránh được ở Bắc > tổng transfer + return case.",
-            c: "from-violet-50 to-white border-violet-100",
-            ic: "bg-violet-100 text-violet-700",
-          },
-          {
-            icon: Zap,
-            t: "Digital Twin",
-            d: "Không tối ưu “thuê ngoài = 0” bằng mọi giá — tối ưu tổng chi phí mạng lưới.",
-            c: "from-teal-50 to-white border-teal-100",
-            ic: "bg-teal-100 text-teal-700",
-          },
-        ].map((x, i) => (
-          <motion.div
-            key={x.t}
-            initial={{ opacity: 0, y: 12 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.25 + i * 0.05 }}
-            className={`glass-hover flex gap-4 rounded-[4px] border bg-gradient-to-br p-5 ${x.c}`}
-          >
-            <div className={`flex h-11 w-11 shrink-0 items-center justify-center rounded-[3px] ${x.ic}`}>
-              <x.icon className="h-5 w-5" />
-            </div>
-            <div>
-              <div className="text-sm font-bold text-slate-900">{x.t}</div>
-              <div className="mt-1 text-xs leading-relaxed text-slate-600">{x.d}</div>
-            </div>
-          </motion.div>
-        ))}
-      </div>
-
-      {/* VALUE STREAM */}
       <NetworkFlow />
 
-      {/* NETWORK MAP */}
-      <Card>
-        <CardHeader className="flex flex-row flex-wrap items-start justify-between gap-3">
-          <div>
-            <div className="section-kicker">Mạng lưới địa lý</div>
-            <CardTitle>Bản đồ kho Bắc · Trung · Nam + tuyến N→S</CardTitle>
-            <CardDescription>
-              GIS Việt Nam · {fmt(REGION_CAPS.nationwide.cap100)} xe nationwide · owned{" "}
-              {REGION_CAPS.hvnOwned.ratio}% / rented {REGION_CAPS.outside.ratio}% · Hoàng Sa & Trường Sa
-            </CardDescription>
-          </div>
-          <Link
-            href="/map"
-            className="btn-bank inline-flex items-center gap-1.5 px-3 py-2 text-xs"
-          >
-            Mở bản đồ đầy đủ
-            <ArrowRight className="h-3.5 w-3.5" />
-          </Link>
-        </CardHeader>
-        <CardContent>
-          <VietnamNetworkMap compact showLanes />
-        </CardContent>
-      </Card>
-
-      {/* MAIN CHARTS */}
-      <div className="grid gap-5 xl:grid-cols-5">
-        <Card className="xl:col-span-3">
+      {/* Charts wall */}
+      <div className="grid gap-4 xl:grid-cols-3">
+        <Card className="xl:col-span-2" accent>
           <CardHeader>
-            <div className="section-kicker">Capacity gap</div>
-            <CardTitle>Vượt kho & phản ứng chính sách theo tháng</CardTitle>
-            <CardDescription>
-              Over gốc → sau stack NK → thuê ngoài residual (z_t)
-            </CardDescription>
+            <div className="section-kicker">Capacity theater</div>
+            <CardTitle>Over · Residual · Transfer · Outsource</CardTitle>
+            <CardDescription>12 tháng Twin live</CardDescription>
           </CardHeader>
-          <CardContent className="h-[340px]">
+          <CardContent className="h-80">
             <ResponsiveContainer width="100%" height="100%">
               <AreaChart data={chartData}>
                 <defs>
                   <linearGradient id="gOver" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="0%" stopColor="#e11d48" stopOpacity={0.35} />
-                    <stop offset="100%" stopColor="#e11d48" stopOpacity={0.02} />
+                    <stop offset="0%" stopColor="#94a3b8" stopOpacity={0.35} />
+                    <stop offset="100%" stopColor="#94a3b8" stopOpacity={0} />
                   </linearGradient>
                   <linearGradient id="gRes" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="0%" stopColor="#d97706" stopOpacity={0.3} />
-                    <stop offset="100%" stopColor="#d97706" stopOpacity={0.02} />
-                  </linearGradient>
-                  <linearGradient id="gOut" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="0%" stopColor="#2563eb" stopOpacity={0.3} />
-                    <stop offset="100%" stopColor="#2563eb" stopOpacity={0.02} />
+                    <stop offset="0%" stopColor="#b45309" stopOpacity={0.35} />
+                    <stop offset="100%" stopColor="#b45309" stopOpacity={0} />
                   </linearGradient>
                 </defs>
-                <CartesianGrid strokeDasharray="3 3" stroke={chartTheme.grid} vertical={false} />
-                <XAxis dataKey="month" tick={{ fill: chartTheme.tick, fontSize: 11 }} axisLine={false} tickLine={false} />
-                <YAxis tick={{ fill: chartTheme.tick, fontSize: 11 }} axisLine={false} tickLine={false} />
-                <Tooltip {...chartTheme.tooltip} />
-                <Legend wrapperStyle={{ fontSize: 12, paddingTop: 8 }} />
-                <Area type="monotone" dataKey="Vượt gốc" stroke="#e11d48" fill="url(#gOver)" strokeWidth={2.5} />
-                <Area type="monotone" dataKey="Sau stack NK" stroke="#d97706" fill="url(#gRes)" strokeWidth={2.5} />
-                <Area type="monotone" dataKey="Thuê ngoài" stroke="#2563eb" fill="url(#gOut)" strokeWidth={2.5} />
-              </AreaChart>
-            </ResponsiveContainer>
-          </CardContent>
-        </Card>
-
-        <Card className="xl:col-span-2">
-          <CardHeader>
-            <div className="section-kicker">Scenarios</div>
-            <CardTitle>Thuê ngoài tại peak</CardTitle>
-            <CardDescription>So sánh 4 tầng chính sách (xe)</CardDescription>
-          </CardHeader>
-          <CardContent className="h-[340px]">
-            <ResponsiveContainer width="100%" height="100%">
-              <BarChart data={scenarioData} layout="vertical" margin={{ left: 4, right: 12 }}>
-                <CartesianGrid strokeDasharray="3 3" stroke={chartTheme.grid} horizontal={false} />
-                <XAxis type="number" tick={{ fill: chartTheme.tick, fontSize: 11 }} axisLine={false} />
-                <YAxis type="category" dataKey="name" width={88} tick={{ fill: chartTheme.tick, fontSize: 11 }} axisLine={false} />
-                <Tooltip {...chartTheme.tooltip} />
-                <Bar dataKey="value" radius={[0, 10, 10, 0]} barSize={22}>
-                  {scenarioData.map((e, i) => (
-                    <Cell key={i} fill={e.fill} />
-                  ))}
-                </Bar>
-              </BarChart>
-            </ResponsiveContainer>
-          </CardContent>
-        </Card>
-      </div>
-
-      <div className="grid gap-5 lg:grid-cols-3">
-        <Card className="lg:col-span-2">
-          <CardHeader>
-            <div className="section-kicker">Flow</div>
-            <CardTitle>Relief · Transfer · Container</CardTitle>
-          </CardHeader>
-          <CardContent className="h-72">
-            <ResponsiveContainer width="100%" height="100%">
-              <LineChart data={chartData}>
                 <CartesianGrid strokeDasharray="3 3" stroke={chartTheme.grid} vertical={false} />
                 <XAxis dataKey="month" tick={{ fill: chartTheme.tick, fontSize: 11 }} axisLine={false} />
                 <YAxis tick={{ fill: chartTheme.tick, fontSize: 11 }} axisLine={false} />
                 <Tooltip {...chartTheme.tooltip} />
                 <Legend />
-                <Line type="monotone" dataKey="Relief NK" stroke="#059669" strokeWidth={3} dot={false} />
-                <Line type="monotone" dataKey="Chuyển N→S" stroke="#7c3aed" strokeWidth={3} dot={false} />
-                <Line type="monotone" dataKey="Container" stroke="#0891b2" strokeWidth={3} dot={false} />
-              </LineChart>
+                <Area type="monotone" dataKey="Over" stroke="#94a3b8" fill="url(#gOver)" strokeWidth={2} />
+                <Area type="monotone" dataKey="Residual" stroke="#b45309" fill="url(#gRes)" strokeWidth={2} />
+                <Line type="monotone" dataKey="Transfer" stroke="#7c3aed" strokeWidth={2} dot={false} />
+                <Line type="monotone" dataKey="Outsource" stroke="#0a4d6e" strokeWidth={2} dot={false} />
+              </AreaChart>
             </ResponsiveContainer>
           </CardContent>
         </Card>
 
         <Card>
           <CardHeader>
-            <div className="section-kicker">Utilization</div>
-            <CardTitle>Peak WH util</CardTitle>
+            <CardTitle>Cơ cấu chi phí (tỷ)</CardTitle>
           </CardHeader>
-          <CardContent className="flex h-72 flex-col items-center justify-center">
-            <div className="h-44 w-full">
-              <ResponsiveContainer width="100%" height="100%">
-                <RadialBarChart
-                  innerRadius="68%"
-                  outerRadius="100%"
-                  data={radial}
-                  startAngle={180}
-                  endAngle={0}
-                >
-                  <RadialBar background dataKey="value" cornerRadius={8} />
-                </RadialBarChart>
-              </ResponsiveContainer>
-            </div>
-            <div className="-mt-10 text-center">
-              <div className="text-3xl font-black tabular-nums text-slate-900">
-                {utilPct}%
-              </div>
-              <div className="text-xs text-slate-500">
-                Max stock / {params.useTtlCapacity ? "TTL" : "Fact"} Cap
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-      </div>
-
-      <div className="grid gap-5 lg:grid-cols-2">
-        <Card>
-          <CardHeader>
-            <div className="section-kicker">Cost mix</div>
-            <CardTitle>Cơ cấu chi phí tối ưu (tỷ VND)</CardTitle>
-          </CardHeader>
-          <CardContent className="h-72">
+          <CardContent className="h-80">
             <ResponsiveContainer width="100%" height="100%">
               <PieChart>
                 <Pie
                   data={costPie}
                   dataKey="value"
                   nameKey="name"
-                  innerRadius={58}
-                  outerRadius={96}
-                  paddingAngle={3}
+                  innerRadius={52}
+                  outerRadius={88}
+                  paddingAngle={2}
                 >
                   {costPie.map((_, i) => (
-                    <Cell
-                      key={i}
-                      fill={
-                        ["#2563eb", "#0d9488", "#7c3aed", "#d97706"][i % 4]
-                      }
-                    />
+                    <Cell key={i} fill={PIE_COLORS[i % PIE_COLORS.length]} />
                   ))}
                 </Pie>
                 <Tooltip {...chartTheme.tooltip} />
@@ -570,42 +424,42 @@ export default function DashboardPage() {
             </ResponsiveContainer>
           </CardContent>
         </Card>
+      </div>
 
+      <div className="grid gap-4 xl:grid-cols-2">
         <Card>
           <CardHeader>
-            <div className="section-kicker">Assumptions</div>
-            <CardTitle>Neo dữ liệu cốt lõi</CardTitle>
+            <CardTitle>Chi phí tháng (tỷ VND)</CardTitle>
+          </CardHeader>
+          <CardContent className="h-64">
+            <ResponsiveContainer width="100%" height="100%">
+              <BarChart data={chartData}>
+                <CartesianGrid strokeDasharray="3 3" stroke={chartTheme.grid} vertical={false} />
+                <XAxis dataKey="month" tick={{ fill: chartTheme.tick, fontSize: 11 }} axisLine={false} />
+                <YAxis tick={{ fill: chartTheme.tick, fontSize: 11 }} axisLine={false} />
+                <Tooltip {...chartTheme.tooltip} />
+                <Bar dataKey="CostBn" name="Chi phí tỷ" fill="#0a4d6e" radius={[4, 4, 0, 0]} />
+              </BarChart>
+            </ResponsiveContainer>
+          </CardContent>
+        </Card>
+
+        <Card accent>
+          <CardHeader className="flex flex-row items-center justify-between">
+            <div>
+              <div className="section-kicker">Geo live</div>
+              <CardTitle>Bản đồ mạng lưới + cargo pulse</CardTitle>
+              <CardDescription>
+                Nationwide {fmt(REGION_CAPS.nationwide.cap100)} xe · owned{" "}
+                {REGION_CAPS.hvnOwned.ratio}%
+              </CardDescription>
+            </div>
+            <Link href="/map" className="btn-bank px-3 py-2 text-xs">
+              Full map
+            </Link>
           </CardHeader>
           <CardContent>
-            <dl className="grid grid-cols-2 gap-3">
-              {[
-                ["Fact Cap Bắc", `${fmt(ASSUMPTIONS.factCapNorth)} xe`],
-                ["TTL Cap Bắc", `${fmt(ASSUMPTIONS.ttlCapNorth)} xe`],
-                ["Import năm", `${fmt(a.importVol)} xe`],
-                ["Xe/kiện mix", `${ASSUMPTIONS.mcPerCaseMix}`],
-                ["Xe/cont Excel", `${ASSUMPTIONS.mcPerContainerExcel}`],
-                ["Return kiện/cont", `${ASSUMPTIONS.casesPerContainerReturn}`],
-                ["PPT tiết kiệm", `~${ASSUMPTIONS.pptStackingSaveBn} tỷ/năm`],
-                ["Excel stack line", `−${ASSUMPTIONS.excelStackingSaveBn} tỷ`],
-              ].map(([k, v]) => (
-                <div
-                  key={k}
-                  className="rounded-xl border border-slate-100 bg-gradient-to-br from-slate-50 to-white px-3.5 py-3"
-                >
-                  <dt className="text-[10px] font-bold uppercase tracking-wider text-slate-400">
-                    {k}
-                  </dt>
-                  <dd className="mt-1 text-sm font-bold tabular-nums text-slate-900">
-                    {v}
-                  </dd>
-                </div>
-              ))}
-            </dl>
-            <p className="mt-4 rounded-xl border border-amber-200 bg-amber-50 px-3.5 py-3 text-[11px] leading-relaxed text-amber-900">
-              <strong>Đối chiếu quan trọng:</strong> Word tính over theo Fact Cap
-              17.680; Excel theo TTL 28.495. m²: Word 1.7/1.0 vs Excel budget 1.6.
-              Bật/tắt trong Digital Twin để so hai chuẩn.
-            </p>
+            <VietnamNetworkMap compact showLanes />
           </CardContent>
         </Card>
       </div>
