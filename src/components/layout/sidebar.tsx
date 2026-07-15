@@ -23,13 +23,15 @@ import {
   Bike,
   MapPinned,
   ShieldCheck,
+  Brain,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 const NAV = [
   { href: "/", label: "Tổng quan", icon: LayoutDashboard, group: "Điều hành" },
   { href: "/digital-twin", label: "Digital Twin", icon: Network, group: "Điều hành", hot: true },
-  { href: "/map", label: "Bản đồ mạng lưới", icon: MapPinned, group: "Điều hành", hot: true },
+  { href: "/insights", label: "Insights & tối ưu", icon: Brain, group: "Điều hành", hot: true },
+  { href: "/map", label: "Bản đồ mạng lưới", icon: MapPinned, group: "Điều hành" },
   { href: "/overview", label: "Giới thiệu dự án", icon: BookOpen, group: "Điều hành" },
   { href: "/warehouse", label: "Năng lực kho", icon: Warehouse, group: "Vận hành" },
   { href: "/vehicle", label: "Năng lực xe", icon: Bike, group: "Vận hành" },

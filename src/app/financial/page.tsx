@@ -13,6 +13,7 @@ import {
   PieChart,
   Cell,
   Line,
+  LineChart,
   ComposedChart,
   Area,
   AreaChart,
@@ -32,6 +33,12 @@ import { chartTheme } from "@/components/charts/theme";
 import { ASSUMPTIONS } from "@/lib/data/projectData";
 import { Landmark, TrendingUp, Wallet, Timer } from "lucide-react";
 import Link from "next/link";
+import { useMemo } from "react";
+import {
+  multiYearCashflow,
+  contributionCosts,
+  optimizePolicy,
+} from "@/lib/engine/analytics";
 
 const COLORS = [
   "#0a4d6e",
@@ -47,6 +54,13 @@ const COLORS = [
 export default function FinancialPage() {
   const { result, params } = useTwinStore();
   const a = result.annual;
+
+  const cashflow = useMemo(
+    () => multiYearCashflow(result, params, 5),
+    [result, params]
+  );
+  const contrib = useMemo(() => contributionCosts(result), [result]);
+  const opt = useMemo(() => optimizePolicy(params), [params]);
 
   const costParts = [
     { name: "Thuê Bắc", value: result.months.reduce((s, m) => s + m.northRentalCost, 0) },
@@ -244,6 +258,80 @@ export default function FinancialPage() {
           </table>
         </CardContent>
       </Card>
+
+      <div className="grid gap-4 xl:grid-cols-2">
+        <Card accent>
+          <CardHeader>
+            <div className="section-kicker">Multi-year</div>
+            <CardTitle>Cashflow 5 năm (tỷ VND)</CardTitle>
+            <CardDescription>
+              Y0 = −capex · Y1–Y5 = savings không đổi · r=
+              {fmtPct(params.cost.discountRate)}
+            </CardDescription>
+          </CardHeader>
+          <CardContent className="h-72">
+            <ResponsiveContainer width="100%" height="100%">
+              <LineChart
+                data={cashflow.map((c) => ({
+                  label: c.label,
+                  "Net năm": +(c.net / 1e9).toFixed(2),
+                  "Lũy kế": +(c.cumulative / 1e9).toFixed(2),
+                  "Chiết khấu": +(c.discounted / 1e9).toFixed(2),
+                }))}
+              >
+                <CartesianGrid strokeDasharray="3 3" stroke={chartTheme.grid} vertical={false} />
+                <XAxis dataKey="label" tick={{ fill: chartTheme.tick, fontSize: 11 }} axisLine={false} />
+                <YAxis tick={{ fill: chartTheme.tick, fontSize: 11 }} axisLine={false} />
+                <Tooltip {...chartTheme.tooltip} />
+                <Legend />
+                <Line type="monotone" dataKey="Net năm" stroke="#64748b" strokeWidth={2} />
+                <Line type="monotone" dataKey="Lũy kế" stroke="#0d6b63" strokeWidth={2} />
+                <Line type="monotone" dataKey="Chiết khấu" stroke="#b8954a" strokeWidth={2} strokeDasharray="4 4" />
+              </LineChart>
+            </ResponsiveContainer>
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardHeader>
+            <CardTitle>Pareto driver chi phí</CardTitle>
+            <CardDescription>Sắp xếp theo đóng góp tuyệt đối</CardDescription>
+          </CardHeader>
+          <CardContent className="h-72">
+            <ResponsiveContainer width="100%" height="100%">
+              <BarChart
+                data={contrib.map((c) => ({
+                  name: c.name,
+                  bn: +(c.amount / 1e9).toFixed(3),
+                }))}
+                layout="vertical"
+                margin={{ left: 8 }}
+              >
+                <CartesianGrid strokeDasharray="3 3" stroke={chartTheme.grid} horizontal={false} />
+                <XAxis type="number" tick={{ fill: chartTheme.tick, fontSize: 11 }} />
+                <YAxis
+                  type="category"
+                  dataKey="name"
+                  width={100}
+                  tick={{ fill: chartTheme.tick, fontSize: 10 }}
+                />
+                <Tooltip {...chartTheme.tooltip} />
+                <Bar dataKey="bn" name="Tỷ VND" fill="#0a4d6e" radius={[0, 3, 3, 0]} />
+              </BarChart>
+            </ResponsiveContainer>
+          </CardContent>
+        </Card>
+      </div>
+
+      <div className="rounded-[4px] border border-[#e8d5a3] bg-[#faf6eb] px-4 py-3 text-sm text-[#5c4a22]">
+        <strong>Optimizer:</strong> policy max savings ≈ stack{" "}
+        {fmtPct(opt.bestStackRatio, 0)} · TF {fmtPct(opt.bestTransferRatio, 0)} →{" "}
+        {fmt(opt.bestSavings / 1e9, 2)} tỷ (
+        {fmt((opt.bestSavings - a.totalSavings) / 1e9, 2)} tỷ so Twin).{" "}
+        <Link href="/insights" className="font-bold underline">
+          Mở Insights
+        </Link>
+      </div>
 
       <Card>
         <CardHeader>

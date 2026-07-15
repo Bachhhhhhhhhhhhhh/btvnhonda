@@ -50,10 +50,21 @@ import {
 import { VietnamNetworkMap } from "@/components/map/VietnamNetworkMap";
 import { REGION_CAPS } from "@/lib/data/warehouseNetwork";
 import { NetworkFlow } from "@/components/flow/NetworkFlow";
+import { OpsAlerts } from "@/components/analytics/OpsAlerts";
+import { PresetBar } from "@/components/analytics/PresetBar";
+import { ScorecardRing } from "@/components/analytics/ScorecardRing";
+import { buildInsights, optimizePolicy } from "@/lib/engine/analytics";
+import { useMemo } from "react";
+import { Brain } from "lucide-react";
 
 export default function DashboardPage() {
   const { result, params } = useTwinStore();
   const a = result.annual;
+  const topInsights = useMemo(
+    () => buildInsights(result, params).slice(0, 4),
+    [result, params]
+  );
+  const opt = useMemo(() => optimizePolicy(params), [params]);
 
   const chartData = result.months.map((m) => ({
     month: m.month,
@@ -206,6 +217,38 @@ export default function DashboardPage() {
           </div>
         </div>
       </motion.section>
+
+      <PresetBar showSnapshot={false} />
+      <OpsAlerts max={3} />
+
+      <div className="grid gap-4 xl:grid-cols-3">
+        <div className="xl:col-span-2 grid gap-3 sm:grid-cols-2">
+          {topInsights.map((ins) => (
+            <div
+              key={ins.id}
+              className="rounded-[4px] border border-[#dce3ec] bg-white p-4 shadow-sm"
+            >
+              <div className="text-[10px] font-bold uppercase tracking-wide text-[#b8954a]">
+                {ins.category} · {ins.impact}
+              </div>
+              <div className="mt-1 text-sm font-bold text-[#071428]">{ins.headline}</div>
+              <p className="mt-1 text-[12px] leading-relaxed text-slate-600">{ins.body}</p>
+            </div>
+          ))}
+        </div>
+        <ScorecardRing />
+      </div>
+
+      <div className="flex flex-wrap items-center gap-3 rounded-[4px] border border-[#e8d5a3] bg-[#faf6eb] px-4 py-3 text-sm">
+        <Brain className="h-4 w-4 text-[#7a6230]" />
+        <span className="font-semibold text-[#071428]">
+          Optimizer gợi ý stack {fmtPct(opt.bestStackRatio, 0)} · TF{" "}
+          {fmtPct(opt.bestTransferRatio, 0)} → max {fmt(opt.bestSavings / 1e9, 2)} tỷ
+        </span>
+        <Link href="/insights" className="ml-auto text-xs font-bold text-[#0a4d6e] underline">
+          Mở Insights & tối ưu →
+        </Link>
+      </div>
 
       {/* KPI ROW */}
       <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">

@@ -38,6 +38,10 @@ import {
 import { VietnamNetworkMap } from "@/components/map/VietnamNetworkMap";
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
+import { PresetBar } from "@/components/analytics/PresetBar";
+import { OpsAlerts } from "@/components/analytics/OpsAlerts";
+import { OptimizePanel } from "@/components/analytics/OptimizePanel";
+import { ScorecardRing } from "@/components/analytics/ScorecardRing";
 
 export default function DigitalTwinPage() {
   const { result, params } = useTwinStore();
@@ -63,9 +67,12 @@ export default function DigitalTwinPage() {
       <SectionHeader
         kicker="Control tower · Live"
         title="Digital Twin — mạng lưới kho & vận tải"
-        subtitle="Thay m², lead time, cước, tỷ lệ stack/transfer — quan sát ngay chi phí, utilization, thuê ngoài và case pool. DSS điều hành, không phải slide tĩnh."
+        subtitle="Thay m², lead time, cước, tỷ lệ stack/transfer — quan sát ngay chi phí, utilization, thuê ngoài và case pool. Preset · optimizer · alerts · snapshot."
         actions={
           <div className="flex gap-2">
+            <Link href="/insights" className="btn-bank-gold px-3 py-2 text-xs">
+              Insights
+            </Link>
             <Link href="/scenarios" className="btn-bank-outline px-3 py-2 text-xs">
               Kịch bản
             </Link>
@@ -75,6 +82,9 @@ export default function DigitalTwinPage() {
           </div>
         }
       />
+
+      <PresetBar />
+      <OpsAlerts max={4} compact />
 
       <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-5">
         <Kpi label="Tổng chi phí" value={`${fmt(a.totalCost / 1e9, 2)} tỷ`} tone="accent" icon={Banknote} delay={0.02} />
@@ -237,6 +247,9 @@ export default function DigitalTwinPage() {
               </div>
             </CardContent>
           </Card>
+
+          <OptimizePanel />
+          <ScorecardRing />
 
           <Card>
             <CardHeader className="flex flex-row items-center justify-between">

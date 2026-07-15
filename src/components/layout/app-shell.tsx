@@ -7,6 +7,7 @@ import { Lock, Clock3, Phone, ChevronRight } from "lucide-react";
 const TITLES: Record<string, { title: string; crumb: string }> = {
   "/": { title: "Tổng quan điều hành", crumb: "Dashboard" },
   "/digital-twin": { title: "Digital Twin — Mô phỏng mạng lưới", crumb: "Digital Twin" },
+  "/insights": { title: "Insights & tối ưu nâng cao", crumb: "Insights" },
   "/map": { title: "Bản đồ mạng lưới kho & vận tải", crumb: "Bản đồ" },
   "/overview": { title: "Giới thiệu dự án", crumb: "Giới thiệu" },
   "/warehouse": { title: "Năng lực kho miền Bắc", crumb: "Kho" },
