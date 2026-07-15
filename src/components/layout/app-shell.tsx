@@ -26,6 +26,7 @@ import { NotificationCenter } from "@/components/command/NotificationCenter";
 import { QuickFab } from "@/components/command/QuickFab";
 import { OnboardingTour } from "@/components/command/OnboardingTour";
 import { ShortcutsModal } from "@/components/command/ShortcutsModal";
+import { StickyTwinBar } from "@/components/command/StickyTwinBar";
 
 const TITLES: Record<string, { title: string; crumb: string }> = {
   "/": { title: "Command Center · Tổng quan", crumb: "Command" },
@@ -83,6 +84,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
       <OnboardingTour />
       <ShortcutsModal open={shortcutsOpen} onClose={() => setShortcutsOpen(false)} />
       <QuickFab onShortcuts={() => setShortcutsOpen(true)} />
+      <StickyTwinBar />
       <div className="flex min-w-0 flex-1 flex-col">
         <div className="bank-util-bar no-print">
           <div className="flex items-center gap-4">
@@ -92,7 +94,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
             </span>
             <span className="hidden text-slate-600 md:inline">|</span>
             <span className="hidden md:inline">
-              Honda Việt Nam · Command Center DSS v4
+              Honda Việt Nam · Command Center DSS v5
             </span>
           </div>
           <div className="flex items-center gap-3 sm:gap-4">
@@ -210,7 +212,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
 
         <main
           className={cn(
-            "bank-content flex-1 overflow-y-auto",
+            "bank-content flex-1 overflow-y-auto pb-16",
             density === "compact" ? "p-2 sm:p-3" : "p-3 sm:p-5 lg:p-6"
           )}
         >
@@ -219,7 +221,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
           <footer className="no-print mt-8 border-t border-[var(--line)] pt-5 pb-2">
             <div className="bank-trust">
               <div>
-                <strong>LOG Twin Command Center v4</strong>
+                <strong>LOG Twin Command Center v5</strong>
               </div>
               <div className="hidden sm:block">
                 Digital Twin DSS · không thay thế phê duyệt chính thức
@@ -227,7 +229,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
               <div className="ml-auto flex items-center gap-3 text-slate-500">
                 <span className="inline-flex items-center gap-1">
                   <Maximize2 className="h-3 w-3" />
-                  Dark/Light · Density · Ctrl+K
+                  Undo sticky · Ctrl+K · Share
                 </span>
               </div>
             </div>

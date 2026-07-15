@@ -4,12 +4,15 @@ import { X } from "lucide-react";
 
 const ROWS = [
   { k: "Ctrl / ⌘ + K", d: "Command palette — tìm trang & actions" },
+  { k: "Ctrl / ⌘ + Z", d: "Undo thay đổi Twin" },
+  { k: "Ctrl / ⌘ + Y", d: "Redo Twin" },
   { k: "Esc", d: "Đóng palette / presentation / modal" },
   { k: "← →", d: "Chuyển slide Presentation mode" },
   { k: "☀ / 🌙", d: "Toggle dark / light (header)" },
   { k: "Density", d: "Compact / comfortable layout" },
-  { k: "FAB +", d: "Quick jump Twin · WSB · Insights · Map · Report" },
-  { k: "Export", d: "Tải JSON params + CSV monthly/annual" },
+  { k: "FAB +", d: "Quick jump Twin · WSB · Planner · Insights" },
+  { k: "Sticky bar", d: "KPI Twin + Undo/Redo luôn dưới màn hình" },
+  { k: "Export / Share", d: "JSON+CSV · share link · workspace" },
   { k: "WSB Apply", d: "Ghi what-if vào Twin + snapshot" },
 ];
 

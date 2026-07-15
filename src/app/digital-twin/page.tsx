@@ -42,6 +42,9 @@ import { PresetBar } from "@/components/analytics/PresetBar";
 import { OpsAlerts } from "@/components/analytics/OpsAlerts";
 import { OptimizePanel } from "@/components/analytics/OptimizePanel";
 import { ScorecardRing } from "@/components/analytics/ScorecardRing";
+import { HistoryPanel } from "@/components/command/HistoryPanel";
+import { BenchmarkPanel } from "@/components/command/BenchmarkPanel";
+import { MemoGenerator } from "@/components/command/MemoGenerator";
 
 export default function DigitalTwinPage() {
   const { result, params } = useTwinStore();
@@ -85,6 +88,15 @@ export default function DigitalTwinPage() {
 
       <PresetBar />
       <OpsAlerts max={4} compact />
+
+      <div className="grid gap-4 xl:grid-cols-12">
+        <div className="xl:col-span-4">
+          <HistoryPanel />
+        </div>
+        <div className="xl:col-span-8">
+          <BenchmarkPanel />
+        </div>
+      </div>
 
       <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-5">
         <Kpi label="Tổng chi phí" value={`${fmt(a.totalCost / 1e9, 2)} tỷ`} tone="accent" icon={Banknote} delay={0.02} />
@@ -250,6 +262,7 @@ export default function DigitalTwinPage() {
 
           <OptimizePanel />
           <ScorecardRing />
+          <MemoGenerator />
 
           <Card>
             <CardHeader className="flex flex-row items-center justify-between">

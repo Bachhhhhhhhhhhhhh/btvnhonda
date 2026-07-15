@@ -28,7 +28,7 @@ export function QuickFab({ onShortcuts }: { onShortcuts?: () => void }) {
   const [open, setOpen] = useState(false);
 
   return (
-    <div className="no-print fixed bottom-5 right-5 z-[120] flex flex-col items-end gap-2">
+    <div className="no-print fixed bottom-16 right-5 z-[120] flex flex-col items-end gap-2">
       {open && (
         <div className="mb-1 flex flex-col items-end gap-1.5">
           {ACTIONS.map((a, i) => {

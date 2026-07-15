@@ -66,6 +66,9 @@ import { ShareBar } from "@/components/command/ShareBar";
 import { PolicyMatrix } from "@/components/command/PolicyMatrix";
 import { GoalTracker } from "@/components/command/GoalTracker";
 import { ActionChecklist } from "@/components/command/ActionChecklist";
+import { MemoGenerator } from "@/components/command/MemoGenerator";
+import { BenchmarkPanel } from "@/components/command/BenchmarkPanel";
+import { HistoryPanel } from "@/components/command/HistoryPanel";
 
 const PIE_COLORS = ["#0a4d6e", "#0d6b63", "#b8954a", "#5b21b6", "#64748b"];
 
@@ -416,6 +419,18 @@ export default function DashboardPage() {
       </div>
 
       <NetworkFlow />
+
+      <div className="grid gap-4 xl:grid-cols-12">
+        <div className="xl:col-span-5">
+          <BenchmarkPanel />
+        </div>
+        <div className="xl:col-span-3">
+          <HistoryPanel />
+        </div>
+        <div className="xl:col-span-4">
+          <MemoGenerator />
+        </div>
+      </div>
 
       {/* Charts wall */}
       <div className="grid gap-4 xl:grid-cols-3">

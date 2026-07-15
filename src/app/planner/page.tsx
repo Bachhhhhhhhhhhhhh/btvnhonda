@@ -11,6 +11,8 @@ import { PolicyMatrix } from "@/components/command/PolicyMatrix";
 import { ShareBar } from "@/components/command/ShareBar";
 import { HeatCalendar } from "@/components/command/HeatCalendar";
 import { BreakEvenGauge } from "@/components/command/BreakEvenGauge";
+import { MemoGenerator } from "@/components/command/MemoGenerator";
+import { BenchmarkPanel } from "@/components/command/BenchmarkPanel";
 import { fmt, fmtPct } from "@/lib/utils";
 import {
   Card,
@@ -151,6 +153,11 @@ export default function PlannerPage() {
           ))}
         </CardContent>
       </Card>
+
+      <div className="grid gap-4 xl:grid-cols-2">
+        <MemoGenerator />
+        <BenchmarkPanel />
+      </div>
 
       <Card>
         <CardHeader>

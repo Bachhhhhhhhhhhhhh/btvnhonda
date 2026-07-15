@@ -55,12 +55,15 @@ export function OptimizePanel() {
     opt.bestSavings - result.annual.totalSavings;
 
   const applyBest = () => {
-    setParams({
-      ...params,
-      importStackRatio: opt.bestStackRatio,
-      transferRatio: opt.bestTransferRatio,
-      cost: { ...params.cost },
-    });
+    setParams(
+      {
+        ...params,
+        importStackRatio: opt.bestStackRatio,
+        transferRatio: opt.bestTransferRatio,
+        cost: { ...params.cost },
+      },
+      "Apply optimizer"
+    );
     setApplied(true);
     pushToast({
       title: "Đã áp dụng policy tối ưu",
