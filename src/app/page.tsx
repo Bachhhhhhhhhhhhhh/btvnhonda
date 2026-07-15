@@ -46,45 +46,41 @@ export default function DashboardPage() {
   return (
     <div className="space-y-6">
       {/* Hero */}
-      <div className="relative overflow-hidden rounded-3xl border border-white/10 bg-gradient-to-br from-sky-950/80 via-slate-900/60 to-emerald-950/50 p-6 sm:p-8">
-        <div className="absolute -right-20 -top-20 h-64 w-64 rounded-full bg-sky-500/10 blur-3xl" />
-        <div className="absolute -bottom-16 left-1/3 h-48 w-48 rounded-full bg-emerald-500/10 blur-3xl" />
-        <div className="relative">
-          <div className="mb-2 inline-flex items-center gap-2 rounded-full border border-sky-400/30 bg-sky-500/10 px-3 py-1 text-[11px] font-semibold text-sky-300">
-            <Zap className="h-3.5 w-3.5" />
-            Decision Support System · Digital Twin
-          </div>
-          <h1 className="max-w-3xl text-2xl font-extrabold tracking-tight text-white sm:text-3xl lg:text-4xl">
-            Tối ưu{" "}
-            <span className="grad-text">stacking & thuê ngoài</span>
-            {" "}kho miền Bắc
-          </h1>
-          <p className="mt-3 max-w-3xl text-sm leading-relaxed text-slate-300 sm:text-base">
-            Mọi KPI tính từ Excel 103Ki 2QFC, Word stacking và PPT Yamagomori.
-            Thay số xe, m², lead time hay cước vận chuyển — quan sát ngay tác động
-            đến chi phí, utilization và tỷ lệ thuê ngoài.
-          </p>
-          <div className="mt-5 flex flex-wrap gap-3">
-            <Link
-              href="/digital-twin"
-              className="inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-sky-500 to-emerald-500 px-5 py-2.5 text-sm font-bold text-slate-950 shadow-lg shadow-sky-500/25 transition hover:brightness-110"
-            >
-              Mở Digital Twin
-              <ArrowRight className="h-4 w-4" />
-            </Link>
-            <Link
-              href="/report"
-              className="inline-flex items-center gap-2 rounded-xl border border-white/15 bg-white/5 px-5 py-2.5 text-sm font-semibold text-slate-200 hover:bg-white/10"
-            >
-              Báo cáo tư vấn
-            </Link>
-          </div>
-          <div className="mt-4 text-[11px] text-slate-500">
-            Góc nhìn capacity:{" "}
-            <span className="font-semibold text-slate-300">
-              {params.useTtlCapacity ? "Excel TTL 28.495" : "Word Fact Cap 17.680"}
-            </span>
-          </div>
+      <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm sm:p-8">
+        <div className="mb-2 inline-flex items-center gap-2 rounded-full border border-sky-200 bg-sky-50 px-3 py-1 text-[11px] font-semibold text-sky-800">
+          <Zap className="h-3.5 w-3.5" />
+          Decision Support System · Digital Twin
+        </div>
+        <h1 className="max-w-3xl text-2xl font-extrabold tracking-tight text-slate-900 sm:text-3xl lg:text-4xl">
+          Tối ưu{" "}
+          <span className="text-sky-700">stacking & thuê ngoài</span>
+          {" "}kho miền Bắc
+        </h1>
+        <p className="mt-3 max-w-3xl text-sm leading-relaxed text-slate-600 sm:text-base">
+          Mọi KPI tính từ Excel 103Ki 2QFC, Word stacking và PPT Yamagomori.
+          Thay số xe, m², lead time hay cước vận chuyển — quan sát ngay tác động
+          đến chi phí, utilization và tỷ lệ thuê ngoài.
+        </p>
+        <div className="mt-5 flex flex-wrap gap-3">
+          <Link
+            href="/digital-twin"
+            className="inline-flex items-center gap-2 rounded-lg bg-sky-700 px-5 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:bg-sky-800"
+          >
+            Mở Digital Twin
+            <ArrowRight className="h-4 w-4" />
+          </Link>
+          <Link
+            href="/report"
+            className="inline-flex items-center gap-2 rounded-lg border border-slate-300 bg-white px-5 py-2.5 text-sm font-semibold text-slate-700 hover:bg-slate-50"
+          >
+            Báo cáo tư vấn
+          </Link>
+        </div>
+        <div className="mt-4 text-[11px] text-slate-500">
+          Góc nhìn capacity:{" "}
+          <span className="font-semibold text-slate-800">
+            {params.useTtlCapacity ? "Excel TTL 28.495" : "Word Fact Cap 17.680"}
+          </span>
         </div>
       </div>
 
@@ -174,11 +170,11 @@ export default function DashboardPage() {
             key={x.t}
             className="glass glass-hover flex gap-3 rounded-2xl p-4"
           >
-            <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-sky-500/15 text-sky-300">
+            <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-sky-100 text-sky-700">
               <x.icon className="h-5 w-5" />
             </div>
             <div>
-              <div className="text-sm font-semibold text-slate-100">{x.t}</div>
+              <div className="text-sm font-semibold text-slate-900">{x.t}</div>
               <div className="mt-1 text-xs leading-relaxed text-slate-400">{x.d}</div>
             </div>
           </div>
@@ -263,14 +259,14 @@ export default function DashboardPage() {
               ].map(([k, v]) => (
                 <div
                   key={k}
-                  className="rounded-xl border border-white/5 bg-white/[0.03] px-3 py-2.5"
+                  className="rounded-xl border border-slate-100 bg-slate-50 px-3 py-2.5"
                 >
                   <dt className="text-[10px] uppercase tracking-wider text-slate-500">{k}</dt>
-                  <dd className="mt-0.5 font-semibold tabular-nums text-slate-100">{v}</dd>
+                  <dd className="mt-0.5 font-semibold tabular-nums text-slate-900">{v}</dd>
                 </div>
               ))}
             </dl>
-            <p className="mt-4 rounded-xl border border-amber-500/20 bg-amber-500/10 p-3 text-[11px] leading-relaxed text-amber-100/90">
+            <p className="mt-4 rounded-xl border border-amber-500/20 bg-amber-500/10 p-3 text-[11px] leading-relaxed text-amber-900">
               <strong>Lưu ý đối chiếu:</strong> Word tính over theo Fact Cap 17.680;
               Excel over theo TTL 28.495. m²: Word 1.7/1.0 vs Excel budget 1.6.
               Bật/tắt trong Digital Twin để so sánh hai chuẩn.

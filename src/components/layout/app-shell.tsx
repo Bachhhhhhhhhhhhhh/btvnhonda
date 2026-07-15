@@ -32,12 +32,12 @@ export function AppShell({ children }: { children: React.ReactNode }) {
     "Hệ thống hỗ trợ quyết định";
 
   return (
-    <div className="flex min-h-screen">
+    <div className="flex min-h-screen bg-slate-100">
       <Sidebar />
       <div className="flex min-w-0 flex-1 flex-col">
-        <header className="no-print sticky top-0 z-20 flex h-16 items-center justify-between border-b border-white/5 bg-[#070b14]/80 px-6 backdrop-blur-xl">
+        <header className="no-print sticky top-0 z-20 flex h-14 items-center justify-between border-b border-slate-200 bg-white/95 px-6 backdrop-blur">
           <div className="min-w-0">
-            <div className="truncate text-sm font-semibold text-slate-100 sm:text-base">
+            <div className="truncate text-sm font-semibold text-slate-900 sm:text-[15px]">
               {title}
             </div>
             <div className="truncate text-[11px] text-slate-500">
@@ -45,11 +45,11 @@ export function AppShell({ children }: { children: React.ReactNode }) {
             </div>
           </div>
           <div className="flex shrink-0 items-center gap-2">
-            <div className="hidden rounded-full border border-white/10 bg-white/5 px-3 py-1.5 text-[11px] text-slate-300 md:block">
-              103Ki 2QFC · Jun update
+            <div className="hidden rounded-full border border-slate-200 bg-slate-50 px-3 py-1 text-[11px] font-medium text-slate-600 md:block">
+              103Ki 2QFC · Jun
             </div>
-            <div className="flex items-center gap-1.5 rounded-full border border-emerald-400/30 bg-emerald-500/10 px-3 py-1.5 text-[11px] font-semibold text-emerald-300">
-              <span className="live-dot h-1.5 w-1.5 rounded-full bg-emerald-400" />
+            <div className="flex items-center gap-1.5 rounded-full border border-emerald-200 bg-emerald-50 px-3 py-1 text-[11px] font-semibold text-emerald-700">
+              <span className="live-dot h-1.5 w-1.5 rounded-full bg-emerald-500" />
               Live
             </div>
           </div>

@@ -32,8 +32,8 @@ export default function SensitivityPage() {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-2xl font-bold text-white">Phân tích độ nhạy</h1>
-        <p className="mt-1 text-sm text-slate-400">
+        <h1 className="text-2xl font-bold text-slate-900">Phân tích độ nhạy</h1>
+        <p className="mt-1 text-sm text-slate-600">
           Thay ±20% từng driver. Tornado xếp theo tác động lên tiết kiệm năm.
           Base: {fmt(result.annual.totalSavings / 1e9, 2)} tỷ VND.
         </p>
@@ -60,8 +60,8 @@ export default function SensitivityPage() {
       <Card>
         <CardHeader><CardTitle>Xếp hạng driver</CardTitle></CardHeader>
         <CardContent className="overflow-x-auto">
-          <table className="table-dark w-full text-left text-sm text-slate-300">
-            <thead className="border-b border-white/10">
+          <table className="table-dark w-full text-left text-sm text-slate-600">
+            <thead className="border-b border-slate-200">
               <tr>
                 <th className="py-2">Driver</th>
                 <th>Tiết kiệm thấp</th>
@@ -69,13 +69,13 @@ export default function SensitivityPage() {
                 <th>Tác động (tỷ)</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-white/5">
+            <tbody className="divide-y divide-slate-100">
               {data.map((d) => (
                 <tr key={d.name}>
-                  <td className="py-2 font-medium text-slate-100">{d.name}</td>
+                  <td className="py-2 font-medium text-slate-900">{d.name}</td>
                   <td className="tabular-nums">{d["Thấp −20%"]}</td>
                   <td className="tabular-nums">{d["Cao +20%"]}</td>
-                  <td className="tabular-nums font-semibold text-sky-300">{d.impact}</td>
+                  <td className="tabular-nums font-semibold text-sky-700">{d.impact}</td>
                 </tr>
               ))}
             </tbody>

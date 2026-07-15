@@ -26,10 +26,10 @@ export default function ImportPage() {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-2xl font-bold text-white">Tối ưu xe nhập khẩu</h1>
-        <p className="mt-1 text-sm text-slate-400">
+        <h1 className="text-2xl font-bold text-slate-900">Tối ưu xe nhập khẩu</h1>
+        <p className="mt-1 text-sm text-slate-600">
           Nhánh 1 — chồng kiện xe NK. Công thức (Word §3): Import × ({params.unpackM2} − {params.stackM2}) / {params.unpackM2} ={" "}
-          <span className="font-semibold text-emerald-300">{fmtPct(reliefRate)}</span> capacity tương đương.
+          <span className="font-semibold text-emerald-700">{fmtPct(reliefRate)}</span> capacity tương đương.
         </p>
       </div>
 

@@ -34,14 +34,14 @@ export default function ReportPage() {
     <div className="space-y-6">
       <div className="flex flex-wrap items-end justify-between gap-3 no-print">
         <div>
-          <h1 className="text-2xl font-bold text-white">Báo cáo tư vấn chuyên sâu</h1>
-          <p className="mt-1 text-sm text-slate-400">
+          <h1 className="text-2xl font-bold text-slate-900">Báo cáo tư vấn chuyên sâu</h1>
+          <p className="mt-1 text-sm text-slate-600">
             Văn bản tư vấn sống — tái sinh từ output Digital Twin · phong cách McKinsey, bám số Excel/Word/PPT.
           </p>
         </div>
         <button
           onClick={() => window.print()}
-          className="rounded-xl bg-gradient-to-r from-sky-500 to-emerald-500 px-5 py-2.5 text-sm font-bold text-slate-950 shadow-lg shadow-sky-500/20"
+          className="rounded-lg bg-sky-700 px-5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-sky-800"
         >
           In / Xuất PDF
         </button>

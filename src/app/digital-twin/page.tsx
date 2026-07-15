@@ -40,10 +40,10 @@ export default function DigitalTwinPage() {
   return (
     <div className="space-y-6">
       <div className="rounded-2xl border border-sky-500/20 bg-sky-500/5 px-5 py-4">
-        <h1 className="text-xl font-bold text-white sm:text-2xl">
+        <h1 className="text-xl font-bold text-slate-900 sm:text-2xl">
           Digital Twin — Mô phỏng toàn mạng lưới
         </h1>
-        <p className="mt-1.5 max-w-4xl text-sm leading-relaxed text-slate-300">
+        <p className="mt-1.5 max-w-4xl text-sm leading-relaxed text-slate-600">
           Đây là trung tâm ra quyết định. Thay số xe, diện tích kho, lead time,
           chi phí thuê ngoài, giá vận chuyển hay số container — quan sát ngay
           tác động đến chi phí, mức sử dụng kho, tỷ lệ thuê ngoài và hiệu quả
@@ -161,10 +161,10 @@ export default function DigitalTwinPage() {
                     key={m.month}
                     className={`rounded-xl px-2 py-3 text-center text-xs font-bold ${
                       m.classification === "green"
-                        ? "border border-emerald-500/30 bg-emerald-500/15 text-emerald-300"
+                        ? "border border-emerald-200 bg-emerald-50 text-emerald-800"
                         : m.classification === "amber"
-                          ? "border border-amber-500/30 bg-amber-500/15 text-amber-300"
-                          : "border border-rose-500/30 bg-rose-500/15 text-rose-300"
+                          ? "border border-amber-200 bg-amber-50 text-amber-900"
+                          : "border border-rose-200 bg-rose-50 text-rose-800"
                     }`}
                   >
                     <div>{m.month}</div>

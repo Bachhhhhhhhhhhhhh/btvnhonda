@@ -13,13 +13,13 @@ export function ParamPanel() {
       <CardHeader className="flex flex-row items-start justify-between gap-2">
         <div>
           <CardTitle>Bảng điều khiển Digital Twin</CardTitle>
-          <p className="mt-1 text-xs text-slate-400">
+          <p className="mt-1 text-xs text-slate-500">
             Kéo thanh trượt — chi phí & utilization tính lại tức thì
           </p>
         </div>
         <button
           onClick={reset}
-          className="flex items-center gap-1.5 rounded-lg border border-white/10 bg-white/5 px-2.5 py-1.5 text-xs font-medium text-slate-300 hover:bg-white/10"
+          className="flex items-center gap-1.5 rounded-lg border border-slate-200 bg-white px-2.5 py-1.5 text-xs font-medium text-slate-700 hover:bg-slate-50"
         >
           <RotateCcw className="h-3.5 w-3.5" />
           Đặt lại
@@ -27,7 +27,7 @@ export function ParamPanel() {
       </CardHeader>
       <CardContent className="max-h-[calc(100vh-220px)] space-y-5 overflow-y-auto">
         <section className="space-y-2.5">
-          <h4 className="text-[10px] font-bold uppercase tracking-[0.16em] text-sky-400/80">
+          <h4 className="text-[10px] font-bold uppercase tracking-wider text-sky-700">
             Diện tích & stacking
           </h4>
           <SliderField
@@ -70,7 +70,7 @@ export function ParamPanel() {
             unit="xe"
             hint="Rental WH!F59 = 28.495 (gồm open + HNM)"
           />
-          <label className="flex cursor-pointer items-center gap-2.5 rounded-xl border border-white/5 bg-white/[0.02] px-3 py-2.5 text-xs text-slate-300">
+          <label className="flex cursor-pointer items-center gap-2.5 rounded-xl border border-slate-100 bg-slate-50 px-3 py-2.5 text-xs text-slate-300">
             <input
               type="checkbox"
               checked={params.useTtlCapacity}
@@ -82,7 +82,7 @@ export function ParamPanel() {
         </section>
 
         <section className="space-y-2.5">
-          <h4 className="text-[10px] font-bold uppercase tracking-[0.16em] text-violet-400/80">
+          <h4 className="text-[10px] font-bold uppercase tracking-[0.16em] text-violet-700">
             Đòn bẩy chính sách
           </h4>
           <SliderField
@@ -158,7 +158,7 @@ export function ParamPanel() {
         </section>
 
         <section className="space-y-2.5">
-          <h4 className="text-[10px] font-bold uppercase tracking-[0.16em] text-amber-400/80">
+          <h4 className="text-[10px] font-bold uppercase tracking-[0.16em] text-amber-700">
             Đơn giá (VND) — Rate card Finance
           </h4>
           <SliderField

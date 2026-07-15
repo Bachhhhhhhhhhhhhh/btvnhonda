@@ -22,7 +22,6 @@ import {
   Settings,
   Network,
   Bike,
-  Sparkles,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -52,29 +51,26 @@ export function Sidebar() {
   let lastGroup = "";
 
   return (
-    <aside className="no-print flex h-screen w-[280px] shrink-0 flex-col border-r border-white/5 bg-[#050a14]/95 backdrop-blur-xl">
-      <div className="border-b border-white/5 px-4 py-5">
+    <aside className="no-print flex h-screen w-[260px] shrink-0 flex-col border-r border-slate-200 bg-white">
+      <div className="border-b border-slate-200 px-4 py-4">
         <div className="flex items-center gap-3">
-          <div className="relative flex h-11 w-11 items-center justify-center rounded-xl bg-gradient-to-br from-sky-400 to-emerald-500 shadow-lg shadow-sky-500/30">
-            <Boxes className="h-5 w-5 text-slate-950" />
-            <Sparkles className="absolute -right-1 -top-1 h-3.5 w-3.5 text-amber-300" />
+          <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-sky-700 text-white">
+            <Boxes className="h-5 w-5" />
           </div>
           <div>
-            <div className="text-base font-bold tracking-tight text-white">
-              LOG Twin
-            </div>
-            <div className="text-[10px] font-medium uppercase tracking-[0.14em] text-sky-400/90">
+            <div className="text-base font-bold text-slate-900">LOG Twin</div>
+            <div className="text-[10px] font-semibold uppercase tracking-wider text-slate-500">
               Honda MC · Kho miền Bắc
             </div>
           </div>
         </div>
-        <div className="mt-4 rounded-xl border border-emerald-500/20 bg-emerald-500/10 px-3 py-2 text-[11px] text-emerald-200">
-          <span className="live-dot mr-1.5 inline-block h-1.5 w-1.5 rounded-full bg-emerald-400" />
+        <div className="mt-3 flex items-center gap-2 rounded-lg bg-emerald-50 px-3 py-2 text-[11px] font-medium text-emerald-800">
+          <span className="live-dot inline-block h-2 w-2 rounded-full bg-emerald-500" />
           DSS sống · Mô phỏng realtime
         </div>
       </div>
 
-      <nav className="flex-1 overflow-y-auto px-2.5 py-3">
+      <nav className="flex-1 overflow-y-auto px-2 py-3">
         {NAV.map((item) => {
           const showGroup = item.group !== lastGroup;
           lastGroup = item.group;
@@ -84,23 +80,23 @@ export function Sidebar() {
           return (
             <div key={item.href}>
               {showGroup && (
-                <div className="mb-1.5 mt-3 px-3 text-[10px] font-bold uppercase tracking-[0.16em] text-slate-500 first:mt-0">
+                <div className="mb-1 mt-3 px-3 text-[10px] font-bold uppercase tracking-wider text-slate-400 first:mt-0">
                   {item.group}
                 </div>
               )}
               <Link
                 href={item.href}
                 className={cn(
-                  "mb-0.5 flex items-center gap-2.5 rounded-xl px-3 py-2.5 text-[13px] transition-all",
+                  "mb-0.5 flex items-center gap-2.5 rounded-lg border border-transparent px-3 py-2 text-[13px] transition",
                   active
-                    ? "nav-active font-semibold"
-                    : "border border-transparent text-slate-400 hover:bg-white/5 hover:text-slate-100"
+                    ? "nav-active"
+                    : "text-slate-600 hover:bg-slate-50 hover:text-slate-900"
                 )}
               >
-                <Icon className="h-4 w-4 shrink-0 opacity-90" />
+                <Icon className="h-4 w-4 shrink-0 opacity-80" />
                 <span className="flex-1">{item.label}</span>
                 {item.hot && (
-                  <span className="rounded-md bg-sky-500/20 px-1.5 py-0.5 text-[9px] font-bold uppercase text-sky-300">
+                  <span className="rounded bg-sky-100 px-1.5 py-0.5 text-[9px] font-bold uppercase text-sky-700">
                     Twin
                   </span>
                 )}
@@ -110,10 +106,10 @@ export function Sidebar() {
         })}
       </nav>
 
-      <div className="border-t border-white/5 px-4 py-3 text-[10px] leading-relaxed text-slate-500">
-        Nguồn: Excel 103Ki 2QFC · Word stacking · PPT Yamagomori
+      <div className="border-t border-slate-200 px-4 py-3 text-[10px] leading-relaxed text-slate-500">
+        Nguồn: Excel 103Ki 2QFC · Word · PPT
         <br />
-        <span className="text-slate-600">Mọi KPI trích dẫn file / sheet gốc</span>
+        Mọi KPI trích dẫn file / sheet gốc
       </div>
     </aside>
   );

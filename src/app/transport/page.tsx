@@ -20,8 +20,8 @@ export default function TransportPage() {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-2xl font-bold text-white">Mô phỏng vận tải</h1>
-        <p className="mt-1 text-sm text-slate-400">
+        <h1 className="text-2xl font-bold text-slate-900">Mô phỏng vận tải</h1>
+        <p className="mt-1 text-sm text-slate-600">
           Vận tải xe Bắc→Nam và hoàn kiện rỗng Nam→Bắc. Đơn giá xấp xỉ To South&Sum
           sea (~350k VND/xe).
         </p>
@@ -58,7 +58,7 @@ export default function TransportPage() {
       <div className="grid gap-4 md:grid-cols-2">
         <Card>
           <CardHeader><CardTitle>Cấu trúc lane (To South&Sum)</CardTitle></CardHeader>
-          <CardContent className="text-sm text-slate-300">
+          <CardContent className="text-sm text-slate-600">
             <ul className="list-disc space-y-1.5 pl-5">
               <li>Vĩnh Phúc → Long An / Đồng Nai / Cái Cui (Sea Case)</li>
               <li>Hà Nam → Long An / Đồng Nai / Cái Cui (Sea Case)</li>

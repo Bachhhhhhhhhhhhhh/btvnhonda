@@ -1,17 +1,16 @@
 @import "tailwindcss";
 
 :root {
-  --bg: #070b14;
-  --bg-elevated: #0d1526;
-  --bg-card: rgba(15, 23, 42, 0.72);
-  --border: rgba(148, 163, 184, 0.14);
-  --text: #e8eef9;
-  --muted: #94a3b8;
-  --accent: #38bdf8;
-  --accent-2: #34d399;
-  --warn: #fbbf24;
-  --danger: #fb7185;
-  --glow: rgba(56, 189, 248, 0.25);
+  --bg: #f4f6f9;
+  --bg-card: #ffffff;
+  --border: #e2e8f0;
+  --text: #0f172a;
+  --muted: #64748b;
+  --accent: #0369a1;
+  --accent-soft: #e0f2fe;
+  --good: #047857;
+  --warn: #b45309;
+  --danger: #be123c;
 }
 
 * {
@@ -26,11 +25,7 @@ body {
   margin: 0;
   min-height: 100vh;
   color: var(--text);
-  background:
-    radial-gradient(1200px 600px at 10% -10%, rgba(56, 189, 248, 0.12), transparent 55%),
-    radial-gradient(900px 500px at 90% 0%, rgba(52, 211, 153, 0.08), transparent 50%),
-    radial-gradient(800px 400px at 50% 100%, rgba(167, 139, 250, 0.08), transparent 45%),
-    linear-gradient(180deg, #070b14 0%, #0a1220 50%, #070b14 100%);
+  background: #f1f5f9;
   font-family:
     "Be Vietnam Pro",
     "Segoe UI",
@@ -40,9 +35,9 @@ body {
   -webkit-font-smoothing: antialiased;
 }
 
-/* Typography */
 h1, h2, h3 {
   letter-spacing: -0.02em;
+  color: #0f172a;
 }
 
 /* Scrollbar */
@@ -51,73 +46,48 @@ h1, h2, h3 {
   height: 8px;
 }
 ::-webkit-scrollbar-thumb {
-  background: linear-gradient(180deg, #334155, #1e293b);
+  background: #cbd5e1;
   border-radius: 999px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
 }
 ::-webkit-scrollbar-track {
   background: transparent;
 }
 
-/* Glass card */
+/* Cards — clean white */
 .glass {
-  background: var(--bg-card);
-  border: 1px solid var(--border);
-  backdrop-filter: blur(16px);
-  box-shadow:
-    0 0 0 1px rgba(255, 255, 255, 0.02) inset,
-    0 20px 40px -24px rgba(0, 0, 0, 0.6);
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  box-shadow: 0 1px 2px rgba(15, 23, 42, 0.04), 0 4px 12px rgba(15, 23, 42, 0.03);
 }
 
 .glass-hover {
-  transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+  transition: box-shadow 0.15s ease, border-color 0.15s ease;
 }
 .glass-hover:hover {
-  transform: translateY(-2px);
-  border-color: rgba(56, 189, 248, 0.35);
-  box-shadow:
-    0 0 0 1px rgba(56, 189, 248, 0.08) inset,
-    0 24px 48px -20px rgba(0, 0, 0, 0.7),
-    0 0 40px -16px var(--glow);
+  border-color: #cbd5e1;
+  box-shadow: 0 4px 16px rgba(15, 23, 42, 0.08);
 }
 
-/* Gradient text */
 .grad-text {
-  background: linear-gradient(135deg, #7dd3fc 0%, #34d399 50%, #a78bfa 100%);
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
+  color: #0369a1;
 }
 
-/* KPI shimmer border */
+/* KPI */
 .kpi-ring {
-  position: relative;
-  overflow: hidden;
-}
-.kpi-ring::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  border-radius: inherit;
-  padding: 1px;
-  background: linear-gradient(135deg, rgba(56, 189, 248, 0.5), transparent 40%, rgba(52, 211, 153, 0.4));
-  -webkit-mask:
-    linear-gradient(#fff 0 0) content-box,
-    linear-gradient(#fff 0 0);
-  mask:
-    linear-gradient(#fff 0 0) content-box,
-    linear-gradient(#fff 0 0);
-  -webkit-mask-composite: xor;
-  mask-composite: exclude;
-  pointer-events: none;
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
 }
 
-/* Range slider premium */
+/* Range slider — clear on light bg */
 input[type="range"] {
   -webkit-appearance: none;
   appearance: none;
-  height: 6px;
+  height: 8px;
   border-radius: 999px;
-  background: linear-gradient(90deg, #0ea5e9, #334155);
+  background: #e2e8f0;
   outline: none;
 }
 input[type="range"]::-webkit-slider-thumb {
@@ -125,50 +95,51 @@ input[type="range"]::-webkit-slider-thumb {
   width: 18px;
   height: 18px;
   border-radius: 50%;
-  background: linear-gradient(145deg, #7dd3fc, #0284c7);
-  border: 2px solid #e0f2fe;
-  box-shadow: 0 0 12px rgba(56, 189, 248, 0.6);
+  background: #0369a1;
+  border: 3px solid #ffffff;
+  box-shadow: 0 1px 4px rgba(3, 105, 161, 0.35);
   cursor: pointer;
 }
 
-/* Report prose */
+/* Report */
 .prose-report p {
-  margin-bottom: 1.1rem;
-  line-height: 1.85;
-  color: #cbd5e1;
+  margin-bottom: 1rem;
+  line-height: 1.8;
+  color: #334155;
   text-align: justify;
   font-size: 0.95rem;
 }
 
-/* Table dark */
+/* Tables */
 .table-dark th {
   color: #64748b;
   font-size: 0.7rem;
   text-transform: uppercase;
-  letter-spacing: 0.06em;
+  letter-spacing: 0.05em;
+  font-weight: 600;
 }
 .table-dark td {
-  border-color: rgba(148, 163, 184, 0.1);
+  border-color: #f1f5f9;
+  color: #1e293b;
 }
 
-/* Pulse live */
+/* Live indicator */
 @keyframes pulse-dot {
-  0%, 100% { opacity: 1; transform: scale(1); }
-  50% { opacity: 0.5; transform: scale(0.85); }
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.45; }
 }
 .live-dot {
-  animation: pulse-dot 1.6s ease-in-out infinite;
+  animation: pulse-dot 1.8s ease-in-out infinite;
 }
 
-/* Sidebar active glow */
+/* Sidebar active */
 .nav-active {
-  background: linear-gradient(90deg, rgba(14, 165, 233, 0.22), rgba(14, 165, 233, 0.05));
-  border: 1px solid rgba(56, 189, 248, 0.25);
-  color: #7dd3fc !important;
-  box-shadow: 0 0 24px -8px rgba(56, 189, 248, 0.4);
+  background: #e0f2fe !important;
+  color: #0369a1 !important;
+  font-weight: 600;
+  border: 1px solid #bae6fd !important;
 }
 
-/* Print */
 @media print {
   body {
     background: white !important;

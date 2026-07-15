@@ -42,8 +42,8 @@ export default function ScenariosPage() {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-2xl font-bold text-white">So sánh kịch bản</h1>
-        <p className="mt-1 text-sm text-slate-400">
+        <h1 className="text-2xl font-bold text-slate-900">So sánh kịch bản</h1>
+        <p className="mt-1 text-sm text-slate-600">
           Word §15: conservative / base / efficiency + các cực chính sách (zero outsource là benchmark kỹ thuật).
         </p>
       </div>
@@ -66,8 +66,8 @@ export default function ScenariosPage() {
       <Card>
         <CardHeader><CardTitle>Bảng chi tiết</CardTitle></CardHeader>
         <CardContent className="overflow-x-auto">
-          <table className="table-dark w-full text-left text-sm text-slate-300">
-            <thead className="border-b border-white/10">
+          <table className="table-dark w-full text-left text-sm text-slate-600">
+            <thead className="border-b border-slate-200">
               <tr>
                 <th className="py-2 pr-3">Kịch bản</th>
                 <th className="pr-3">Tiết kiệm tỷ</th>
@@ -78,11 +78,11 @@ export default function ScenariosPage() {
                 <th>Peak z_t</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-white/5">
+            <tbody className="divide-y divide-slate-100">
               {rows.map((r) => (
                 <tr key={r.name}>
-                  <td className="py-2 pr-3 font-medium text-slate-100">{r.name}</td>
-                  <td className="tabular-nums pr-3 text-emerald-300">{fmt(r["Tiết kiệm tỷ"], 2)}</td>
+                  <td className="py-2 pr-3 font-medium text-slate-900">{r.name}</td>
+                  <td className="tabular-nums pr-3 text-emerald-700">{fmt(r["Tiết kiệm tỷ"], 2)}</td>
                   <td className="tabular-nums pr-3">{fmt(r.costBn, 2)}</td>
                   <td className="tabular-nums pr-3">{fmt(r.outsource)}</td>
                   <td className="tabular-nums pr-3">{fmt(r.transfer)}</td>

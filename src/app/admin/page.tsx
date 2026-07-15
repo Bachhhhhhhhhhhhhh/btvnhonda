@@ -16,8 +16,8 @@ export default function AdminPage() {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-2xl font-bold text-white">Quản trị / Audit</h1>
-        <p className="mt-1 text-sm text-slate-400">
+        <h1 className="text-2xl font-bold text-slate-900">Quản trị / Audit</h1>
+        <p className="mt-1 text-sm text-slate-600">
           Snapshot tham số và nhật ký thay đổi phục vụ quản trị.
         </p>
       </div>
@@ -27,13 +27,13 @@ export default function AdminPage() {
           <CardTitle>JSON tham số sống</CardTitle>
           <button
             onClick={reset}
-            className="rounded-lg border border-white/10 bg-white/5 px-3 py-1.5 text-xs font-medium text-slate-300 hover:bg-white/10"
+            className="rounded-lg border border-slate-200 bg-slate-50 px-3 py-1.5 text-xs font-medium text-slate-300 hover:bg-white/10"
           >
             Đặt lại mặc định
           </button>
         </CardHeader>
         <CardContent>
-          <pre className="max-h-96 overflow-auto rounded-xl border border-emerald-500/20 bg-slate-950 p-4 text-xs text-emerald-300">
+          <pre className="max-h-96 overflow-auto rounded-xl border border-emerald-500/20 bg-slate-50 p-4 text-xs text-emerald-800 border border-slate-200">
             {JSON.stringify(params, null, 2)}
           </pre>
         </CardContent>
@@ -46,10 +46,10 @@ export default function AdminPage() {
             {AUDIT.map((a, i) => (
               <li
                 key={i}
-                className="flex flex-wrap gap-3 rounded-xl border border-white/5 bg-white/[0.02] px-3 py-2.5"
+                className="flex flex-wrap gap-3 rounded-xl border border-slate-100 bg-slate-50 px-3 py-2.5"
               >
                 <span className="font-mono text-xs text-slate-500">{a.t}</span>
-                <span className="font-semibold text-sky-300">{a.actor}</span>
+                <span className="font-semibold text-sky-700">{a.actor}</span>
                 <span className="text-slate-300">{a.action}</span>
               </li>
             ))}

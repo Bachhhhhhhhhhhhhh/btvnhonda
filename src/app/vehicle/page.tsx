@@ -16,8 +16,8 @@ export default function VehiclePage() {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-2xl font-bold text-white">Năng lực xe & mật độ lưu kho</h1>
-        <p className="mt-1 text-sm text-slate-400">
+        <h1 className="text-2xl font-bold text-slate-900">Năng lực xe & mật độ lưu kho</h1>
+        <p className="mt-1 text-sm text-slate-600">
           Stacking thay đổi số xe trên mỗi m² và slot capacity hiệu dụng của kho.
         </p>
       </div>
@@ -32,15 +32,15 @@ export default function VehiclePage() {
       <div className="grid gap-4 md:grid-cols-2">
         <Card hover>
           <CardHeader><CardTitle>Tải pallet / kiện</CardTitle></CardHeader>
-          <CardContent className="space-y-3 text-sm text-slate-300">
+          <CardContent className="space-y-3 text-sm text-slate-600">
             <p>
-              Đề bài: <strong className="text-white">2–4 xe/kiện</strong>, tối đa{" "}
-              <strong className="text-white">{layers} tầng</strong>. Mix workbook:{" "}
-              <strong className="text-sky-300">{ASSUMPTIONS.mcPerCaseMix} xe/kiện</strong>{" "}
+              Đề bài: <strong className="text-slate-900">2–4 xe/kiện</strong>, tối đa{" "}
+              <strong className="text-slate-900">{layers} tầng</strong>. Mix workbook:{" "}
+              <strong className="text-sky-700">{ASSUMPTIONS.mcPerCaseMix} xe/kiện</strong>{" "}
               (To South&Sum!X1).
             </p>
             <p>
-              Twin hiện tại: <strong className="text-white">{fmt(mcPerPallet, 1)}</strong> xe/kiện
+              Twin hiện tại: <strong className="text-slate-900">{fmt(mcPerPallet, 1)}</strong> xe/kiện
             </p>
             <p>
               Container: {params.casesPerContainerNS} kiện →{" "}
@@ -51,17 +51,17 @@ export default function VehiclePage() {
         </Card>
         <Card hover>
           <CardHeader><CardTitle>Hàm ý throughput</CardTitle></CardHeader>
-          <CardContent className="space-y-2 text-sm text-slate-300">
+          <CardContent className="space-y-2 text-sm text-slate-600">
             <p>
               Import năm dưới tỷ lệ stack {fmtPct(params.importStackRatio, 0)}:{" "}
-              <strong className="text-white">
+              <strong className="text-slate-900">
                 {fmt(result.annual.importVol * params.importStackRatio)}
               </strong>{" "}
               xe được stack.
             </p>
             <p>
               Capacity tương đương giải phóng:{" "}
-              <strong className="text-emerald-300">{fmt(result.annual.importRelief)}</strong>
+              <strong className="text-emerald-700">{fmt(result.annual.importRelief)}</strong>
             </p>
             <p className="text-xs text-slate-500">
               Lưu ý: stacking tăng mật độ lưu kho; bản thân không đổi throughput

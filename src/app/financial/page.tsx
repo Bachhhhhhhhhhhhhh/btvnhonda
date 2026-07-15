@@ -35,8 +35,8 @@ export default function FinancialPage() {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-2xl font-bold text-white">Phân tích tài chính</h1>
-        <p className="mt-1 text-sm text-slate-400">
+        <h1 className="text-2xl font-bold text-slate-900">Phân tích tài chính</h1>
+        <p className="mt-1 text-sm text-slate-600">
           Tổng chi phí mạng lưới, ROI, payback, NPV. Rate card chỉnh trong Digital Twin
           đến khi Finance khóa (Word §15).
         </p>
@@ -94,8 +94,8 @@ export default function FinancialPage() {
 
       <Card>
         <CardHeader><CardTitle>Neo ngân sách Excel</CardTitle></CardHeader>
-        <CardContent className="text-sm text-slate-400">
-          Rental WH!C123 “Stacking case” phân bổ <strong className="text-emerald-300">−2,62 tỷ VND</strong>{" "}
+        <CardContent className="text-sm text-slate-600">
+          Rental WH!C123 “Stacking case” phân bổ <strong className="text-emerald-700">−2,62 tỷ VND</strong>{" "}
           qua các tháng peak. PPT tuyên bố ~3 tỷ/năm — cùng bậc độ lớn. DSS này tính
           savings động từ rate card, không hardcode −2,62.
         </CardContent>

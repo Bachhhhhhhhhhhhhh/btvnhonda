@@ -18,6 +18,14 @@ Repo: https://github.com/Bachhhhhhhhhhhhhh/btvnhonda
 - **Engine:** Digital Twin client-side + **FastAPI** (`backend/`)  
 - **Deploy:** Docker Compose  
 
+## Website (GitHub Pages)
+
+Sau khi deploy Actions thành công, mở:
+
+**https://bachhhhhhhhhhhhhh.github.io/btvnhonda/**
+
+> Lưu ý: GitHub **không** chạy Next.js từ trang repo code. Site public nằm trên **GitHub Pages** (link trên).
+
 ## Chạy local
 
 ```bash

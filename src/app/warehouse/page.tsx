@@ -37,8 +37,8 @@ export default function WarehousePage() {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-2xl font-bold text-white">Năng lực kho miền Bắc</h1>
-        <p className="mt-1 text-sm text-slate-400">
+        <h1 className="text-2xl font-bold text-slate-900">Năng lực kho miền Bắc</h1>
+        <p className="mt-1 text-sm text-slate-600">
           Dữ liệu Excel Rental WH. Hai định nghĩa “vượt capacity” được hiển thị
           song song — không gộp nhầm.
         </p>
@@ -96,18 +96,18 @@ export default function WarehousePage() {
         </CardHeader>
         <CardContent className="overflow-x-auto">
           <table className="table-dark w-full text-left text-sm">
-            <thead className="border-b border-white/10">
+            <thead className="border-b border-slate-200">
               <tr>
                 <th className="py-2">Thành phần</th>
                 <th>Xe</th>
                 <th>Nguồn</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-white/5 text-slate-300">
+            <tbody className="divide-y divide-slate-100 text-slate-300">
               <tr><td className="py-2">VPC Fact Cap</td><td className="tabular-nums">17.680</td><td className="text-slate-500">Rental WH!F55</td></tr>
               <tr><td className="py-2">HNM (NKV)</td><td className="tabular-nums">2.500</td><td className="text-slate-500">Rental WH!F56</td></tr>
               <tr><td className="py-2">Open area HNM VTP</td><td className="tabular-nums">8.315</td><td className="text-slate-500">Rental WH!F58</td></tr>
-              <tr className="font-semibold text-sky-300"><td className="py-2">TTL capacity</td><td className="tabular-nums">28.495</td><td className="text-slate-500">Rental WH!F59</td></tr>
+              <tr className="font-semibold text-sky-700"><td className="py-2">TTL capacity</td><td className="tabular-nums">28.495</td><td className="text-slate-500">Rental WH!F59</td></tr>
               <tr><td className="py-2">m²/xe Bắc dài hạn</td><td className="tabular-nums">1,6</td><td className="text-slate-500">S110 (≠ Word 1,7)</td></tr>
               <tr><td className="py-2">m²/xe Nam dài hạn</td><td className="tabular-nums">2,0</td><td className="text-slate-500">Rental WH!S112</td></tr>
             </tbody>

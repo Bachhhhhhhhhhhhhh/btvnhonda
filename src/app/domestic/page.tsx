@@ -35,8 +35,8 @@ export default function DomesticPage() {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-2xl font-bold text-white">Tối ưu xe nội địa</h1>
-        <p className="mt-1 text-sm text-slate-400">
+        <h1 className="text-2xl font-bold text-slate-900">Tối ưu xe nội địa</h1>
+        <p className="mt-1 text-sm text-slate-600">
           Nhánh 2 — residual sau stack NK: chọn chuyển N→S (y_t) hay thuê ngoài Bắc (z_t).
           Quy tắc (Word §13): chuyển khi chi phí tránh được ở Bắc &gt; tổng chi phí transfer.
         </p>
@@ -54,8 +54,8 @@ export default function DomesticPage() {
         <CardContent>
           <div className={`rounded-2xl border p-4 text-sm leading-relaxed ${
             justified
-              ? "border-emerald-500/30 bg-emerald-500/10 text-emerald-100"
-              : "border-rose-500/30 bg-rose-500/10 text-rose-100"
+              ? "border-emerald-500/30 bg-emerald-500/10 text-emerald-900"
+              : "border-rose-500/30 bg-rose-500/10 text-rose-900"
           }`}>
             {justified ? (
               <>Transfer <strong>có lợi kinh tế</strong> với rate card hiện tại: biên {fmt(unitAvoided - unitTransfer)} VND/xe.

@@ -36,8 +36,8 @@ export default function MonteCarloPage() {
     <div className="space-y-6">
       <div className="flex flex-wrap items-end justify-between gap-3">
         <div>
-          <h1 className="text-2xl font-bold text-white">Mô phỏng Monte Carlo</h1>
-          <p className="mt-1 text-sm text-slate-400">
+          <h1 className="text-2xl font-bold text-slate-900">Mô phỏng Monte Carlo</h1>
+          <p className="mt-1 text-sm text-slate-600">
             Lấy mẫu ngẫu nhiên m², tỷ lệ stack/transfer, cước & thuê ngoài → phân phối tiết kiệm năm.
           </p>
         </div>
@@ -46,7 +46,7 @@ export default function MonteCarloPage() {
           <select
             value={n}
             onChange={(e) => setN(Number(e.target.value))}
-            className="rounded-lg border border-white/10 bg-slate-900 px-3 py-1.5 text-sm text-slate-200"
+            className="rounded-lg border border-slate-300 bg-white px-3 py-1.5 text-sm text-slate-800"
           >
             <option value={200}>200</option>
             <option value={500}>500</option>

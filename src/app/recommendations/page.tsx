@@ -49,8 +49,8 @@ export default function RecommendationsPage() {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-2xl font-bold text-white">Khuyến nghị điều hành</h1>
-        <p className="mt-1 text-sm text-slate-400">
+        <h1 className="text-2xl font-bold text-slate-900">Khuyến nghị điều hành</h1>
+        <p className="mt-1 text-sm text-slate-600">
           Playbook Senior Business Manager — tính lại theo tham số Twin sống.
         </p>
       </div>
@@ -59,13 +59,13 @@ export default function RecommendationsPage() {
           <Card key={r.title} hover>
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
-                <span className="flex h-7 w-7 items-center justify-center rounded-lg bg-sky-500/20 text-xs font-bold text-sky-300">
+                <span className="flex h-7 w-7 items-center justify-center rounded-lg bg-sky-100 text-xs font-bold text-sky-700">
                   {i + 1}
                 </span>
                 {r.title.replace(/^\d+\.\s*/, "")}
               </CardTitle>
             </CardHeader>
-            <CardContent className="text-sm leading-relaxed text-slate-300">
+            <CardContent className="text-sm leading-relaxed text-slate-600">
               {r.body}
             </CardContent>
           </Card>

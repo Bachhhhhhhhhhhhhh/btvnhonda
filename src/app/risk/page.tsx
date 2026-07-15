@@ -49,8 +49,8 @@ export default function RiskPage() {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-2xl font-bold text-white">Phân tích rủi ro</h1>
-        <p className="mt-1 text-sm text-slate-400">
+        <h1 className="text-2xl font-bold text-slate-900">Phân tích rủi ro</h1>
+        <p className="mt-1 text-sm text-slate-600">
           Từ Word Bảng 7 — control bắt buộc trước khi phê duyệt playbook stacking / transfer.
         </p>
       </div>
@@ -61,21 +61,21 @@ export default function RiskPage() {
             <CardHeader>
               <CardTitle>{r.risk}</CardTitle>
             </CardHeader>
-            <CardContent className="space-y-2 text-sm text-slate-300">
+            <CardContent className="space-y-2 text-sm text-slate-600">
               <p>
                 <span className="font-medium text-slate-500">Tác động: </span>
                 {r.impact}
               </p>
               <div className="flex gap-2">
-                <span className="rounded-full bg-amber-500/15 px-2 py-0.5 text-[11px] font-semibold text-amber-300">
+                <span className="rounded-full bg-amber-100 px-2 py-0.5 text-[11px] font-semibold text-amber-800">
                   Khả năng: {r.likelihood}
                 </span>
-                <span className="rounded-full bg-rose-500/15 px-2 py-0.5 text-[11px] font-semibold text-rose-300">
+                <span className="rounded-full bg-rose-100 px-2 py-0.5 text-[11px] font-semibold text-rose-700">
                   Mức độ: {r.severity}
                 </span>
               </div>
-              <p className="rounded-xl border border-white/5 bg-white/[0.03] p-2.5 text-xs text-slate-400">
-                <span className="font-semibold text-sky-300">Kiểm soát: </span>
+              <p className="rounded-xl border border-slate-100 bg-slate-50 p-2.5 text-xs text-slate-500">
+                <span className="font-semibold text-sky-700">Kiểm soát: </span>
                 {r.control}
               </p>
             </CardContent>
