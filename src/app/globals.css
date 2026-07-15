@@ -494,6 +494,38 @@ input[type="range"]::-webkit-slider-thumb {
   color: #94a3b8;
 }
 
+/* ── Professional consulting report ── */
+.report-table {
+  border-collapse: collapse;
+  width: 100%;
+}
+.report-table th {
+  background: #f7f9fc;
+  color: #64748b;
+  font-size: 0.65rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  font-weight: 700;
+  padding: 10px 12px;
+  border-bottom: 1px solid #dce3ec;
+  text-align: left;
+}
+.report-table td {
+  padding: 9px 12px;
+  border-bottom: 1px solid #eef2f6;
+  color: #1e293b;
+  vertical-align: top;
+}
+.report-table tbody tr:hover td {
+  background: #fafbfc;
+}
+.report-section {
+  break-inside: avoid;
+}
+.report-cover {
+  break-after: page;
+}
+
 @media print {
   body {
     background: white !important;
@@ -503,5 +535,43 @@ input[type="range"]::-webkit-slider-thumb {
   }
   .map-float {
     box-shadow: none !important;
+  }
+  /* Hide app chrome when printing report */
+  aside.no-print,
+  header.no-print,
+  .bank-util-bar,
+  footer.no-print {
+    display: none !important;
+  }
+  main {
+    padding: 0 !important;
+    overflow: visible !important;
+  }
+  .bank-content {
+    background: white !important;
+  }
+  .report-root {
+    max-width: 100% !important;
+  }
+  .report-page {
+    break-inside: avoid;
+    box-shadow: none !important;
+    border-color: #dce3ec !important;
+  }
+  .report-cover {
+    break-after: page;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+  .report-section {
+    break-inside: avoid;
+    page-break-inside: avoid;
+  }
+  a {
+    text-decoration: none !important;
+    color: inherit !important;
+  }
+  @page {
+    margin: 14mm 12mm;
   }
 }
