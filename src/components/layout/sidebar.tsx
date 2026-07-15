@@ -24,12 +24,15 @@ import {
   MapPinned,
   ShieldCheck,
   Brain,
+  FlaskConical,
+  X,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
-const NAV = [
+export const NAV = [
   { href: "/", label: "Tổng quan", icon: LayoutDashboard, group: "Điều hành" },
   { href: "/digital-twin", label: "Digital Twin", icon: Network, group: "Điều hành", hot: true },
+  { href: "/wsb", label: "WSB What-if", icon: FlaskConical, group: "Điều hành", hot: true },
   { href: "/insights", label: "Insights & tối ưu", icon: Brain, group: "Điều hành", hot: true },
   { href: "/map", label: "Bản đồ mạng lưới", icon: MapPinned, group: "Điều hành" },
   { href: "/overview", label: "Giới thiệu dự án", icon: BookOpen, group: "Điều hành" },
@@ -49,19 +52,24 @@ const NAV = [
   { href: "/data", label: "Dữ liệu nguồn", icon: Database, group: "Hệ thống" },
 ];
 
-export function Sidebar() {
+export function Sidebar({
+  mobileOpen,
+  onClose,
+}: {
+  mobileOpen?: boolean;
+  onClose?: () => void;
+}) {
   const path = usePathname();
   let lastGroup = "";
 
-  return (
-    <aside className="no-print flex h-screen w-[248px] shrink-0 flex-col bg-[#071428] text-slate-300">
-      {/* Brand — bank lockup */}
+  const body = (
+    <>
       <div className="border-b border-white/10 px-4 py-4">
         <div className="flex items-center gap-3">
           <div className="flex h-10 w-10 items-center justify-center rounded-[3px] bg-gradient-to-b from-[#d4b76a] to-[#b8954a] text-[#071428] shadow-sm">
             <Boxes className="h-5 w-5" strokeWidth={2.25} />
           </div>
-          <div className="min-w-0">
+          <div className="min-w-0 flex-1">
             <div className="text-[15px] font-bold tracking-tight text-white">
               LOG Twin
             </div>
@@ -69,6 +77,15 @@ export function Sidebar() {
               Honda MC · DSS
             </div>
           </div>
+          {onClose && (
+            <button
+              type="button"
+              onClick={onClose}
+              className="rounded p-1 text-slate-400 hover:bg-white/10 hover:text-white lg:hidden"
+            >
+              <X className="h-5 w-5" />
+            </button>
+          )}
         </div>
         <div className="mt-3 flex items-center gap-2 rounded-[3px] border border-white/10 bg-white/[0.04] px-2.5 py-1.5 text-[10px] font-medium text-slate-400">
           <ShieldCheck className="h-3 w-3 text-emerald-400" />
@@ -92,6 +109,7 @@ export function Sidebar() {
               )}
               <Link
                 href={item.href}
+                onClick={onClose}
                 className={cn(
                   "mb-0.5 flex items-center gap-2.5 rounded-[3px] border border-transparent px-3 py-2 text-[12.5px] transition",
                   active
@@ -130,6 +148,30 @@ export function Sidebar() {
           Hệ thống trực tuyến
         </div>
       </div>
-    </aside>
+    </>
+  );
+
+  return (
+    <>
+      {/* Desktop */}
+      <aside className="no-print hidden h-screen w-[248px] shrink-0 flex-col bg-[#071428] text-slate-300 lg:flex">
+        {body}
+      </aside>
+
+      {/* Mobile drawer */}
+      {mobileOpen && (
+        <div className="fixed inset-0 z-[150] lg:hidden">
+          <button
+            type="button"
+            className="absolute inset-0 bg-black/50"
+            aria-label="Close menu"
+            onClick={onClose}
+          />
+          <aside className="absolute left-0 top-0 flex h-full w-[280px] flex-col bg-[#071428] text-slate-300 shadow-2xl">
+            {body}
+          </aside>
+        </div>
+      )}
+    </>
   );
 }
