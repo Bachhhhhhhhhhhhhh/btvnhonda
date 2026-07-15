@@ -4,6 +4,7 @@ import { POLICY_PRESETS, useTwinStore } from "@/lib/store";
 import { cn } from "@/lib/utils";
 import { RotateCcw, Camera } from "lucide-react";
 import { useToast } from "@/components/wow/ToastHost";
+import { ParamLockButton, useParamLock } from "@/components/command/ParamLock";
 
 export function PresetBar({
   showSnapshot = true,
@@ -18,18 +19,25 @@ export function PresetBar({
     snapshots,
   } = useTwinStore();
   const pushToast = useToast((s) => s.push);
+  const locked = useParamLock((s) => s.locked);
 
   return (
-    <div className="flex flex-wrap items-center gap-2 rounded-[4px] border border-[#dce3ec] bg-white p-2.5 shadow-sm">
-      <span className="px-1 text-[10px] font-bold uppercase tracking-[0.12em] text-slate-400">
+    <div className="flex flex-wrap items-center gap-2 rounded-xl border border-[var(--line)] bg-[var(--card)] p-2.5 shadow-sm">
+      <span className="px-1 text-[10px] font-bold uppercase tracking-[0.12em] text-[var(--muted)]">
         Preset
       </span>
+      <ParamLockButton />
       {POLICY_PRESETS.map((p) => (
         <button
           key={p.id}
           type="button"
           title={p.description}
+          disabled={locked}
           onClick={() => {
+            if (locked) {
+              pushToast({ title: "Twin đang khóa", tone: "warn" });
+              return;
+            }
             applyPolicyPreset(p);
             pushToast({
               title: `Preset · ${p.name}`,
@@ -38,10 +46,10 @@ export function PresetBar({
             });
           }}
           className={cn(
-            "rounded-[3px] border px-2.5 py-1.5 text-[11px] font-bold transition",
+            "rounded-lg border px-2.5 py-1.5 text-[11px] font-bold transition disabled:opacity-40",
             activePresetId === p.id
-              ? "border-[#071428] bg-[#071428] text-white pulse-ring"
-              : "border-[#dce3ec] bg-[#f7f9fc] text-slate-700 hover:border-[#b8954a]/50"
+              ? "border-[var(--ink)] bg-[var(--ink)] text-[var(--card)] pulse-ring"
+              : "border-[var(--line)] bg-[var(--bg)] text-[var(--ink)] hover:border-[var(--gold)]/50"
           )}
         >
           {p.name}
@@ -49,11 +57,13 @@ export function PresetBar({
       ))}
       <button
         type="button"
+        disabled={locked}
         onClick={() => {
+          if (locked) return;
           reset();
           pushToast({ title: "Đã reset Twin về default", tone: "warn" });
         }}
-        className="inline-flex items-center gap-1 rounded-[3px] border border-[#dce3ec] px-2.5 py-1.5 text-[11px] font-semibold text-slate-600 hover:bg-slate-50"
+        className="inline-flex items-center gap-1 rounded-lg border border-[var(--line)] px-2.5 py-1.5 text-[11px] font-semibold text-[var(--muted)] hover:bg-[var(--bg)] disabled:opacity-40"
       >
         <RotateCcw className="h-3 w-3" />
         Reset

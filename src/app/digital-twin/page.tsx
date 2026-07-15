@@ -45,6 +45,7 @@ import { ScorecardRing } from "@/components/analytics/ScorecardRing";
 import { HistoryPanel } from "@/components/command/HistoryPanel";
 import { BenchmarkPanel } from "@/components/command/BenchmarkPanel";
 import { MemoGenerator } from "@/components/command/MemoGenerator";
+import { TwinChat } from "@/components/command/TwinChat";
 
 export default function DigitalTwinPage() {
   const { result, params } = useTwinStore();
@@ -262,6 +263,7 @@ export default function DigitalTwinPage() {
 
           <OptimizePanel />
           <ScorecardRing />
+          <TwinChat compact />
           <MemoGenerator />
 
           <Card>

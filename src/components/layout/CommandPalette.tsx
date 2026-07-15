@@ -108,6 +108,12 @@ export function CommandPalette() {
         run: () => toggleMode(),
         show: !qq || "theme dark light".includes(qq),
       },
+      {
+        id: "chat",
+        label: "Hỏi Twin Chat (dashboard)",
+        run: () => router.push("/"),
+        show: !qq || "chat hỏi twin".includes(qq),
+      },
     ].filter((a) => a.show);
     return { routes, actions };
   }, [q, params, result, router, saveSnapshot, toggleMode]);

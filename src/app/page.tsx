@@ -69,6 +69,9 @@ import { ActionChecklist } from "@/components/command/ActionChecklist";
 import { MemoGenerator } from "@/components/command/MemoGenerator";
 import { BenchmarkPanel } from "@/components/command/BenchmarkPanel";
 import { HistoryPanel } from "@/components/command/HistoryPanel";
+import { TwinChat } from "@/components/command/TwinChat";
+import { CostWaterfall } from "@/components/command/CostWaterfall";
+import { MonteCarloMini } from "@/components/command/MonteCarloMini";
 
 const PIE_COLORS = ["#0a4d6e", "#0d6b63", "#b8954a", "#5b21b6", "#64748b"];
 
@@ -429,6 +432,18 @@ export default function DashboardPage() {
         </div>
         <div className="xl:col-span-4">
           <MemoGenerator />
+        </div>
+      </div>
+
+      <div className="grid gap-4 xl:grid-cols-12">
+        <div className="xl:col-span-5">
+          <TwinChat compact />
+        </div>
+        <div className="xl:col-span-4">
+          <CostWaterfall />
+        </div>
+        <div className="xl:col-span-3">
+          <MonteCarloMini />
         </div>
       </div>
 

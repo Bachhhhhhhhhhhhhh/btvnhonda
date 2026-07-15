@@ -13,6 +13,15 @@ import {
   applyPreset,
   type PolicyPreset,
 } from "@/lib/engine/analytics";
+import { useParamLock } from "@/components/command/ParamLock";
+
+function isLocked() {
+  try {
+    return useParamLock.getState().locked;
+  } catch {
+    return false;
+  }
+}
 
 export type Snapshot = {
   id: string;
@@ -88,6 +97,7 @@ export const useTwinStore = create<TwinStore>()(
         past: [],
         future: [],
         setParam: (key, value) => {
+          if (isLocked()) return;
           const cur = get().params;
           const next = { ...cur, [key]: value };
           set({
@@ -99,6 +109,7 @@ export const useTwinStore = create<TwinStore>()(
           });
         },
         setCost: (key, value) => {
+          if (isLocked()) return;
           const cur = get().params;
           const next: TwinParams = {
             ...cur,
@@ -113,6 +124,7 @@ export const useTwinStore = create<TwinStore>()(
           });
         },
         setParams: (params, label = "Set params") => {
+          if (isLocked()) return;
           const cur = get().params;
           set({
             past: pushHistory(get().past, cur, label),
@@ -123,6 +135,7 @@ export const useTwinStore = create<TwinStore>()(
           });
         },
         applyPolicyPreset: (presetOrId) => {
+          if (isLocked()) return;
           const preset =
             typeof presetOrId === "string"
               ? POLICY_PRESETS.find((p) => p.id === presetOrId)
@@ -139,6 +152,7 @@ export const useTwinStore = create<TwinStore>()(
           });
         },
         reset: () => {
+          if (isLocked()) return;
           const cur = get().params;
           const p = defaultParams();
           set({
@@ -167,6 +181,7 @@ export const useTwinStore = create<TwinStore>()(
           set({ snapshots: get().snapshots.filter((s) => s.id !== id) });
         },
         loadSnapshot: (id) => {
+          if (isLocked()) return;
           const snap = get().snapshots.find((s) => s.id === id);
           if (!snap) return;
           const cur = get().params;
