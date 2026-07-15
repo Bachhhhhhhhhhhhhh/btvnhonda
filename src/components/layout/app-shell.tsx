@@ -96,6 +96,10 @@ export function AppShell({ children }: { children: React.ReactNode }) {
             <span className="hidden md:inline">
               Honda Việt Nam · Command Center DSS v5
             </span>
+            <span className="hidden text-slate-600 lg:inline">|</span>
+            <span className="hidden truncate lg:inline">
+              Tạo bởi <span className="text-[#d4b76a]">Bach Truong</span> · Intern · BMLG
+            </span>
           </div>
           <div className="flex items-center gap-3 sm:gap-4">
             <span className="hidden items-center gap-1.5 sm:inline-flex">
@@ -224,7 +228,14 @@ export function AppShell({ children }: { children: React.ReactNode }) {
               <div className="hidden sm:block">
                 Digital Twin DSS · không thay thế phê duyệt chính thức
               </div>
-              <div className="ml-auto flex items-center gap-3 text-slate-500">
+              <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-[var(--muted)]">
+                <span>
+                  Tạo bởi{" "}
+                  <strong className="text-[var(--ink)]">Bach Truong</strong>
+                  {" · "}
+                  Intern · phòng BMLG · Honda Việt Nam
+                </span>
+                <span className="hidden text-[var(--line)] sm:inline">|</span>
                 <span className="inline-flex items-center gap-1">
                   <Maximize2 className="h-3 w-3" />
                   Undo sticky · Ctrl+K · Share

@@ -179,6 +179,17 @@ export function Sidebar({
           {showLabels && (
             <>
               <div className="text-[9px] font-bold uppercase tracking-[0.14em] text-slate-500">
+                Người tạo
+              </div>
+              <div className="mt-1 text-[11px] font-semibold leading-snug text-slate-200">
+                Bach Truong
+              </div>
+              <div className="mt-0.5 text-[10px] leading-relaxed text-slate-400">
+                Intern · phòng BMLG
+                <br />
+                Honda Việt Nam
+              </div>
+              <div className="mt-2.5 text-[9px] font-bold uppercase tracking-[0.14em] text-slate-500">
                 Nguồn dữ liệu
               </div>
               <div className="mt-1 text-[10px] leading-relaxed text-slate-400">

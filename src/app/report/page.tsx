@@ -484,6 +484,12 @@ export default function ReportPage() {
                   Tối ưu stacking & capacity
                   <span className="mt-1 block text-[#d4b76a]">kho miền Bắc mùa cao điểm</span>
                 </h2>
+                <p className="mt-3 text-[12px] font-medium text-slate-400">
+                  Prepared by{" "}
+                  <span className="font-semibold text-[#e8d5a3]">Bach Truong</span>
+                  {" · "}
+                  Intern · phòng BMLG · Honda Việt Nam
+                </p>
                 <p className="mt-4 max-w-2xl text-[14px] leading-relaxed text-slate-300">
                   Định lượng stacking nhập khẩu, transfer Bắc–Nam và thuê ngoài để tối thiểu hóa
                   tổng chi phí mạng lưới — bám Excel 103Ki 2QFC, Word đề bài và PPT LOG Unit
@@ -1457,6 +1463,8 @@ export default function ReportPage() {
               <div className="mt-6 flex flex-wrap items-center justify-between gap-3 text-[11px] text-slate-500">
                 <span>
                   © Honda Việt Nam · LOG Twin DSS · {docId} · {today}
+                  {" · "}
+                  Tạo bởi Bach Truong · Intern · phòng BMLG
                 </span>
                 <span>
                   {SOURCES.word} · {SOURCES.excel} · {SOURCES.ppt}

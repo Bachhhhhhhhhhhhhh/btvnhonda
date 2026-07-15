@@ -6,7 +6,9 @@ import { ThemeProvider } from "@/components/layout/ThemeProvider";
 export const metadata: Metadata = {
   title: "LOG Twin Command Center · Honda MC DSS",
   description:
-    "Command Center Digital Twin — stacking, transfer Bắc–Nam, what-if, Monte Carlo — Honda Việt Nam",
+    "Command Center Digital Twin — stacking, transfer Bắc–Nam, what-if, Monte Carlo — Honda Việt Nam. Tạo bởi Bach Truong, Intern phòng BMLG.",
+  authors: [{ name: "Bach Truong" }],
+  creator: "Bach Truong · Intern · phòng BMLG · Honda Việt Nam",
 };
 
 export default function RootLayout({

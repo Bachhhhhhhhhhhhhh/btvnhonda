@@ -167,6 +167,12 @@ export default function DashboardPage() {
               Điều hành stacking, transfer N→S và thuê ngoài trên một màn hình —
               playback, brief, optimizer, GIS và board pack.
             </p>
+            <p className="mt-2.5 text-[12px] text-slate-500">
+              Tạo bởi{" "}
+              <span className="font-semibold text-[#d4b76a]">Bach Truong</span>
+              {" · "}
+              Intern · phòng BMLG · Honda Việt Nam
+            </p>
             <div className="mt-6 flex flex-wrap gap-2">
               <Link
                 href="/digital-twin"

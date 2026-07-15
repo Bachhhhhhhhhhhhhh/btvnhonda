@@ -47,7 +47,7 @@ export default function OverviewPage() {
       <SectionHeader
         kicker="Dự án · Context"
         title="Tổng quan dự án"
-        subtitle="Honda Việt Nam MC Logistics — tối ưu stacking & thuê ngoài kho miền Bắc (Trương Thế Bách / OM029354). DSS kết nối Word · Excel 103Ki 2QFC · PPT Yamagomori."
+        subtitle="Honda Việt Nam MC Logistics — tối ưu stacking & thuê ngoài kho miền Bắc. Tạo bởi Bach Truong · Intern phòng BMLG · Honda Việt Nam. DSS kết nối Word · Excel 103Ki 2QFC · PPT Yamagomori."
         actions={
           <Link href="/digital-twin" className="btn-bank-gold inline-flex items-center gap-1.5 px-3 py-2 text-xs">
             Mở Digital Twin
