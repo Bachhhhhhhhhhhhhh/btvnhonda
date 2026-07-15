@@ -19,7 +19,6 @@ import {
   FileText,
   Boxes,
   Database,
-  Settings,
   Network,
   Bike,
   MapPinned,
@@ -46,7 +45,6 @@ const NAV = [
   { href: "/recommendations", label: "Khuyến nghị", icon: Lightbulb, group: "Báo cáo" },
   { href: "/report", label: "Báo cáo tư vấn", icon: FileText, group: "Báo cáo" },
   { href: "/data", label: "Dữ liệu nguồn", icon: Database, group: "Hệ thống" },
-  { href: "/admin", label: "Quản trị", icon: Settings, group: "Hệ thống" },
 ];
 
 export function Sidebar() {
