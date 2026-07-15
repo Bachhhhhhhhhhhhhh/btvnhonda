@@ -1,36 +1,83 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# LOG Twin — Honda MC North Warehouse Digital Twin DSS
 
-## Getting Started
+Enterprise decision-support web application for peak-season **North warehouse stacking**, **N→S transfer**, and **outsourcing** optimization (Honda Vietnam motorcycle logistics).
 
-First, run the development server:
+## Sources (knowledge base)
+
+| Document | Role |
+|----------|------|
+| `Bài toán tối ưu log packing miền Bắc.docx` | Optimization logic, monthly tables, playbook |
+| `MC DOM_BUDGET 103Ki 2QFC_update Jun.xlsx` | Volumes, capacity, rental, transport rates |
+| `UNTITLED.pptx` | Executive process redesign & network capacity |
+
+## Stack
+
+- **Frontend:** Next.js 15 · React · TypeScript · Tailwind CSS · Recharts · Zustand  
+- **Engine:** Client-side Digital Twin + optional **FastAPI** (`backend/`)  
+- **Deploy:** Docker Compose  
+
+## Run (development)
 
 ```bash
+cd honda-log-digital-twin
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open http://localhost:3000
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### FastAPI engine (optional)
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```bash
+cd backend
+pip install -r requirements.txt
+uvicorn main:app --reload --port 8000
+```
 
-## Learn More
+- Health: `GET http://localhost:8000/health`  
+- Simulate: `POST http://localhost:8000/simulate`  
 
-To learn more about Next.js, take a look at the following resources:
+### Docker
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+```bash
+docker compose up --build
+```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+- Web: :3000 · API: :8000  
 
-## Deploy on Vercel
+## Modules
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+| Route | Purpose |
+|-------|---------|
+| `/` | Executive dashboard KPIs & charts |
+| `/digital-twin` | **Live parameter simulation** (core DSS) |
+| `/overview` | Problem statement & sources |
+| `/warehouse` | Fact Cap vs TTL Cap, stock |
+| `/vehicle` | Density & effective capacity |
+| `/import` | Import stacking relief |
+| `/domestic` | Transfer vs outsource break-even |
+| `/container` | N→S / S→N containers & case pool |
+| `/transport` | Freight & return simulation |
+| `/financial` | Cost bridge, ROI, NPV, payback |
+| `/scenarios` | Policy scenario comparison |
+| `/sensitivity` | Tornado ±20% |
+| `/monte-carlo` | Stochastic savings distribution |
+| `/risk` | Risk matrix & controls |
+| `/recommendations` | Live playbook |
+| `/report` | Consulting narrative (print/PDF) |
+| `/data` | Validation & inconsistencies |
+| `/admin` | Parameter JSON + audit |
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## Core formulas
+
+```
+Import relief = Import × (unpackM2 − stackM2) / unpackM2
+N→S containers = Transfer / (casesPerCont × mcPerCase)
+Return containers = Cases / 80
+Case pool = Cases / 30 × (lead + free)
+Transfer if Avoided North cost > Total transfer cost
+```
+
+## Author note
+
+Built as a Senior Logistics DSS: every slider recomputes cost, utilization, outsourcing and containers — not a static slide deck.
