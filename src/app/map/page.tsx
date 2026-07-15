@@ -36,9 +36,7 @@ export default function MapPage() {
   const [selected, setSelected] = useState<WarehouseNode | null>(null);
   const { result } = useTwinStore();
 
-  const regionBars = (
-    ["north", "central", "south"] as Region[]
-  ).map((r) => ({
+  const regionBars = (["north", "central", "south"] as const).map((r) => ({
     name: REGION_LABEL[r],
     "Cap 100%": REGION_CAPS[r].cap100,
     "Cap 80%": REGION_CAPS[r].cap80,

@@ -26,7 +26,7 @@ export function SliderField({
     <div className="space-y-2 rounded-xl border border-slate-200/80 bg-gradient-to-br from-slate-50 to-white p-3.5 shadow-sm">
       <div className="flex items-baseline justify-between gap-2">
         <label className="text-xs font-semibold text-slate-700">{label}</label>
-        <span className="rounded-lg bg-gradient-to-r from-blue-600 to-teal-600 px-2.5 py-0.5 text-xs font-bold tabular-nums text-white shadow-sm">
+        <span className="rounded bg-[#0a1628] px-2.5 py-0.5 text-xs font-bold tabular-nums text-white">
           {fmt(value, step < 1 ? 2 : 0)}
           {unit ? ` ${unit}` : ""}
         </span>
@@ -40,7 +40,7 @@ export function SliderField({
         onChange={(e) => onChange(Number(e.target.value))}
         className="w-full"
         style={{
-          background: `linear-gradient(90deg, #2563eb ${pct}%, #e2e8f0 ${pct}%)`,
+          background: `linear-gradient(90deg, #0a1628 ${pct}%, #e2e8f0 ${pct}%)`,
         }}
       />
       {hint && (

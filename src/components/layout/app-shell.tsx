@@ -4,24 +4,24 @@ import { usePathname } from "next/navigation";
 import { Sidebar } from "./sidebar";
 
 const TITLES: Record<string, string> = {
-  "/": "Bảng điều hành cấp cao",
-  "/digital-twin": "Digital Twin — Mô phỏng mạng lưới kho & vận tải",
-  "/map": "Bản đồ mạng lưới kho & vận tải Việt Nam",
-  "/overview": "Tổng quan dự án tối ưu stacking",
+  "/": "Tổng quan điều hành",
+  "/digital-twin": "Digital Twin — Mô phỏng mạng lưới",
+  "/map": "Bản đồ mạng lưới kho & vận tải",
+  "/overview": "Giới thiệu dự án",
   "/warehouse": "Năng lực kho miền Bắc",
-  "/vehicle": "Năng lực xe & mật độ lưu kho",
-  "/import": "Tối ưu xe nhập khẩu",
-  "/domestic": "Tối ưu xe nội địa & chuyển Bắc–Nam",
-  "/container": "Tối ưu container & case pool",
-  "/transport": "Mô phỏng vận tải N↔S",
-  "/financial": "Phân tích tài chính mạng lưới",
+  "/vehicle": "Năng lực xe & mật độ",
+  "/import": "Tối ưu nhập khẩu",
+  "/domestic": "Tối ưu nội địa",
+  "/container": "Tối ưu container",
+  "/transport": "Vận tải Bắc–Nam",
+  "/financial": "Phân tích tài chính",
   "/scenarios": "So sánh kịch bản",
   "/sensitivity": "Phân tích độ nhạy",
   "/monte-carlo": "Mô phỏng Monte Carlo",
-  "/risk": "Ma trận rủi ro",
-  "/recommendations": "Khuyến nghị điều hành",
-  "/report": "Báo cáo tư vấn chuyên sâu",
-  "/data": "Dữ liệu & đối chiếu nguồn",
+  "/risk": "Quản trị rủi ro",
+  "/recommendations": "Khuyến nghị",
+  "/report": "Báo cáo tư vấn",
+  "/data": "Dữ liệu & nguồn",
   "/admin": "Quản trị hệ thống",
 };
 
@@ -33,30 +33,29 @@ export function AppShell({ children }: { children: React.ReactNode }) {
     "Hệ thống hỗ trợ quyết định";
 
   return (
-    <div className="flex min-h-screen">
+    <div className="flex min-h-screen bg-[#eef1f6]">
       <Sidebar />
       <div className="flex min-w-0 flex-1 flex-col">
-        <header className="no-print sticky top-0 z-20 flex h-[60px] items-center justify-between border-b border-slate-200/70 bg-white/80 px-5 backdrop-blur-xl sm:px-8">
+        <header className="no-print sticky top-0 z-20 flex h-14 items-center justify-between border-b border-slate-200 bg-white px-6">
           <div className="min-w-0">
-            <div className="truncate text-[15px] font-bold text-slate-900">
+            <div className="truncate text-sm font-bold text-[#0a1628]">
               {title}
             </div>
             <div className="truncate text-[11px] text-slate-500">
-              Logistics Decision Support · Honda Việt Nam · Peak season North WH
+              Honda Việt Nam · Logistics Decision Support · 103Ki 2QFC
             </div>
           </div>
           <div className="flex shrink-0 items-center gap-2">
-            <div className="hidden items-center gap-2 rounded-full border border-slate-200 bg-white px-3 py-1.5 text-[11px] font-semibold text-slate-600 shadow-sm md:flex">
-              <span className="h-1.5 w-1.5 rounded-full bg-blue-500" />
-              103Ki 2QFC · Jun
+            <div className="hidden rounded border border-slate-200 bg-slate-50 px-3 py-1 text-[11px] font-semibold text-slate-600 md:block">
+              Phiên bản chính thức
             </div>
-            <div className="flex items-center gap-1.5 rounded-full border border-emerald-200 bg-emerald-50 px-3 py-1.5 text-[11px] font-bold text-emerald-700 shadow-sm">
-              <span className="live-dot h-1.5 w-1.5 rounded-full bg-emerald-500" />
-              LIVE
+            <div className="flex items-center gap-1.5 rounded border border-emerald-200 bg-emerald-50 px-3 py-1 text-[11px] font-bold text-emerald-800">
+              <span className="live-dot h-1.5 w-1.5 rounded-full bg-emerald-600" />
+              Online
             </div>
           </div>
         </header>
-        <main className="flex-1 overflow-y-auto p-4 sm:p-6 lg:p-8">{children}</main>
+        <main className="flex-1 overflow-y-auto p-5 sm:p-6 lg:p-8">{children}</main>
       </div>
     </div>
   );

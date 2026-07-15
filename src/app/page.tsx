@@ -44,7 +44,6 @@ import {
   Landmark,
   Sparkles,
   Gauge,
-  ArrowUpRight,
   Warehouse,
   MapPinned,
 } from "lucide-react";
@@ -117,47 +116,38 @@ export default function DashboardPage() {
       >
         <div className="relative z-10 grid gap-8 lg:grid-cols-12 lg:items-end">
           <div className="lg:col-span-7">
-            <div className="badge mb-4 border border-white/20 bg-white/10 text-sky-100 backdrop-blur">
+            <div className="badge mb-4 border border-[#c4a35a]/40 bg-[#c4a35a]/10 text-[#e8d5a3]">
               <Sparkles className="h-3.5 w-3.5" />
-              Enterprise Digital Twin · Honda MC Logistics
+              Hệ thống hỗ trợ quyết định · Honda MC Logistics
             </div>
-            <h1 className="max-w-2xl text-3xl font-black leading-[1.1] tracking-tight sm:text-4xl lg:text-[2.75rem]">
-              Biến nỗi đau{" "}
-              <span className="grad-text">vượt capacity miền Bắc</span>
-              {" "}thành quyết định có số
+            <h1 className="max-w-2xl text-3xl font-bold leading-[1.15] tracking-tight sm:text-4xl">
+              Tối ưu capacity miền Bắc —{" "}
+              <span className="text-[#c4a35a]">quyết định dựa trên số liệu</span>
             </h1>
-            <p className="mt-4 max-w-xl text-sm leading-relaxed text-slate-200 sm:text-[15px]">
+            <p className="mt-4 max-w-xl text-sm leading-relaxed text-slate-300 sm:text-[15px]">
               Stacking nhập khẩu · Transfer Bắc–Nam · Thuê ngoài có kiểm soát.
-              Mọi KPI bám Excel 103Ki 2QFC, Word tối ưu và PPT Yamagomori —
-              kéo tham số, thấy ngay ROI.
+              KPI bám Excel 103Ki 2QFC, Word tối ưu và PPT Yamagomori.
             </p>
             <div className="mt-6 flex flex-wrap gap-3">
               <Link
                 href="/digital-twin"
-                className="btn-shimmer inline-flex items-center gap-2 rounded-xl bg-white px-5 py-3 text-sm font-bold text-slate-900 shadow-lg transition hover:bg-sky-50"
+                className="btn-bank-gold inline-flex items-center gap-2 px-5 py-2.5 text-sm"
               >
                 Mở Digital Twin
                 <ArrowRight className="h-4 w-4" />
               </Link>
               <Link
-                href="/report"
-                className="inline-flex items-center gap-2 rounded-xl border border-white/25 bg-white/10 px-5 py-3 text-sm font-semibold text-white backdrop-blur transition hover:bg-white/15"
-              >
-                Báo cáo tư vấn
-              </Link>
-              <Link
                 href="/map"
-                className="inline-flex items-center gap-2 rounded-xl border border-white/25 bg-white/10 px-5 py-3 text-sm font-semibold text-white backdrop-blur transition hover:bg-white/15"
+                className="inline-flex items-center gap-2 rounded-md border border-white/25 bg-white/10 px-5 py-2.5 text-sm font-semibold text-white hover:bg-white/15"
               >
                 <MapPinned className="h-4 w-4" />
                 Bản đồ mạng lưới
               </Link>
               <Link
-                href="/scenarios"
-                className="inline-flex items-center gap-2 rounded-xl border border-white/15 px-4 py-3 text-sm font-medium text-slate-200 hover:bg-white/5"
+                href="/report"
+                className="inline-flex items-center gap-2 rounded-md border border-white/20 px-4 py-2.5 text-sm font-medium text-slate-200 hover:bg-white/5"
               >
-                So sánh kịch bản
-                <ArrowUpRight className="h-4 w-4" />
+                Báo cáo tư vấn
               </Link>
             </div>
           </div>
@@ -187,18 +177,18 @@ export default function DashboardPage() {
             ].map((x, i) => (
               <motion.div
                 key={x.l}
-                initial={{ opacity: 0, scale: 0.96 }}
-                animate={{ opacity: 1, scale: 1 }}
-                transition={{ delay: 0.15 + i * 0.06 }}
-                className="rounded-2xl border border-white/15 bg-white/10 p-4 backdrop-blur-md"
+                initial={{ opacity: 0, y: 8 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.12 + i * 0.05 }}
+                className="rounded-md border border-white/15 bg-white/8 p-4"
               >
-                <div className="text-[10px] font-bold uppercase tracking-wider text-slate-300">
+                <div className="text-[10px] font-bold uppercase tracking-wider text-[#c4a35a]">
                   {x.l}
                 </div>
-                <div className="mt-1 text-2xl font-black tabular-nums tracking-tight">
+                <div className="mt-1 text-2xl font-bold tabular-nums tracking-tight">
                   {x.v}
                 </div>
-                <div className="mt-1 text-[11px] text-slate-300">{x.s}</div>
+                <div className="mt-1 text-[11px] text-slate-400">{x.s}</div>
               </motion.div>
             ))}
           </div>
@@ -348,9 +338,9 @@ export default function DashboardPage() {
           </div>
           <Link
             href="/map"
-            className="inline-flex items-center gap-1.5 rounded-xl border border-blue-200 bg-blue-50 px-3 py-2 text-xs font-bold text-blue-800 hover:bg-blue-100"
+            className="btn-bank inline-flex items-center gap-1.5 px-3 py-2 text-xs"
           >
-            Full map studio
+            Mở bản đồ đầy đủ
             <ArrowRight className="h-3.5 w-3.5" />
           </Link>
         </CardHeader>

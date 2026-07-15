@@ -19,14 +19,14 @@ export function PageHero({
   if (variant === "light") {
     return (
       <motion.div
-        initial={{ opacity: 0, y: 10 }}
+        initial={{ opacity: 0, y: 8 }}
         animate={{ opacity: 1, y: 0 }}
-        className="rounded-3xl border border-slate-200 bg-gradient-to-br from-white via-slate-50 to-blue-50/40 p-6 shadow-sm sm:p-8"
+        className="rounded-lg border border-slate-200 bg-white p-6 shadow-sm"
       >
-        <div className="text-[11px] font-bold uppercase tracking-[0.16em] text-blue-600">
+        <div className="text-[11px] font-bold uppercase tracking-[0.14em] text-slate-500">
           {kicker}
         </div>
-        <h1 className="mt-1 text-2xl font-black tracking-tight text-slate-900 sm:text-3xl">
+        <h1 className="mt-1 text-2xl font-bold tracking-tight text-[#0a1628]">
           {title}
         </h1>
         {subtitle && (
@@ -41,19 +41,19 @@ export function PageHero({
 
   return (
     <motion.div
-      initial={{ opacity: 0, y: 12 }}
+      initial={{ opacity: 0, y: 8 }}
       animate={{ opacity: 1, y: 0 }}
-      className="hero-mesh relative overflow-hidden rounded-3xl p-6 text-white shadow-2xl shadow-slate-900/25 sm:p-8"
+      className="hero-mesh relative overflow-hidden rounded-lg p-6 text-white shadow-lg sm:p-7"
     >
       <div className="relative z-10">
-        <div className="text-[11px] font-bold uppercase tracking-[0.16em] text-sky-200/90">
+        <div className="text-[11px] font-bold uppercase tracking-[0.14em] text-[#c4a35a]">
           {kicker}
         </div>
-        <h1 className="mt-1 max-w-3xl text-2xl font-black tracking-tight sm:text-3xl">
+        <h1 className="mt-1 max-w-3xl text-2xl font-bold tracking-tight sm:text-[1.75rem]">
           {title}
         </h1>
         {subtitle && (
-          <p className="mt-2 max-w-3xl text-sm leading-relaxed text-slate-200">
+          <p className="mt-2 max-w-3xl text-sm leading-relaxed text-slate-300">
             {subtitle}
           </p>
         )}

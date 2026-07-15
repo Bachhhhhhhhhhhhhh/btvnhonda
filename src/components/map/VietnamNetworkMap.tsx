@@ -14,6 +14,7 @@ import {
 import { fmt } from "@/lib/utils";
 import { cn } from "@/lib/utils";
 import { useTwinStore } from "@/lib/store";
+import { Flag } from "lucide-react";
 
 type Props = {
   showLanes?: boolean;
@@ -23,32 +24,55 @@ type Props = {
   onSelect?: (wh: WarehouseNode | null) => void;
 };
 
-/** Stylized Vietnam land path — more recognizable S-shape */
-const VN_PATH = `
-  M 46 6
-  C 52 5, 58 6, 61 10
-  C 64 14, 62 17, 59 19
-  C 56 21, 57 24, 55 27
-  C 53 30, 55 33, 53 36
-  C 51 39, 54 42, 52 45
-  C 50 48, 54 50, 56 53
-  C 58 56, 57 59, 55 62
-  C 53 65, 55 68, 54 71
-  C 53 74, 56 77, 54 80
-  C 52 83, 50 86, 47 89
-  C 44 92, 40 94, 37 91
-  C 34 88, 37 85, 39 82
-  C 41 79, 39 76, 40 73
-  C 41 70, 39 67, 41 64
-  C 43 61, 41 58, 42 55
-  C 43 52, 41 49, 43 46
-  C 45 43, 43 40, 44 37
-  C 45 34, 43 31, 44 28
-  C 45 25, 43 22, 44 19
-  C 45 16, 43 13, 44 10
-  C 45 8, 44 7, 46 6
+/** Mainland Vietnam — recognizable S-curve */
+const VN_MAINLAND = `
+  M 28 5
+  C 34 3.5, 42 4, 46 8
+  C 49 11, 47 14, 45 16
+  C 43 18, 44 21, 42 24
+  C 40 27, 42 30, 40 33
+  C 38 36, 41 39, 39 42
+  C 37 45, 40 47, 42 50
+  C 44 53, 43 56, 41 59
+  C 39 62, 41 65, 40 68
+  C 39 71, 42 74, 40 77
+  C 38 80, 36 83, 33 86
+  C 30 89, 26 91, 23 88
+  C 20 85, 23 82, 25 79
+  C 27 76, 25 73, 26 70
+  C 27 67, 25 64, 27 61
+  C 29 58, 27 55, 28 52
+  C 29 49, 27 46, 29 43
+  C 31 40, 29 37, 30 34
+  C 31 31, 29 28, 30 25
+  C 31 22, 29 19, 30 16
+  C 31 13, 29 10, 30 8
+  C 31 6.5, 30 5.5, 28 5
   Z
 `;
+
+/** Hoàng Sa cluster — northeast of central coast */
+const HOANG_SA_ISLANDS: { x: number; y: number; r: number }[] = [
+  { x: 70, y: 34, r: 0.55 },
+  { x: 72.5, y: 35.5, r: 0.7 },
+  { x: 74, y: 33.5, r: 0.45 },
+  { x: 71.2, y: 37, r: 0.5 },
+  { x: 73.5, y: 37.5, r: 0.4 },
+  { x: 75.5, y: 35, r: 0.35 },
+  { x: 69.5, y: 36.2, r: 0.3 },
+];
+
+/** Trường Sa cluster — southeast */
+const TRUONG_SA_ISLANDS: { x: number; y: number; r: number }[] = [
+  { x: 66, y: 66, r: 0.45 },
+  { x: 68.5, y: 67.5, r: 0.6 },
+  { x: 70, y: 65.5, r: 0.4 },
+  { x: 67, y: 69.5, r: 0.5 },
+  { x: 69.5, y: 70, r: 0.35 },
+  { x: 71.5, y: 68, r: 0.3 },
+  { x: 65.5, y: 68.2, r: 0.28 },
+  { x: 72, y: 71, r: 0.32 },
+];
 
 export function VietnamNetworkMap({
   showLanes = true,
@@ -66,18 +90,27 @@ export function VietnamNetworkMap({
   const nsCont = useTwinStore((s) => s.result.annual.nsContainersBase);
 
   useEffect(() => {
-    const t = setInterval(() => setTick((x) => (x + 1) % 100), 80);
+    const t = setInterval(() => setTick((x) => (x + 1) % 100), 90);
     return () => clearInterval(t);
   }, []);
 
   const activeFilter = filterRegion !== "all" ? filterRegion : localFilter;
 
-  const nodes = useMemo(
-    () =>
+  const nodes = useMemo(() => {
+    const base =
       activeFilter === "all"
         ? WAREHOUSES
-        : WAREHOUSES.filter((w) => w.region === activeFilter),
-    [activeFilter]
+        : activeFilter === "east_sea"
+          ? WAREHOUSES.filter((w) => w.region === "east_sea")
+          : WAREHOUSES.filter(
+              (w) => w.region === activeFilter || w.region === "east_sea"
+            );
+    return base;
+  }, [activeFilter]);
+
+  const warehousesOnly = useMemo(
+    () => nodes.filter((w) => w.type !== "sovereignty"),
+    [nodes]
   );
 
   const byId = useMemo(() => {
@@ -91,30 +124,35 @@ export function VietnamNetworkMap({
     onSelect?.(w);
   };
 
-  const maxCap = Math.max(...WAREHOUSES.map((w) => w.cap100));
+  const maxCap = Math.max(
+    ...WAREHOUSES.filter((w) => w.type !== "sovereignty").map((w) => w.cap100),
+    1
+  );
 
   return (
     <div className={cn("relative", className)}>
-      <div className="mb-3 flex flex-wrap items-center gap-2">
+      {/* Bank-style toolbar */}
+      <div className="mb-3 flex flex-wrap items-center gap-2 border-b border-slate-200 pb-3">
         <button
           type="button"
           onClick={() => setLaneOn((v) => !v)}
           className={cn(
-            "rounded-xl border px-3 py-1.5 text-xs font-bold shadow-sm transition",
+            "rounded-md border px-3 py-1.5 text-xs font-bold transition",
             laneOn
-              ? "border-blue-300 bg-gradient-to-r from-blue-600 to-cyan-600 text-white shadow-blue-500/20"
-              : "border-slate-200 bg-white text-slate-600 hover:bg-slate-50"
+              ? "border-[#0a1628] bg-[#0a1628] text-white"
+              : "border-slate-300 bg-white text-slate-700 hover:bg-slate-50"
           )}
         >
-          {laneOn ? "● Live routes N→S" : "○ Bật tuyến N→S"}
+          {laneOn ? "Tuyến N→S: Bật" : "Tuyến N→S: Tắt"}
         </button>
-        <div className="flex flex-wrap gap-1.5">
+        <div className="flex flex-wrap gap-1">
           {(
             [
               ["all", "Toàn quốc"],
               ["north", "Bắc"],
               ["central", "Trung"],
               ["south", "Nam"],
+              ["east_sea", "Hoàng Sa · Trường Sa"],
             ] as const
           ).map(([k, lab]) => (
             <button
@@ -122,356 +160,477 @@ export function VietnamNetworkMap({
               key={k}
               onClick={() => setLocalFilter(k)}
               className={cn(
-                "rounded-full px-3 py-1 text-[10px] font-bold transition",
+                "rounded-md px-2.5 py-1 text-[10px] font-bold transition",
                 activeFilter === k
-                  ? "bg-slate-900 text-white shadow-md"
-                  : "bg-white text-slate-600 ring-1 ring-slate-200 hover:bg-slate-50"
+                  ? "bg-[#0a1628] text-white"
+                  : "bg-slate-100 text-slate-600 hover:bg-slate-200"
               )}
             >
               {lab}
-              {k !== "all" && (
-                <span className="ml-1 opacity-70">
-                  {REGION_CAPS[k as Region].ratio}%
-                </span>
-              )}
             </button>
           ))}
         </div>
-        <div className="ml-auto flex flex-wrap items-center gap-3 text-[10px] font-bold text-slate-500">
-          <span className="rounded-full bg-blue-50 px-2 py-1 text-blue-700">
-            Twin transfer: {fmt(transferVol)} xe
+        <div className="ml-auto flex flex-wrap items-center gap-2 text-[10px] font-semibold text-slate-600">
+          <span className="rounded border border-slate-200 bg-white px-2 py-1">
+            Transfer Twin: {fmt(transferVol)} xe
           </span>
-          <span className="rounded-full bg-teal-50 px-2 py-1 text-teal-700">
+          <span className="rounded border border-slate-200 bg-white px-2 py-1">
             {fmt(nsCont)} cont/năm
           </span>
           <span className="hidden items-center gap-1 sm:flex">
-            <span className="h-2.5 w-2.5 rounded-full bg-blue-600 ring-2 ring-blue-100" />
-            Owned
+            <span className="h-2.5 w-2.5 rounded-full bg-[#0c4a6e]" /> Owned
           </span>
           <span className="hidden items-center gap-1 sm:flex">
-            <span className="h-2.5 w-2.5 rounded-sm bg-amber-500 ring-2 ring-amber-100" />
-            Rented
+            <span className="h-2.5 w-2.5 rounded-sm bg-[#b45309]" /> Rented
+          </span>
+          <span className="hidden items-center gap-1 sm:flex">
+            <span className="h-2.5 w-2.5 rounded-full bg-[#c4a35a]" /> HS · TS
           </span>
         </div>
       </div>
 
+      {/* 3D floating stage */}
       <div
         className={cn(
-          "relative overflow-hidden rounded-3xl border border-slate-200/80 shadow-xl",
-          compact ? "h-[380px]" : "h-[560px] sm:h-[640px]"
+          "map-stage relative",
+          compact ? "h-[400px]" : "h-[580px] sm:h-[660px]"
         )}
-        style={{
-          background:
-            "radial-gradient(ellipse 80% 60% at 70% 40%, #e0f2fe 0%, transparent 55%), radial-gradient(ellipse 60% 50% at 30% 80%, #ccfbf1 0%, transparent 50%), linear-gradient(165deg, #0b1f3a 0%, #0f2942 35%, #134e4a 100%)",
-        }}
       >
-        {/* stars / particles */}
-        <div className="pointer-events-none absolute inset-0 opacity-40">
-          {Array.from({ length: 28 }).map((_, i) => (
-            <span
-              key={i}
-              className="absolute h-0.5 w-0.5 rounded-full bg-white"
-              style={{
-                left: `${(i * 37) % 100}%`,
-                top: `${(i * 53) % 100}%`,
-                opacity: 0.2 + (i % 5) * 0.12,
-              }}
-            />
-          ))}
-        </div>
-
-        <svg
-          viewBox="0 0 100 100"
-          className="relative z-[1] h-full w-full"
-          preserveAspectRatio="xMidYMid meet"
+        <div className="map-base-shadow" />
+        <div
+          className={cn(
+            "map-float relative z-[1] h-full w-full overflow-hidden rounded-2xl border border-[#1a3355]"
+          )}
+          style={{
+            background:
+              "linear-gradient(160deg, #0a1628 0%, #0f2847 40%, #0c3d4a 100%)",
+          }}
         >
-          <defs>
-            <linearGradient id="landPremium" x1="0" y1="0" x2="1" y2="1">
-              <stop offset="0%" stopColor="#bae6fd" />
-              <stop offset="45%" stopColor="#a7f3d0" />
-              <stop offset="100%" stopColor="#99f6e4" />
-            </linearGradient>
-            <linearGradient id="seaGrad" x1="0" y1="0" x2="1" y2="0">
-              <stop offset="0%" stopColor="#38bdf8" stopOpacity="0.9" />
-              <stop offset="100%" stopColor="#22d3ee" stopOpacity="0.4" />
-            </linearGradient>
-            <filter id="softGlow" x="-80%" y="-80%" width="260%" height="260%">
-              <feGaussianBlur stdDeviation="0.8" result="b" />
-              <feMerge>
-                <feMergeNode in="b" />
-                <feMergeNode in="SourceGraphic" />
-              </feMerge>
-            </filter>
-            <filter id="landShadow">
-              <feDropShadow dx="0" dy="0.4" stdDeviation="0.6" floodOpacity="0.35" />
-            </filter>
-          </defs>
-
-          {/* Land */}
-          <path
-            d={VN_PATH}
-            fill="url(#landPremium)"
-            stroke="#e0f2fe"
-            strokeWidth="0.5"
-            filter="url(#landShadow)"
+          {/* subtle grid like bank dashboard */}
+          <div
+            className="pointer-events-none absolute inset-0 opacity-[0.07]"
+            style={{
+              backgroundImage:
+                "linear-gradient(#fff 1px, transparent 1px), linear-gradient(90deg, #fff 1px, transparent 1px)",
+              backgroundSize: "32px 32px",
+            }}
           />
 
-          {/* Inner land highlight */}
-          <path
-            d={VN_PATH}
-            fill="none"
-            stroke="#ffffff"
-            strokeWidth="0.15"
-            opacity="0.5"
-            transform="translate(0.3 0.2) scale(0.985)"
-            transform-origin="50 50"
-          />
+          <svg
+            viewBox="0 0 100 100"
+            className="relative z-[1] h-full w-full"
+            preserveAspectRatio="xMidYMid meet"
+          >
+            <defs>
+              <linearGradient id="landBank" x1="0" y1="0" x2="0.3" y2="1">
+                <stop offset="0%" stopColor="#d4e4d0" />
+                <stop offset="50%" stopColor="#b8d4b0" />
+                <stop offset="100%" stopColor="#9fc49a" />
+              </linearGradient>
+              <linearGradient id="islandGold" x1="0" y1="0" x2="1" y2="1">
+                <stop offset="0%" stopColor="#e8d5a3" />
+                <stop offset="100%" stopColor="#c4a35a" />
+              </linearGradient>
+              <filter id="land3d">
+                <feDropShadow
+                  dx="0.3"
+                  dy="0.8"
+                  stdDeviation="0.5"
+                  floodColor="#000"
+                  floodOpacity="0.4"
+                />
+              </filter>
+              <filter id="nodeGlow">
+                <feDropShadow
+                  dx="0"
+                  dy="0.3"
+                  stdDeviation="0.35"
+                  floodColor="#000"
+                  floodOpacity="0.35"
+                />
+              </filter>
+              <linearGradient id="routeSea" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stopColor="#7dd3fc" stopOpacity="0.9" />
+                <stop offset="100%" stopColor="#38bdf8" stopOpacity="0.5" />
+              </linearGradient>
+            </defs>
 
-          {/* Region labels on dark sea */}
-          <text x="70" y="18" fontSize="2.6" fill="#7dd3fc" fontWeight="800" letterSpacing="0.05">
-            BẮC · 38%
-          </text>
-          <text x="70" y="22.5" fontSize="1.9" fill="#bae6fd" fontWeight="600">
-            {fmt(REGION_CAPS.north.cap100)} xe
-          </text>
-          <text x="70" y="48" fontSize="2.6" fill="#fcd34d" fontWeight="800">
-            TRUNG · 22%
-          </text>
-          <text x="70" y="52.5" fontSize="1.9" fill="#fde68a" fontWeight="600">
-            {fmt(REGION_CAPS.central.cap100)} xe
-          </text>
-          <text x="70" y="82" fontSize="2.6" fill="#6ee7b7" fontWeight="800">
-            NAM · 40%
-          </text>
-          <text x="70" y="86.5" fontSize="1.9" fill="#a7f3d0" fontWeight="600">
-            {fmt(REGION_CAPS.south.cap100)} xe
-          </text>
+            {/* Sea label */}
+            <text
+              x="82"
+              y="52"
+              fontSize="2.2"
+              fill="#64748b"
+              fontWeight="600"
+              letterSpacing="0.15"
+              opacity="0.7"
+            >
+              BIỂN ĐÔNG
+            </text>
 
-          {/* Lanes + animated flow dots */}
-          {laneOn &&
-            LANES.map((lane, li) => {
-              const from = byId.get(lane.fromId);
-              const to = byId.get(lane.toId);
-              if (!from || !to) return null;
-              if (
-                activeFilter !== "all" &&
-                from.region !== activeFilter &&
-                to.region !== activeFilter
-              )
-                return null;
-              const cx = (from.x + to.x) / 2 + 10;
-              const cy = (from.y + to.y) / 2;
-              const pathId = `lane-${lane.id}`;
-              const t = ((tick + li * 17) % 100) / 100;
-              // quadratic bezier point
-              const px =
-                (1 - t) * (1 - t) * from.x +
-                2 * (1 - t) * t * cx +
-                t * t * to.x;
-              const py =
-                (1 - t) * (1 - t) * from.y +
-                2 * (1 - t) * t * cy +
-                t * t * to.y;
-              const isSea = lane.mode === "sea";
+            {/* Mainland */}
+            <path
+              d={VN_MAINLAND}
+              fill="url(#landBank)"
+              stroke="#e8eef4"
+              strokeWidth="0.45"
+              filter="url(#land3d)"
+            />
+
+            {/* Region captions */}
+            <text x="12" y="18" fontSize="2.3" fill="#94a3b8" fontWeight="700">
+              BẮC
+            </text>
+            <text x="12" y="21.5" fontSize="1.7" fill="#64748b">
+              {fmt(REGION_CAPS.north.cap100)} xe
+            </text>
+            <text x="12" y="42" fontSize="2.3" fill="#94a3b8" fontWeight="700">
+              TRUNG
+            </text>
+            <text x="12" y="45.5" fontSize="1.7" fill="#64748b">
+              {fmt(REGION_CAPS.central.cap100)} xe
+            </text>
+            <text x="12" y="78" fontSize="2.3" fill="#94a3b8" fontWeight="700">
+              NAM
+            </text>
+            <text x="12" y="81.5" fontSize="1.7" fill="#64748b">
+              {fmt(REGION_CAPS.south.cap100)} xe
+            </text>
+
+            {/* ── Hoàng Sa ── */}
+            <g>
+              {/* dashed sovereignty box */}
+              <rect
+                x="67"
+                y="31"
+                width="12"
+                height="9"
+                rx="0.8"
+                fill="rgba(196,163,90,0.08)"
+                stroke="#c4a35a"
+                strokeWidth="0.25"
+                strokeDasharray="0.6 0.4"
+              />
+              {HOANG_SA_ISLANDS.map((p, i) => (
+                <circle
+                  key={`hs-${i}`}
+                  cx={p.x}
+                  cy={p.y}
+                  r={p.r}
+                  fill="url(#islandGold)"
+                  stroke="#fff"
+                  strokeWidth="0.15"
+                  filter="url(#nodeGlow)"
+                />
+              ))}
+              <text
+                x="73"
+                y="30"
+                textAnchor="middle"
+                fontSize="2"
+                fontWeight="800"
+                fill="#e8d5a3"
+              >
+                HOÀNG SA
+              </text>
+              <text
+                x="73"
+                y="41.5"
+                textAnchor="middle"
+                fontSize="1.35"
+                fill="#94a3b8"
+              >
+                Việt Nam
+              </text>
+            </g>
+
+            {/* ── Trường Sa ── */}
+            <g>
+              <rect
+                x="63"
+                y="63"
+                width="12.5"
+                height="10.5"
+                rx="0.8"
+                fill="rgba(196,163,90,0.08)"
+                stroke="#c4a35a"
+                strokeWidth="0.25"
+                strokeDasharray="0.6 0.4"
+              />
+              {TRUONG_SA_ISLANDS.map((p, i) => (
+                <circle
+                  key={`ts-${i}`}
+                  cx={p.x}
+                  cy={p.y}
+                  r={p.r}
+                  fill="url(#islandGold)"
+                  stroke="#fff"
+                  strokeWidth="0.15"
+                  filter="url(#nodeGlow)"
+                />
+              ))}
+              <text
+                x="69.5"
+                y="62"
+                textAnchor="middle"
+                fontSize="2"
+                fontWeight="800"
+                fill="#e8d5a3"
+              >
+                TRƯỜNG SA
+              </text>
+              <text
+                x="69.5"
+                y="75"
+                textAnchor="middle"
+                fontSize="1.35"
+                fill="#94a3b8"
+              >
+                Việt Nam
+              </text>
+            </g>
+
+            {/* Routes */}
+            {laneOn &&
+              LANES.map((lane, li) => {
+                const from = byId.get(lane.fromId);
+                const to = byId.get(lane.toId);
+                if (!from || !to) return null;
+                if (
+                  activeFilter !== "all" &&
+                  activeFilter !== "east_sea" &&
+                  from.region !== activeFilter &&
+                  to.region !== activeFilter
+                )
+                  return null;
+                const cx = (from.x + to.x) / 2 + 8;
+                const cy = (from.y + to.y) / 2;
+                const t = ((tick + li * 19) % 100) / 100;
+                const px =
+                  (1 - t) * (1 - t) * from.x +
+                  2 * (1 - t) * t * cx +
+                  t * t * to.x;
+                const py =
+                  (1 - t) * (1 - t) * from.y +
+                  2 * (1 - t) * t * cy +
+                  t * t * to.y;
+                const isSea = lane.mode === "sea";
+                return (
+                  <g key={lane.id}>
+                    <path
+                      d={`M ${from.x} ${from.y} Q ${cx} ${cy} ${to.x} ${to.y}`}
+                      fill="none"
+                      stroke={isSea ? "url(#routeSea)" : "#c4a35a"}
+                      strokeWidth={isSea ? 0.4 : 0.35}
+                      strokeDasharray={isSea ? "1.2 0.7" : "0.55 0.55"}
+                      opacity="0.75"
+                    />
+                    <circle
+                      cx={px}
+                      cy={py}
+                      r="0.65"
+                      fill={isSea ? "#e0f2fe" : "#fef3c7"}
+                    />
+                  </g>
+                );
+              })}
+
+            {/* Warehouse nodes */}
+            {warehousesOnly.map((w) => {
+              const r = 1.05 + (w.cap100 / maxCap) * 2.1;
+              const isH = hover === w.id || selected?.id === w.id;
+              const owned = w.type === "owned";
               return (
-                <g key={lane.id}>
-                  <path
-                    id={pathId}
-                    d={`M ${from.x} ${from.y} Q ${cx} ${cy} ${to.x} ${to.y}`}
-                    fill="none"
-                    stroke={isSea ? "url(#seaGrad)" : "#fbbf24"}
-                    strokeWidth={isSea ? 0.55 : 0.45}
-                    strokeDasharray={isSea ? "1.4 0.9" : "0.7 0.7"}
-                    opacity="0.85"
-                  />
-                  {/* flowing cargo dot */}
-                  <circle
-                    cx={px}
-                    cy={py}
-                    r="0.75"
-                    fill={isSea ? "#e0f2fe" : "#fef3c7"}
-                    filter="url(#softGlow)"
-                  />
-                  <circle
-                    cx={px}
-                    cy={py}
-                    r="1.4"
-                    fill={isSea ? "#38bdf8" : "#f59e0b"}
-                    opacity="0.25"
-                  />
+                <g
+                  key={w.id}
+                  className="cursor-pointer"
+                  onMouseEnter={() => setHover(w.id)}
+                  onMouseLeave={() => setHover(null)}
+                  onClick={() => select(selected?.id === w.id ? null : w)}
+                  filter={isH ? "url(#nodeGlow)" : undefined}
+                >
+                  {selected?.id === w.id && (
+                    <circle
+                      cx={w.x}
+                      cy={w.y}
+                      r={r + 1.1}
+                      fill="none"
+                      stroke="#c4a35a"
+                      strokeWidth="0.3"
+                    >
+                      <animate
+                        attributeName="r"
+                        values={`${r + 0.5};${r + 2};${r + 0.5}`}
+                        dur="2s"
+                        repeatCount="indefinite"
+                      />
+                      <animate
+                        attributeName="opacity"
+                        values="0.8;0;0.8"
+                        dur="2s"
+                        repeatCount="indefinite"
+                      />
+                    </circle>
+                  )}
+                  {owned ? (
+                    <circle
+                      cx={w.x}
+                      cy={w.y}
+                      r={r}
+                      fill={REGION_COLOR[w.region]}
+                      stroke="#fff"
+                      strokeWidth="0.4"
+                    />
+                  ) : (
+                    <rect
+                      x={w.x - r}
+                      y={w.y - r}
+                      width={r * 2}
+                      height={r * 2}
+                      rx={0.35}
+                      fill={REGION_COLOR[w.region]}
+                      stroke="#fff"
+                      strokeWidth="0.35"
+                    />
+                  )}
+                  <text
+                    x={w.x}
+                    y={w.y - r - 1}
+                    textAnchor="middle"
+                    fontSize="1.75"
+                    fontWeight="700"
+                    fill="#0a1628"
+                    stroke="#fff"
+                    strokeWidth="0.3"
+                    paintOrder="stroke"
+                  >
+                    {w.short}
+                  </text>
                 </g>
               );
             })}
 
-          {/* Warehouse nodes */}
-          {nodes.map((w) => {
-            const r = 1.15 + (w.cap100 / maxCap) * 2.4;
-            const isH = hover === w.id || selected?.id === w.id;
-            const owned = w.type === "owned";
-            return (
-              <g
-                key={w.id}
-                className="cursor-pointer"
-                onMouseEnter={() => setHover(w.id)}
-                onMouseLeave={() => setHover(null)}
-                onClick={() => select(selected?.id === w.id ? null : w)}
-                filter={isH ? "url(#softGlow)" : undefined}
-              >
-                {selected?.id === w.id && (
-                  <circle
-                    cx={w.x}
-                    cy={w.y}
-                    r={r + 1.2}
-                    fill="none"
-                    stroke="#fff"
-                    strokeWidth="0.35"
-                    opacity="0.7"
-                  >
-                    <animate
-                      attributeName="r"
-                      values={`${r + 0.6};${r + 2.4};${r + 0.6}`}
-                      dur="2s"
-                      repeatCount="indefinite"
-                    />
-                    <animate
-                      attributeName="opacity"
-                      values="0.7;0;0.7"
-                      dur="2s"
-                      repeatCount="indefinite"
-                    />
-                  </circle>
-                )}
-                {owned ? (
-                  <circle
-                    cx={w.x}
-                    cy={w.y}
-                    r={r}
-                    fill={REGION_COLOR[w.region]}
-                    stroke="#fff"
-                    strokeWidth="0.5"
-                  />
-                ) : (
-                  <rect
-                    x={w.x - r}
-                    y={w.y - r}
-                    width={r * 2}
-                    height={r * 2}
-                    rx={0.45}
-                    fill={REGION_COLOR[w.region]}
-                    fillOpacity={0.92}
-                    stroke="#fff"
-                    strokeWidth="0.45"
-                  />
-                )}
-                {/* inner highlight */}
-                <circle
-                  cx={w.x - r * 0.25}
-                  cy={w.y - r * 0.25}
-                  r={r * 0.28}
-                  fill="#fff"
-                  opacity="0.35"
-                />
-                <text
-                  x={w.x}
-                  y={w.y - r - 1.2}
-                  textAnchor="middle"
-                  fontSize="1.9"
-                  fontWeight="800"
-                  fill="#0f172a"
-                  stroke="#fff"
-                  strokeWidth="0.25"
-                  paintOrder="stroke"
+            {/* Clickable sovereignty markers */}
+            {WAREHOUSES.filter((w) => w.type === "sovereignty").map((w) => {
+              const show =
+                activeFilter === "all" ||
+                activeFilter === "east_sea" ||
+                activeFilter === "central" ||
+                activeFilter === "south";
+              if (!show) return null;
+              return (
+                <g
+                  key={w.id}
+                  className="cursor-pointer"
+                  onClick={() => select(selected?.id === w.id ? null : w)}
+                  onMouseEnter={() => setHover(w.id)}
+                  onMouseLeave={() => setHover(null)}
                 >
-                  {w.short}
-                </text>
-              </g>
-            );
-          })}
-        </svg>
+                  <circle
+                    cx={w.x}
+                    cy={w.y}
+                    r="1.8"
+                    fill="none"
+                    stroke="#c4a35a"
+                    strokeWidth="0.25"
+                    opacity="0.01"
+                  />
+                </g>
+              );
+            })}
+          </svg>
 
-        {/* Top legend bar */}
-        <div className="pointer-events-none absolute left-3 top-3 right-3 flex flex-wrap gap-2">
-          <div className="rounded-xl border border-white/20 bg-slate-900/50 px-3 py-1.5 text-[10px] font-bold text-white backdrop-blur">
-            Nationwide {fmt(REGION_CAPS.nationwide.cap100)} xe · Owned{" "}
-            {REGION_CAPS.hvnOwned.ratio}% · Rented {REGION_CAPS.outside.ratio}%
+          {/* Top bar — bank style */}
+          <div className="pointer-events-none absolute left-0 right-0 top-0 flex items-center justify-between border-b border-white/10 bg-[#0a1628]/70 px-4 py-2 backdrop-blur">
+            <div className="flex items-center gap-2 text-[11px] font-bold text-white">
+              <Flag className="h-3.5 w-3.5 text-[#c4a35a]" />
+              Cộng hòa XHCN Việt Nam · Bản đồ logistics nội địa
+            </div>
+            <div className="text-[10px] font-semibold text-slate-300">
+              Nationwide {fmt(REGION_CAPS.nationwide.cap100)} xe · Owned{" "}
+              {REGION_CAPS.hvnOwned.ratio}% · Rented {REGION_CAPS.outside.ratio}%
+            </div>
           </div>
-        </div>
 
-        <AnimatePresence>
-          {(hover || selected) && (
-            <motion.div
-              key={(selected || nodes.find((n) => n.id === hover))?.id}
-              initial={{ opacity: 0, y: 12, scale: 0.98 }}
-              animate={{ opacity: 1, y: 0, scale: 1 }}
-              exit={{ opacity: 0, y: 8 }}
-              className="absolute bottom-3 left-3 right-3 z-10 sm:left-auto sm:right-3 sm:w-80"
-            >
-              {(() => {
-                const w =
-                  selected ||
-                  WAREHOUSES.find((x) => x.id === hover) ||
-                  null;
-                if (!w) return null;
-                return (
-                  <div className="overflow-hidden rounded-2xl border border-white/30 bg-white/95 shadow-2xl backdrop-blur-xl">
-                    <div
-                      className="h-1.5 w-full"
-                      style={{ background: REGION_COLOR[w.region] }}
-                    />
-                    <div className="p-4">
-                      <div className="flex items-start justify-between gap-2">
-                        <div>
-                          <div className="text-[10px] font-bold uppercase tracking-wider text-slate-400">
-                            {REGION_LABEL[w.region]} ·{" "}
-                            {w.type === "owned" ? "HVN owned" : "Rented WH"}
-                          </div>
-                          <div className="text-lg font-black text-slate-900">
-                            {w.name}
-                          </div>
-                          <div className="text-xs font-medium text-slate-500">
-                            {w.city}
-                          </div>
+          {/* Detail card */}
+          <AnimatePresence>
+            {(hover || selected) && (
+              <motion.div
+                key={(selected || nodes.find((n) => n.id === hover))?.id}
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: 6 }}
+                className="absolute bottom-3 left-3 right-3 z-10 sm:left-auto sm:right-3 sm:w-80"
+              >
+                {(() => {
+                  const w =
+                    selected ||
+                    WAREHOUSES.find((x) => x.id === hover) ||
+                    null;
+                  if (!w) return null;
+                  const isSov = w.type === "sovereignty";
+                  return (
+                    <div className="overflow-hidden rounded-lg border border-slate-200 bg-white shadow-2xl">
+                      <div
+                        className="h-1 w-full"
+                        style={{
+                          background: isSov
+                            ? "#c4a35a"
+                            : REGION_COLOR[w.region],
+                        }}
+                      />
+                      <div className="p-4">
+                        <div className="text-[10px] font-bold uppercase tracking-wider text-slate-400">
+                          {REGION_LABEL[w.region]}
+                          {!isSov &&
+                            ` · ${w.type === "owned" ? "HVN owned" : "Rented"}`}
+                          {isSov && " · Lãnh thổ Việt Nam"}
                         </div>
-                        <span
-                          className="rounded-xl px-2.5 py-1 text-xs font-black text-white shadow"
-                          style={{ background: REGION_COLOR[w.region] }}
-                        >
-                          {w.ratioPct}%
-                        </span>
-                      </div>
-                      <div className="mt-3 grid grid-cols-2 gap-2">
-                        <div className="rounded-xl bg-gradient-to-br from-slate-50 to-slate-100 px-3 py-2">
-                          <div className="text-[9px] font-bold uppercase text-slate-400">
-                            Cap 100%
-                          </div>
-                          <div className="text-base font-black tabular-nums text-slate-900">
-                            {fmt(w.cap100)}
-                          </div>
+                        <div className="text-base font-bold text-[#0a1628]">
+                          {w.name}
                         </div>
-                        <div className="rounded-xl bg-gradient-to-br from-slate-50 to-slate-100 px-3 py-2">
-                          <div className="text-[9px] font-bold uppercase text-slate-400">
-                            Cap 80%
+                        <div className="text-xs text-slate-500">{w.city}</div>
+                        {!isSov ? (
+                          <div className="mt-3 grid grid-cols-2 gap-2">
+                            <div className="rounded border border-slate-100 bg-slate-50 px-2.5 py-2">
+                              <div className="text-[9px] font-bold uppercase text-slate-400">
+                                Cap 100%
+                              </div>
+                              <div className="text-sm font-bold tabular-nums text-[#0a1628]">
+                                {fmt(w.cap100)} xe
+                              </div>
+                            </div>
+                            <div className="rounded border border-slate-100 bg-slate-50 px-2.5 py-2">
+                              <div className="text-[9px] font-bold uppercase text-slate-400">
+                                Cap 80%
+                              </div>
+                              <div className="text-sm font-bold tabular-nums text-[#0a1628]">
+                                {fmt(w.cap80)} xe
+                              </div>
+                            </div>
                           </div>
-                          <div className="text-base font-black tabular-nums text-slate-900">
-                            {fmt(w.cap80)}
+                        ) : (
+                          <div className="mt-3 rounded border border-[#e8d5a3] bg-[#faf6eb] px-3 py-2 text-xs font-semibold text-[#7a6230]">
+                            Quần đảo thuộc chủ quyền Việt Nam — hiển thị trên
+                            bản đồ logistics quốc gia
                           </div>
-                        </div>
-                      </div>
-                      {w.note && (
-                        <p className="mt-2 text-[11px] leading-snug text-slate-500">
-                          {w.note}
+                        )}
+                        {w.note && !isSov && (
+                          <p className="mt-2 text-[11px] text-slate-500">
+                            {w.note}
+                          </p>
+                        )}
+                        <p className="mt-2 text-[10px] text-slate-400">
+                          Nguồn: PPT BACKGROUND MC WH · Excel Rental WH
                         </p>
-                      )}
-                      <p className="mt-2 text-[10px] text-slate-400">
-                        PPT BACKGROUND MC WH · Excel Rental WH
-                      </p>
+                      </div>
                     </div>
-                  </div>
-                );
-              })()}
-            </motion.div>
-          )}
-        </AnimatePresence>
+                  );
+                })()}
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </div>
       </div>
     </div>
   );

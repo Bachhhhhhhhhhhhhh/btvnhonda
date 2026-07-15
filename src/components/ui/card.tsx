@@ -10,7 +10,7 @@ export function Card({
   hover?: boolean;
 }) {
   return (
-    <div className={cn("glass rounded-2xl", hover && "glass-hover", className)}>
+    <div className={cn("glass rounded-lg", hover && "glass-hover", className)}>
       {children}
     </div>
   );
@@ -24,7 +24,7 @@ export function CardHeader({
   children: React.ReactNode;
 }) {
   return (
-    <div className={cn("border-b border-slate-100 px-5 py-4 sm:px-6", className)}>
+    <div className={cn("border-b border-slate-100 px-5 py-3.5", className)}>
       {children}
     </div>
   );
@@ -40,7 +40,7 @@ export function CardTitle({
   return (
     <h3
       className={cn(
-        "text-[15px] font-bold tracking-tight text-slate-900",
+        "text-[14px] font-bold tracking-tight text-[#0a1628]",
         className
       )}
     >
@@ -57,7 +57,7 @@ export function CardDescription({
   children: React.ReactNode;
 }) {
   return (
-    <p className={cn("mt-1 text-xs leading-relaxed text-slate-500", className)}>
+    <p className={cn("mt-0.5 text-xs leading-relaxed text-slate-500", className)}>
       {children}
     </p>
   );
@@ -70,5 +70,5 @@ export function CardContent({
   className?: string;
   children: React.ReactNode;
 }) {
-  return <div className={cn("px-5 py-4 sm:px-6 sm:py-5", className)}>{children}</div>;
+  return <div className={cn("px-5 py-4", className)}>{children}</div>;
 }

@@ -1,10 +1,10 @@
 /**
- * Mạng lưới kho MC — nguồn PPT UNTITLED (BACKGROUND MC WH, slide 17/30)
- * + Excel Rental WH (capacity Bắc chi tiết)
+ * Mạng lưới kho MC — PPT BACKGROUND MC WH + Excel Rental WH
+ * Bản đồ: đất liền Việt Nam + Hoàng Sa + Trường Sa
  */
 
-export type WhType = "owned" | "rented";
-export type Region = "north" | "central" | "south";
+export type WhType = "owned" | "rented" | "sovereignty";
+export type Region = "north" | "central" | "south" | "east_sea";
 
 export type WarehouseNode = {
   id: string;
@@ -12,10 +12,8 @@ export type WarehouseNode = {
   short: string;
   region: Region;
   type: WhType;
-  /** % of SVG viewBox 0–100 */
   x: number;
   y: number;
-  /** Capacity 100% (xe) from PPT where available */
   cap100: number;
   cap80: number;
   ratioPct: number;
@@ -24,20 +22,19 @@ export type WarehouseNode = {
 };
 
 export const WAREHOUSES: WarehouseNode[] = [
-  // NORTH — clustered around Vĩnh Phúc / Hà Nội area
   {
     id: "log1",
     name: "HVN LOG 1",
     short: "LOG1",
     region: "north",
     type: "owned",
-    x: 48,
-    y: 18,
+    x: 36,
+    y: 16,
     cap100: 4532,
     cap80: 3612,
     ratioPct: 7,
     city: "Vĩnh Phúc",
-    note: "PTF cluster · owned",
+    note: "PTF cluster · HVN owned",
   },
   {
     id: "log2",
@@ -45,8 +42,8 @@ export const WAREHOUSES: WarehouseNode[] = [
     short: "LOG2",
     region: "north",
     type: "owned",
-    x: 52,
-    y: 16,
+    x: 40,
+    y: 14,
     cap100: 4188,
     cap80: 3371,
     ratioPct: 7,
@@ -58,8 +55,8 @@ export const WAREHOUSES: WarehouseNode[] = [
     short: "PTF",
     region: "north",
     type: "owned",
-    x: 45,
-    y: 20,
+    x: 33,
+    y: 18,
     cap100: 3220,
     cap80: 2576,
     ratioPct: 5,
@@ -71,13 +68,13 @@ export const WAREHOUSES: WarehouseNode[] = [
     short: "CBU",
     region: "north",
     type: "owned",
-    x: 50,
-    y: 22,
+    x: 38,
+    y: 20,
     cap100: 4000,
     cap80: 3200,
     ratioPct: 7,
     city: "Vĩnh Phúc",
-    note: "Floor lớn · clear height cao nhất (PPT)",
+    note: "Floor lớn · clear height cao (PPT)",
   },
   {
     id: "log3",
@@ -85,8 +82,8 @@ export const WAREHOUSES: WarehouseNode[] = [
     short: "LOG3",
     region: "north",
     type: "owned",
-    x: 54,
-    y: 20,
+    x: 42,
+    y: 18,
     cap100: 4021,
     cap80: 3234,
     ratioPct: 7,
@@ -98,13 +95,13 @@ export const WAREHOUSES: WarehouseNode[] = [
     short: "NKV",
     region: "north",
     type: "rented",
-    x: 56,
-    y: 15,
+    x: 44,
+    y: 13,
     cap100: 3000,
     cap80: 2400,
     ratioPct: 5,
     city: "Hà Nội / NKV",
-    note: "Excel: thuê 5000m² nhưng ~1100 xe",
+    note: "Excel: thuê 5000m² ≈ 1100 xe thực tế",
   },
   {
     id: "nbf",
@@ -112,23 +109,22 @@ export const WAREHOUSES: WarehouseNode[] = [
     short: "NBF",
     region: "north",
     type: "rented",
-    x: 42,
-    y: 17,
+    x: 30,
+    y: 15,
     cap100: 7021,
     cap80: 5634,
     ratioPct: 12,
     city: "Miền Bắc",
     note: "Kho thuê · mid-term expand",
   },
-  // CENTRAL
   {
     id: "nghe-an",
     name: "Nghệ An WH",
     short: "N.An",
     region: "central",
     type: "rented",
-    x: 48,
-    y: 42,
+    x: 36,
+    y: 38,
     cap100: 8000,
     cap80: 6400,
     ratioPct: 13,
@@ -140,22 +136,21 @@ export const WAREHOUSES: WarehouseNode[] = [
     short: "ĐN",
     region: "central",
     type: "rented",
-    x: 58,
-    y: 52,
+    x: 44,
+    y: 48,
     cap100: 5500,
     cap80: 4400,
     ratioPct: 9,
     city: "Đà Nẵng",
   },
-  // SOUTH
   {
     id: "dong-nai",
     name: "Đồng Nai WH",
     short: "ĐNai",
     region: "south",
     type: "rented",
-    x: 55,
-    y: 78,
+    x: 42,
+    y: 74,
     cap100: 11000,
     cap80: 8800,
     ratioPct: 18,
@@ -167,8 +162,8 @@ export const WAREHOUSES: WarehouseNode[] = [
     short: "LA",
     region: "south",
     type: "rented",
-    x: 48,
-    y: 82,
+    x: 36,
+    y: 78,
     cap100: 11000,
     cap80: 8800,
     ratioPct: 18,
@@ -180,12 +175,40 @@ export const WAREHOUSES: WarehouseNode[] = [
     short: "CC",
     region: "south",
     type: "rented",
-    x: 42,
-    y: 88,
+    x: 30,
+    y: 84,
     cap100: 2500,
     cap80: 2000,
     ratioPct: 4,
     city: "Cần Thơ / Cái Cui",
+  },
+  {
+    id: "hoang-sa",
+    name: "Quần đảo Hoàng Sa",
+    short: "HS",
+    region: "east_sea",
+    type: "sovereignty",
+    x: 72,
+    y: 36,
+    cap100: 0,
+    cap80: 0,
+    ratioPct: 0,
+    city: "Biển Đông · Việt Nam",
+    note: "Lãnh thổ Việt Nam — Quần đảo Hoàng Sa",
+  },
+  {
+    id: "truong-sa",
+    name: "Quần đảo Trường Sa",
+    short: "TS",
+    region: "east_sea",
+    type: "sovereignty",
+    x: 68,
+    y: 68,
+    cap100: 0,
+    cap80: 0,
+    ratioPct: 0,
+    city: "Biển Đông · Việt Nam",
+    note: "Lãnh thổ Việt Nam — Quần đảo Trường Sa",
   },
 ];
 
@@ -198,7 +221,6 @@ export const REGION_CAPS = {
   outside: { cap: 32800, ratio: 67 },
 } as const;
 
-/** Tuyến vận tải chính N→S (To South&Sum) */
 export type TransportLane = {
   id: string;
   fromId: string;
@@ -208,21 +230,53 @@ export type TransportLane = {
 };
 
 export const LANES: TransportLane[] = [
-  { id: "vp-la-sea", fromId: "log1", toId: "long-an", mode: "sea", label: "Vĩnh Phúc → Long An (Sea)" },
-  { id: "vp-dn-sea", fromId: "log1", toId: "dong-nai", mode: "sea", label: "Vĩnh Phúc → Đồng Nai (Sea)" },
-  { id: "vp-cc-sea", fromId: "log1", toId: "cai-cui", mode: "sea", label: "Vĩnh Phúc → Cái Cui (Sea)" },
-  { id: "vp-la-trk", fromId: "cbu", toId: "long-an", mode: "truck", label: "Bắc → Long An (Truck)" },
-  { id: "vp-dn-trk", fromId: "cbu", toId: "dong-nai", mode: "truck", label: "Bắc → Đồng Nai (Truck)" },
+  {
+    id: "vp-la-sea",
+    fromId: "log1",
+    toId: "long-an",
+    mode: "sea",
+    label: "Vĩnh Phúc → Long An (Sea)",
+  },
+  {
+    id: "vp-dn-sea",
+    fromId: "log1",
+    toId: "dong-nai",
+    mode: "sea",
+    label: "Vĩnh Phúc → Đồng Nai (Sea)",
+  },
+  {
+    id: "vp-cc-sea",
+    fromId: "log1",
+    toId: "cai-cui",
+    mode: "sea",
+    label: "Vĩnh Phúc → Cái Cui (Sea)",
+  },
+  {
+    id: "vp-la-trk",
+    fromId: "cbu",
+    toId: "long-an",
+    mode: "truck",
+    label: "Bắc → Long An (Truck)",
+  },
+  {
+    id: "vp-dn-trk",
+    fromId: "cbu",
+    toId: "dong-nai",
+    mode: "truck",
+    label: "Bắc → Đồng Nai (Truck)",
+  },
 ];
 
 export const REGION_LABEL: Record<Region, string> = {
   north: "Miền Bắc",
   central: "Miền Trung",
   south: "Miền Nam",
+  east_sea: "Biển Đông",
 };
 
 export const REGION_COLOR: Record<Region, string> = {
-  north: "#2563eb",
-  central: "#d97706",
-  south: "#059669",
+  north: "#0c4a6e",
+  central: "#b45309",
+  south: "#0f766e",
+  east_sea: "#c4a35a",
 };
