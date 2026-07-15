@@ -107,28 +107,40 @@ export default function DashboardPage() {
 
   return (
     <div className="space-y-7">
-      {/* HERO */}
+      {/* HERO — light bank panel for readability */}
       <motion.section
-        initial={{ opacity: 0, y: 16 }}
+        initial={{ opacity: 0, y: 12 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5 }}
-        className="hero-mesh relative rounded-[4px] p-6 text-white shadow-[0_12px_32px_-12px_rgba(7,20,40,0.45)] sm:p-8"
+        transition={{ duration: 0.4 }}
+        className="kpi-ring overflow-hidden rounded-[4px] border border-[#dce3ec] bg-white shadow-[0_1px_3px_rgba(7,20,40,0.06)]"
       >
-        <div className="relative z-10 grid gap-8 lg:grid-cols-12 lg:items-end">
+        <div className="grid gap-6 p-6 sm:p-7 lg:grid-cols-12 lg:items-center lg:gap-8">
           <div className="lg:col-span-7">
-            <div className="badge mb-4 border border-[#b8954a]/35 bg-[#b8954a]/10 text-[#e8d5a3]">
+            <div className="mb-3 inline-flex items-center gap-2 rounded-[3px] border border-[#e8d5a3] bg-[#faf6eb] px-2.5 py-1 text-[11px] font-bold text-[#7a6230]">
               <Sparkles className="h-3.5 w-3.5" />
-              Hệ thống hỗ trợ quyết định · Honda MC Logistics
+              DSS · Honda MC Logistics
             </div>
-            <h1 className="max-w-2xl text-[1.85rem] font-bold leading-[1.2] tracking-tight sm:text-[2.1rem]">
-              Tối ưu capacity miền Bắc —{" "}
-              <span className="text-[#d4b76a]">quyết định dựa trên số liệu</span>
+            <h1 className="max-w-2xl text-[1.65rem] font-bold leading-snug tracking-tight text-[#071428] sm:text-[1.9rem]">
+              Tối ưu capacity miền Bắc
             </h1>
-            <p className="mt-3 max-w-xl text-sm leading-relaxed text-slate-300">
-              Stacking nhập khẩu · Transfer Bắc–Nam · Thuê ngoài có kiểm soát.
-              KPI bám Excel 103Ki 2QFC, Word tối ưu và PPT Yamagomori.
+            <p className="mt-1 text-base font-semibold text-[#0a4d6e] sm:text-lg">
+              Quyết định dựa trên số liệu vận hành
             </p>
-            <div className="mt-6 flex flex-wrap gap-2.5">
+            <p className="mt-3 max-w-xl text-[13.5px] leading-relaxed text-slate-600">
+              Mô hình stacking nhập khẩu, chuyển kho Bắc–Nam và thuê ngoài có kiểm soát.
+              KPI đồng bộ từ Excel 103Ki 2QFC, Word và PPT Yamagomori.
+            </p>
+            <div className="mt-3 flex flex-wrap gap-1.5">
+              {["Stacking NK", "Transfer N→S", "Thuê ngoài"].map((t) => (
+                <span
+                  key={t}
+                  className="rounded-[3px] border border-[#dce3ec] bg-[#f7f9fc] px-2.5 py-1 text-[11px] font-bold text-slate-700"
+                >
+                  {t}
+                </span>
+              ))}
+            </div>
+            <div className="mt-5 flex flex-wrap gap-2.5">
               <Link
                 href="/digital-twin"
                 className="btn-bank-gold inline-flex items-center gap-2 px-5 py-2.5 text-sm"
@@ -138,14 +150,14 @@ export default function DashboardPage() {
               </Link>
               <Link
                 href="/map"
-                className="inline-flex items-center gap-2 rounded-[3px] border border-white/20 bg-white/8 px-5 py-2.5 text-sm font-semibold text-white hover:bg-white/12"
+                className="btn-bank inline-flex items-center gap-2 px-5 py-2.5 text-sm"
               >
                 <MapPinned className="h-4 w-4" />
                 Bản đồ mạng lưới
               </Link>
               <Link
                 href="/report"
-                className="inline-flex items-center gap-2 rounded-[3px] border border-white/15 px-4 py-2.5 text-sm font-medium text-slate-200 hover:bg-white/5"
+                className="btn-bank-outline inline-flex items-center gap-2 px-4 py-2.5 text-sm"
               >
                 Báo cáo tư vấn
               </Link>
@@ -177,14 +189,18 @@ export default function DashboardPage() {
             ].map((x, i) => (
               <motion.div
                 key={x.l}
-                initial={{ opacity: 0, y: 8 }}
+                initial={{ opacity: 0, y: 6 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.12 + i * 0.05 }}
-                className="stat-tile-dark"
+                transition={{ delay: 0.1 + i * 0.04 }}
+                className="rounded-[3px] border border-[#e8edf2] bg-[#f7f9fc] px-3.5 py-3"
               >
-                <div className="label">{x.l}</div>
-                <div className="value" style={{ fontSize: "1.4rem" }}>{x.v}</div>
-                <div className="sub">{x.s}</div>
+                <div className="text-[10px] font-bold uppercase tracking-[0.1em] text-slate-500">
+                  {x.l}
+                </div>
+                <div className="mt-1 text-[1.35rem] font-bold tabular-nums tracking-tight text-[#071428]">
+                  {x.v}
+                </div>
+                <div className="mt-0.5 text-[11px] text-slate-500">{x.s}</div>
               </motion.div>
             ))}
           </div>
