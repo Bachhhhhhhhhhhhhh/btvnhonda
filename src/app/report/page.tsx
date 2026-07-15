@@ -3,63 +3,160 @@
 import { useTwinStore } from "@/lib/store";
 import { ASSUMPTIONS, SOURCES } from "@/lib/data/projectData";
 import { fmt, fmtPct } from "@/lib/utils";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { SectionHeader, MetricRow } from "@/components/ui/section-header";
+import { Kpi } from "@/components/ui/kpi";
+import { FileText, Printer } from "lucide-react";
+import Link from "next/link";
 
 export default function ReportPage() {
   const { result, params } = useTwinStore();
   const a = result.annual;
   const peak = result.months.reduce((b, m) => (m.baseOver > b.baseOver ? m : b));
+  const redMonths = result.months.filter((m) => m.classification === "red").map((m) => m.month);
 
-  const paragraphs = [
-    `Báo cáo hỗ trợ quyết định này tổng hợp chương trình tối ưu năng lực kho xe máy miền Bắc trong mùa cao điểm của Honda Việt Nam, kết nối đồng thời nghiên cứu stacking chuyên sâu (${SOURCES.word}), workbook ngân sách logistics 103Ki 2QFC (${SOURCES.excel}) và slide điều hành LOG Unit Yamagomori (${SOURCES.ppt}). Câu hỏi quản trị trung tâm không phải stacking có hấp dẫn về khái niệm hay không, mà là trong điều kiện định lượng nào thì stacking, thuê ngoài Bắc hoặc chuyển Bắc–Nam tối thiểu hóa tổng chi phí mạng lưới mà vẫn bảo vệ service level và tính toàn vẹn claim chất lượng.`,
-
-    `Với cài đặt Digital Twin hiện tại, Fact Cap được mô hình hóa ở mức ${fmt(params.factCap)} xe, footprint unpack ${params.unpackM2} m²/xe và footprint chồng kiện ${params.stackM2} m²/xe. Tỷ lệ relief capacity tương đương do đó đạt ${fmtPct((params.unpackM2 - params.stackM2) / params.unpackM2)}; áp dụng lên volume nhập khẩu năm ${fmt(a.importVol)} xe với tỷ lệ tham gia stacking ${fmtPct(params.importStackRatio, 0)} tạo ra khoảng ${fmt(a.importRelief)} đơn vị capacity tương đương và tiết kiệm xấp xỉ ${fmt(a.m2Saved)} m² sàn. Các con số này tái khẳng định phương pháp Word “Import relief = Import × (unpack − stack) / unpack” và cùng hướng với tuyên bố PowerPoint rằng stacking quy mô CBU có thể giải phóng khoảng mười nghìn m² và khoảng ba tỷ VND mỗi năm.`,
-
-    `Tuy nhiên, chỉ stacking nhập khẩu không khép được khoảng trống peak. Dưới định nghĩa vượt capacity ${params.useTtlCapacity ? "TTL Cap Excel" : "Fact Cap Word"}, tháng residual cao nhất là ${peak.month}, với over gốc ${fmt(peak.baseOver)} xe được giảm bởi import stacking xuống residual ${fmt(peak.residualAfterImport)} trước khi chính sách nội địa can thiệp. Sau khi áp dụng tỷ lệ transfer ${fmtPct(params.transferRatio, 0)}, thuê ngoài Bắc residual còn ${fmt(peak.outsourceVol)} xe trong tháng đó, trong khi volume thuê ngoài năm giảm từ ${fmt(a.baseOutsourceVol)} xuống ${fmt(a.outsourceVol)} xe-tương đương — tuyệt đối ${fmt(a.outsourceReduction)} đơn vị.`,
-
-    `Hệ quả vận tải mạng lưới là đáng kể. Nhu cầu container Bắc–Nam theo quy ước ${params.casesPerContainerNS} kiện/container và ${params.mcPerCase} xe/kiện đạt ${fmt(a.nsContainersBase)} container/năm, so với ${fmt(a.nsContainersExcel)} container nếu đạt năng suất workbook ${params.mcPerContainerExcel} xe/container. Hoàn kiện rỗng ở mức ${params.casesPerContainerReturn} kiện/container tương ứng ${fmt(a.returnContainers)} container return; chu kỳ reverse logistics ${params.leadTimeDays} ngày lead cộng ${params.freeTimeDays} ngày free sizing case pool đỉnh khoảng ${fmt(a.peakCasePool)} kiện. Mọi kế hoạch bỏ qua coverage case pool sẽ thất bại vận hành ngay cả khi container chiều đi dường như đủ.`,
-
-    `Về tài chính, baseline trong đó mọi đơn vị over được hấp thụ bằng thuê ngoài Bắc và bonus peak tạo chi phí năm ${fmt(a.baselineCost / 1e9, 2)} tỷ VND. Chính sách tối ưu — stacking NK kết hợp transfer chọn lọc — phát sinh ${fmt(a.totalCost / 1e9, 2)} tỷ VND, tiết kiệm mô hình ${fmt(a.totalSavings / 1e9, 2)} tỷ VND. So với vốn stacking ${fmt(params.cost.stackCapex / 1e9, 2)} tỷ VND, ROI đạt ${fmtPct(a.roi)} với hoàn vốn đơn giản ${Number.isFinite(a.paybackMonths) ? fmt(a.paybackMonths, 1) + " tháng" : "không đạt dưới rate card hiện tại"} và NPV ba năm ${fmt(a.npv / 1e9, 2)} tỷ VND ở suất chiết khấu ${fmtPct(params.cost.discountRate)}. Cường độ chi phí đứng ở ${fmt(a.costPerVehicle)} VND/xe được xử lý và ${fmt(a.costPerM2)} VND/m² tiết kiệm.`,
-
-    `Hai định nghĩa capacity không được trộn trong tranh luận điều hành. Báo cáo Word sizing over theo Fact Cap ${fmt(ASSUMPTIONS.factCapNorth)}, tạo gap peak gần năm mươi nghìn xe tháng Tám. Engine Excel Rental WH sizing over theo TTL capacity ${fmt(ASSUMPTIONS.ttlCapNorth)} — đã gồm open area và HNM — nên residual nhỏ hơn và tập trung tháng Mười Hai đến Tháng Ba. Cả hai đều nhất quán nội bộ; chọn sai baseline sẽ hoặc đánh giá thấp “nỗi đau” peak, hoặc thổi phồng mức khẩn cấp thuê ngoài.`,
-
-    `Tương tự, driver footprint khác nhau: đề bài và Word dùng 1,7 m² unpack so 1,0 m² stack, trong khi driver ngân sách dài hạn Bắc ở Rental WH là 1,6 m²/xe. Phân tích độ nhạy trong ứng dụng cho thấy mật độ stack, đơn giá thuê ngoài Bắc và cước N–S chi phối phương sai savings, xác nhận việc khóa rate card Finance là cổng chặn trước cam kết ngân sách đa năm.`,
-
-    `Tư thế vận hành khuyến nghị do đó mang tính phân tầng. Thứ nhất, thể chế hóa stacking nhập khẩu kèm kiểm soát chất lượng bảo vệ cửa sổ claim NSX. Thứ hai, phân loại tháng xanh–vàng–đỏ theo residual sau stack NK, và pre-book container cùng case pool bốn tuần trước cụm đỏ. Thứ ba, mở rộng transfer nội địa chỉ khi chi phí tránh được ở Bắc còn lớn hơn chi phí transfer all-in; nếu không, giữ thuê ngoài Bắc có kiểm soát. Thứ tư, duy trì nhịp Digital Twin — hàng tuần mùa cao điểm — để shock volume, rate và lead time được định giá lại trước khi cam kết tiền mặt.`,
-
-    `Kết luận, stacking là điều kiện cần nhưng chưa đủ cho capacity peak miền Bắc. Khi kết hợp transfer chọn lọc, reverse logistics được sizing đúng và quản trị theo tổng chi phí mạng lưới, stacking biến phụ thuộc thuê kho mãn tính thành chương trình S&OP có kiểm soát. Bằng chứng số trong báo cáo — capacity, container, case pool, ROI và phong bì kịch bản — phải được chạy lại mỗi khi niguri, tender cước hoặc hợp đồng kho thay đổi, bảo đảm tổ chức tối ưu kinh tế thay vì chỉ dời chi phí trên bản đồ Việt Nam.`,
+  const execSummary = [
+    {
+      h: "1. Bối cảnh & câu hỏi quyết định",
+      p: `Chương trình tối ưu năng lực kho xe máy miền Bắc mùa cao điểm Honda Việt Nam kết nối nghiên cứu stacking (${SOURCES.word}), workbook logistics 103Ki 2QFC (${SOURCES.excel}) và slide LOG Unit Yamagomori (${SOURCES.ppt}). Câu hỏi không phải stacking có hấp dẫn khái niệm hay không, mà trong điều kiện định lượng nào thì stacking, thuê ngoài Bắc hoặc chuyển Bắc–Nam tối thiểu hóa tổng chi phí mạng lưới mà vẫn bảo vệ service level và claim chất lượng.`,
+    },
+    {
+      h: "2. Capacity & stacking nhập khẩu",
+      p: `Fact Cap mô hình ${fmt(params.factCap)} xe; footprint unpack ${params.unpackM2} m²/xe, stack ${params.stackM2} m²/xe → relief ${fmtPct((params.unpackM2 - params.stackM2) / params.unpackM2)}. Import năm ${fmt(a.importVol)} xe @ stack ${fmtPct(params.importStackRatio, 0)} tạo ${fmt(a.importRelief)} capacity tương đương và ~${fmt(a.m2Saved)} m² sàn. Cùng hướng PPT (~${ASSUMPTIONS.pptStackingSaveBn} tỷ/năm, ~${fmt(ASSUMPTIONS.cbuWhM2)} m² CBU) và Excel budget line −${ASSUMPTIONS.excelStackingSaveBn} tỷ.`,
+    },
+    {
+      h: "3. Residual & chính sách nội địa",
+      p: `Chỉ stack NK không khép peak. Dưới chuẩn ${params.useTtlCapacity ? "TTL Cap Excel" : "Fact Cap Word"}, tháng over gốc cao nhất ${peak.month} (${fmt(peak.baseOver)} → residual ${fmt(peak.residualAfterImport)} sau stack). Transfer ${fmtPct(params.transferRatio, 0)} → outsource residual tháng đó ${fmt(peak.outsourceVol)}; năm: thuê ngoài ${fmt(a.baseOutsourceVol)} → ${fmt(a.outsourceVol)} (giảm ${fmt(a.outsourceReduction)}). Tháng đỏ: ${redMonths.join(", ") || "không"}.`,
+    },
+    {
+      h: "4. Vận tải & equipment",
+      p: `Container N→S: ${fmt(a.nsContainersBase)} @ ${params.casesPerContainerNS} kiện × ${params.mcPerCase} xe/kiện vs ${fmt(a.nsContainersExcel)} @ workbook ${params.mcPerContainerExcel} xe/cont. Return ${params.casesPerContainerReturn} kiện/cont → ${fmt(a.returnContainers)} cont return. Case pool đỉnh ~${fmt(a.peakCasePool)} kiện với chu kỳ ${params.leadTimeDays}+${params.freeTimeDays} ngày. Bỏ qua case pool = thất bại vận hành dù cont chiều đi đủ.`,
+    },
+    {
+      h: "5. Tài chính",
+      p: `Baseline (toàn over → thuê+bonus): ${fmt(a.baselineCost / 1e9, 2)} tỷ VND. Chính sách tối ưu: ${fmt(a.totalCost / 1e9, 2)} tỷ → tiết kiệm mô hình ${fmt(a.totalSavings / 1e9, 2)} tỷ. Capex stacking ${fmt(params.cost.stackCapex / 1e9, 2)} tỷ → ROI ${fmtPct(a.roi)}, payback ${Number.isFinite(a.paybackMonths) ? fmt(a.paybackMonths, 1) + " tháng" : "không đạt"}, NPV 3 năm ${fmt(a.npv / 1e9, 2)} tỷ @ r=${fmtPct(params.cost.discountRate)}. Cường độ: ${fmt(a.costPerVehicle)} VND/xe · ${fmt(a.costPerM2)} VND/m². Break-even transfer unit max ${fmt(a.breakEvenTransferUnitCost)} VND/xe.`,
+    },
+    {
+      h: "6. Hai chuẩn capacity",
+      p: `Word sizing over theo Fact Cap ${fmt(ASSUMPTIONS.factCapNorth)} (peak gap ~50k Aug). Excel Rental WH theo TTL ${fmt(ASSUMPTIONS.ttlCapNorth)} (gồm open + HNM) → residual nhỏ hơn, tập trung Dec–Mar. Cả hai nhất quán nội bộ; chọn sai baseline sẽ đánh giá thấp/n thr phồng khẩn cấp thuê ngoài. Footprint: Word 1,7/1,0 vs Excel dài hạn 1,6 m²/xe Bắc.`,
+    },
+    {
+      h: "7. Khuyến nghị phân tầng",
+      p: `Thứ nhất, thể chế hóa stacking NK + kiểm soát claim. Thứ hai, phân loại tháng xanh–vàng–đỏ theo residual; pre-book cont & case pool T-4 trước cụm đỏ. Thứ ba, mở rộng transfer chỉ khi chi phí tránh được Bắc > transfer all-in. Thứ tư, Digital Twin hàng tuần mùa cao điểm. Stacking là điều kiện cần; transfer chọn lọc + reverse logistics sizing + quản trị total network cost là đủ.`,
+    },
   ];
 
+  const wordCount = execSummary.map((s) => s.p).join(" ").split(/\s+/).length;
+
   return (
-    <div className="space-y-6">
-      <div className="flex flex-wrap items-end justify-between gap-3 no-print">
-        <div>
-          <h1 className="text-2xl font-bold text-slate-900">Báo cáo tư vấn chuyên sâu</h1>
-          <p className="mt-1 text-sm text-slate-600">
-            Văn bản tư vấn sống — tái sinh từ output Digital Twin · phong cách McKinsey, bám số Excel/Word/PPT.
-          </p>
-        </div>
-        <button
-          onClick={() => window.print()}
-          className="rounded-lg bg-sky-700 px-5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-sky-800"
-        >
-          In / Xuất PDF
-        </button>
+    <div className="space-y-5">
+      <SectionHeader
+        kicker="Báo cáo · Board pack"
+        title="Báo cáo tư vấn chuyên sâu"
+        subtitle="Văn bản tư vấn sống — tái sinh từ Digital Twin · phong cách tư vấn, bám số Excel/Word/PPT."
+        actions={
+          <div className="flex gap-2 no-print">
+            <Link href="/recommendations" className="btn-bank-outline px-3 py-2 text-xs">
+              Khuyến nghị
+            </Link>
+            <button
+              type="button"
+              onClick={() => window.print()}
+              className="btn-bank inline-flex items-center gap-1.5 px-4 py-2 text-xs"
+            >
+              <Printer className="h-3.5 w-3.5" />
+              In / PDF
+            </button>
+          </div>
+        }
+      />
+
+      <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
+        <Kpi label="Tiết kiệm" value={`${fmt(a.totalSavings / 1e9, 2)} tỷ`} tone="good" icon={FileText} />
+        <Kpi label="ROI" value={fmtPct(a.roi)} tone="accent" />
+        <Kpi label="NPV 3y" value={`${fmt(a.npv / 1e9, 2)} tỷ`} />
+        <Kpi label="Giảm outsource" value={fmt(a.outsourceReduction)} sub="xe-eq" />
       </div>
 
-      <Card>
+      <MetricRow
+        items={[
+          { label: "Import", value: fmt(a.importVol) },
+          { label: "Relief", value: fmt(a.importRelief) },
+          { label: "Transfer", value: fmt(a.transferVol) },
+          { label: "Cont N→S", value: fmt(a.nsContainersBase) },
+        ]}
+      />
+
+      <Card className="no-print">
         <CardHeader>
+          <CardTitle>Mục lục nhanh</CardTitle>
+          <CardDescription>Bảy mục tường thuật điều hành</CardDescription>
+        </CardHeader>
+        <CardContent>
+          <ol className="grid gap-1 text-sm text-slate-700 sm:grid-cols-2">
+            {execSummary.map((s) => (
+              <li key={s.h} className="rounded-[3px] border border-[#eef2f6] bg-[#f7f9fc] px-3 py-2">
+                {s.h}
+              </li>
+            ))}
+          </ol>
+        </CardContent>
+      </Card>
+
+      <Card accent>
+        <CardHeader>
+          <div className="section-kicker">Executive narrative</div>
           <CardTitle>
             Tối ưu kho miền Bắc mùa cao điểm — Tường thuật điều hành
           </CardTitle>
+          <CardDescription>
+            Tham số: stack {fmtPct(params.importStackRatio, 0)} · transfer {fmtPct(params.transferRatio, 0)} ·{" "}
+            {params.useTtlCapacity ? "TTL Cap" : "Fact Cap"}
+          </CardDescription>
         </CardHeader>
-        <CardContent className="prose-report max-w-none">
-          {paragraphs.map((p, i) => (
-            <p key={i}>{p}</p>
+        <CardContent className="prose-report max-w-none space-y-6">
+          {execSummary.map((s) => (
+            <section key={s.h}>
+              <h2 className="mb-2 text-base font-bold text-[#071428]">{s.h}</h2>
+              <p className="text-[13.5px] leading-[1.85] text-slate-700">{s.p}</p>
+            </section>
           ))}
+
+          <div className="mt-8 overflow-x-auto rounded-[3px] border border-[#dce3ec]">
+            <table className="table-dark w-full text-left text-sm">
+              <thead>
+                <tr>
+                  <th>Chỉ số</th>
+                  <th>Giá trị</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-[#eef2f6]">
+                {[
+                  ["Baseline cost", `${fmt(a.baselineCost / 1e9, 2)} tỷ`],
+                  ["Optimized cost", `${fmt(a.totalCost / 1e9, 2)} tỷ`],
+                  ["Savings", `${fmt(a.totalSavings / 1e9, 2)} tỷ`],
+                  ["m² saved", fmt(a.m2Saved)],
+                  ["Peak case pool", fmt(a.peakCasePool)],
+                  ["Payback", Number.isFinite(a.paybackMonths) ? `${fmt(a.paybackMonths, 1)} tháng` : "—"],
+                ].map(([k, v]) => (
+                  <tr key={k as string}>
+                    <td className="font-semibold text-[#071428]">{k}</td>
+                    <td className="tabular-nums font-bold">{v}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+
           <p className="mt-6 text-xs text-slate-500">
-            Số từ ≈ {paragraphs.join(" ").split(/\s+/).length}. Nguồn: {SOURCES.word};{" "}
-            {SOURCES.excel}; {SOURCES.ppt}.
+            Số từ ≈ {wordCount}. Nguồn: {SOURCES.word}; {SOURCES.excel}; {SOURCES.ppt}. Báo cáo tái
+            tính mỗi khi chỉnh Twin — không phải file tĩnh.
           </p>
         </CardContent>
       </Card>

@@ -24,6 +24,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { SectionHeader, MetricRow, InsightBox } from "@/components/ui/section-header";
 import { fmt, fmtPct } from "@/lib/utils";
 import { chartTheme } from "@/components/charts/theme";
 import { motion } from "framer-motion";
@@ -58,22 +59,22 @@ export default function DigitalTwinPage() {
   ];
 
   return (
-    <div className="space-y-6">
-      <motion.div
-        initial={{ opacity: 0, y: 10 }}
-        animate={{ opacity: 1, y: 0 }}
-        className="rounded-2xl border border-blue-100 bg-gradient-to-r from-blue-50 via-white to-teal-50 px-5 py-5 sm:px-7"
-      >
-        <div className="section-kicker text-blue-600">Control tower</div>
-        <h1 className="mt-1 text-2xl font-black tracking-tight text-slate-900 sm:text-3xl">
-          Digital Twin — mạng lưới kho & vận tải sống
-        </h1>
-        <p className="mt-2 max-w-3xl text-sm leading-relaxed text-slate-600">
-          Thay số xe, m², lead time, cước, tỷ lệ stack/transfer — quan sát ngay
-          chi phí, utilization, thuê ngoài và case pool. Đây là DSS điều hành,
-          không phải slide tĩnh.
-        </p>
-      </motion.div>
+    <div className="space-y-5">
+      <SectionHeader
+        kicker="Control tower · Live"
+        title="Digital Twin — mạng lưới kho & vận tải"
+        subtitle="Thay m², lead time, cước, tỷ lệ stack/transfer — quan sát ngay chi phí, utilization, thuê ngoài và case pool. DSS điều hành, không phải slide tĩnh."
+        actions={
+          <div className="flex gap-2">
+            <Link href="/scenarios" className="btn-bank-outline px-3 py-2 text-xs">
+              Kịch bản
+            </Link>
+            <Link href="/map" className="btn-bank px-3 py-2 text-xs">
+              Bản đồ
+            </Link>
+          </div>
+        }
+      />
 
       <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-5">
         <Kpi label="Tổng chi phí" value={`${fmt(a.totalCost / 1e9, 2)} tỷ`} tone="accent" icon={Banknote} delay={0.02} />
@@ -88,6 +89,22 @@ export default function DigitalTwinPage() {
         <Kpi label="Transfer N→S" value={fmt(a.transferVol)} icon={Ship} delay={0.11} sub="xe / năm" />
         <Kpi label="Case pool đỉnh" value={fmt(a.peakCasePool)} tone="warn" icon={Container} delay={0.14} />
       </div>
+
+      <MetricRow
+        items={[
+          { label: "Stack NK", value: fmtPct(params.importStackRatio, 0) },
+          { label: "Transfer ratio", value: fmtPct(params.transferRatio, 0) },
+          { label: "ROI", value: fmtPct(a.roi) },
+          { label: "NPV 3y", value: `${fmt(a.npv / 1e9, 2)} tỷ` },
+        ]}
+      />
+
+      <InsightBox title="Cách dùng nhanh" tone="info">
+        Kéo slider bên trái → chart & đèn giao thông cập nhật ngay. So kịch bản tại{" "}
+        <Link href="/scenarios" className="font-bold underline">Scenarios</Link>
+        {" · "}độ nhạy tại{" "}
+        <Link href="/sensitivity" className="font-bold underline">Sensitivity</Link>.
+      </InsightBox>
 
       <div className="grid gap-5 xl:grid-cols-12">
         <div className="xl:col-span-4">
@@ -196,12 +213,12 @@ export default function DigitalTwinPage() {
                     initial={{ opacity: 0, scale: 0.92 }}
                     animate={{ opacity: 1, scale: 1 }}
                     transition={{ delay: i * 0.03 }}
-                    className={`rounded-2xl px-2 py-3.5 text-center shadow-sm ${
+                    className={`rounded-[3px] px-2 py-3.5 text-center shadow-sm ${
                       m.classification === "green"
-                        ? "border border-emerald-200 bg-gradient-to-b from-emerald-50 to-white text-emerald-800"
+                        ? "border border-emerald-200 bg-emerald-50 text-emerald-800"
                         : m.classification === "amber"
-                          ? "border border-amber-200 bg-gradient-to-b from-amber-50 to-white text-amber-900"
-                          : "border border-rose-200 bg-gradient-to-b from-rose-50 to-white text-rose-800"
+                          ? "border border-amber-200 bg-amber-50 text-amber-900"
+                          : "border border-rose-200 bg-rose-50 text-rose-800"
                     }`}
                   >
                     <div className="text-xs font-bold">{m.month}</div>
